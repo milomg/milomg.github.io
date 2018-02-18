@@ -1,0 +1,36 @@
+canvas {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	top: 0;
+	left: 0;
+	z-index: -1;
+}
+.button {
+	position: absolute;
+	bottom: 50px;
+    left: 50%;
+    transform: translate(-50%, 0);
+	color: white;
+	width: 4rem;
+	height: 4rem;
+	line-height: 4rem;
+	border-radius: 4rem;
+	font-weight: 900;
+	text-align: center;
+	border: 5px solid white;
+}
+p {
+	font-family: 'Open Sans' !important;
+	color: white;
+}
+section {
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.8);
+}
+body {
+    scroll-behavior: smooth;
+}
