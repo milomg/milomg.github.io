@@ -14,22 +14,39 @@
 	bottom: 50px;
     left: 50%;
     transform: translate(-50%, 0);
-	color: white;
+	color: royalblue;
 	width: 4rem;
 	height: 4rem;
+	font-size: 3em;
 	line-height: 4rem;
 	border-radius: 4rem;
 	font-weight: 900;
 	text-align: center;
 	border: 5px solid white;
 }
-p {
-	font-family: 'Open Sans' !important;
+body {
+	font-family: 'Open Sans';
 	color: white;
 }
-section {
+.fullscreen {
 	height: 100vh;
+	background: none;
+	padding: 0;
+}
+section {
+	width: 90vw;
+	margin: auto;
 	background: rgba(0, 0, 0, 0.8);
+	padding: 3em;
+}
+h1 {
+	text-align: center;
+	font-size: 3em;
+}
+hr {
+	max-width: 250px;
+	margin: 25px auto 30px;
+	border-top: solid 5px;
 }
 body {
     scroll-behavior: smooth;

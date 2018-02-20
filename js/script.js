@@ -1,3 +1,4 @@
+import 'zenscroll';
 import '../css/main.css'
 import fontawesome from '@fortawesome/fontawesome';
 import solid from '@fortawesome/fontawesome-free-solid'
@@ -20,6 +21,8 @@ function letterM() {
 		createSplat((i + 0.4) * window.innerWidth, (i * 2 + 0.4) * window.innerHeight, 0, 0, color, config.SPLAT_RADIUS);
 		createSplat((i + 0.6) * window.innerWidth, (-i * 2 + 0.4) * window.innerHeight, 0, 0, color, config.SPLAT_RADIUS);
 	}
+	createSplat(0.05 * window.innerWidth, window.innerHeight, 0, -100, color, config.SPLAT_RADIUS);
+	createSplat(0.95 * window.innerWidth, window.innerHeight, 0, -100, color, config.SPLAT_RADIUS);
 }
 
 regl.frame(() => {
