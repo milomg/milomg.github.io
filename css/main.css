@@ -27,6 +27,7 @@
 body {
 	font-family: 'Open Sans';
 	color: white;
+	font-size: 1.25em;
 }
 .fullscreen {
 	height: 100vh;
@@ -34,14 +35,17 @@ body {
 	padding: 0;
 }
 section {
-	width: 90vw;
+	width: 75vw;
 	margin: auto;
-	background: rgba(0, 0, 0, 0.8);
+	background: rgba(100, 100, 100, 0.8);
 	padding: 3em;
+	border-radius: 30px;
 }
 h1 {
 	text-align: center;
 	font-size: 3em;
+	text-transform: uppercase;
+	margin: 0;
 }
 hr {
 	max-width: 250px;

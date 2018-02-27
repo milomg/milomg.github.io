@@ -11,14 +11,12 @@ export const fullscreen = regl({
 });
 
 const texelSize = ({ viewportWidth, viewportHeight }) => [1 / viewportWidth, 1 / viewportHeight];
-const viewport = ({ viewportWidth, viewportHeight }) => {
-    return {
-        x: 0,
-        y: 0,
-        width: viewportWidth >> TEXTURE_DOWNSAMPLE,
-        height: viewportHeight >> TEXTURE_DOWNSAMPLE,
-    }
-};
+const viewport = ({ viewportWidth, viewportHeight }) => ({
+    x: 0,
+    y: 0,
+    width: viewportWidth >> TEXTURE_DOWNSAMPLE,
+    height: viewportHeight >> TEXTURE_DOWNSAMPLE,
+});
 
 export const splat = regl({
     frag: require("../shaders/splat.frag"),

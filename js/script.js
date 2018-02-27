@@ -1,9 +1,9 @@
 import 'zenscroll';
 import '../css/main.css'
 import fontawesome from '@fortawesome/fontawesome';
-import solid from '@fortawesome/fontawesome-free-solid'
+import { faArrowDown } from '@fortawesome/fontawesome-free-solid'
 
-fontawesome.library.add(solid.faArrowDown);
+fontawesome.library.add(faArrowDown);
 
 import { regl } from './canvas';
 import * as config from './config';

@@ -1,7 +1,7 @@
 import { regl } from './canvas';
 import * as config from './config';
 
-let doubleFbo = (filter) => {
+function doubleFbo(filter) {
     let fbos = [createFbo(filter), createFbo(filter)];
     return {
         get read() {
@@ -16,7 +16,7 @@ let doubleFbo = (filter) => {
     };
 };
 
-let createFbo = (filter) => {
+function createFbo(filter) {
     let tex = regl.texture({
         width: window.innerWidth >> config.TEXTURE_DOWNSAMPLE,
         height: window.innerHeight >> config.TEXTURE_DOWNSAMPLE,
