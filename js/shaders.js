@@ -1,14 +1,6 @@
-import { regl } from './canvas';
-import { TEXTURE_DOWNSAMPLE } from './config';
-import { velocity, density, pressure, divergenceTex } from './fbos';
-
-export const fullscreen = regl({
-    vert: require("../shaders/project.vert"),
-    attributes: {
-        points: [1, 1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1]
-    },
-    count: 6
-});
+import { regl } from "./canvas";
+import { TEXTURE_DOWNSAMPLE } from "./config";
+import { velocity, density, pressure, divergenceTex } from "./fbos";
 
 const texelSize = ({ viewportWidth, viewportHeight }) => [1 / viewportWidth, 1 / viewportHeight];
 const viewport = ({ viewportWidth, viewportHeight }) => ({
@@ -18,7 +10,15 @@ const viewport = ({ viewportWidth, viewportHeight }) => ({
     height: viewportHeight >> TEXTURE_DOWNSAMPLE,
 });
 
-export const splat = regl({
+export const fullscreen = regl({
+    vert: require("../shaders/project.vert"),
+    attributes: {
+        points: [1, 1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1]
+    },
+    count: 6
+});
+
+const splat = regl({
     frag: require("../shaders/splat.frag"),
     framebuffer: regl.prop("framebuffer"),
     uniforms: {
@@ -27,7 +27,14 @@ export const splat = regl({
         point: regl.prop("point"),
         color: regl.prop("color"),
         radius: regl.prop("radius"),
-        density: () => density.read
+    },
+    viewport
+});
+const m = regl({
+    frag: require("../shaders/m.frag"),
+    framebuffer: () => density.write,
+    uniforms: {
+        density: () => density.read,
     },
     viewport
 });
@@ -84,7 +91,7 @@ const jacobi = regl({
 export const display = regl({
     frag: require("../shaders/display.frag"),
     uniforms: {
-        density: () => density.read,
+       density: () => density.read,
     }
 });
 
@@ -107,7 +114,10 @@ export function createSplat(x, y, dx, dy, color, radius) {
     });
     density.swap();
 }
-
+export function letterM() {
+    m();
+    density.swap();
+}
 export const update = (config) => {
     advect({
         framebuffer: velocity.write,
@@ -137,6 +147,4 @@ export const update = (config) => {
 
     gradientSubtract();
     velocity.swap();
-
-    display();
 }

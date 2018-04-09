@@ -6,15 +6,14 @@ module.exports = {
     },
     module: {
         rules: [
-            { test: /\.css$/, loader: "style-loader!css-loader" },
-            { test: /\.(vert|frag)$/, use: 'raw-loader' },
+            { test: /\.(vert|frag)$/, use: "raw-loader" },
             {
                 test: /\.js$/,
-                exclude: /node_modules(?!\/webpack-dev-server)/,
+                exclude: /node_modules/,
                 use: {
-                    loader: 'babel-loader',
+                    loader: "babel-loader",
                     options: { 
-                        presets: [ '@babel/preset-env' ] 
+                        presets: [ "@babel/preset-env" ] 
                     } 
                 }
             }

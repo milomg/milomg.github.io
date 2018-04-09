@@ -12,8 +12,8 @@
 .button {
 	position: absolute;
 	bottom: 50px;
-    left: 50%;
-    transform: translate(-50%, 0);
+	left: 50%;
+	transform: translate(-50%, 0);
 	color: royalblue;
 	width: 4rem;
 	height: 4rem;
@@ -25,7 +25,7 @@
 	border: 5px solid white;
 }
 body {
-	font-family: 'Open Sans';
+	font-family: "Open Sans";
 	color: white;
 	font-size: 1.25em;
 }
@@ -35,11 +35,16 @@ body {
 	padding: 0;
 }
 section {
-	width: 75vw;
-	margin: auto;
-	background: rgba(100, 100, 100, 0.8);
-	padding: 3em;
-	border-radius: 30px;
+	padding: 3em 10em;
+}
+#about,
+#contact {
+	background: white;
+	color: black;
+}
+#work {
+	background: black;
+	color: white;
 }
 h1 {
 	text-align: center;
@@ -47,11 +52,81 @@ h1 {
 	text-transform: uppercase;
 	margin: 0;
 }
+.languages li {
+	margin: 0 0 1em 0;
+}
+.languages {
+	list-style-type: none;
+	-moz-column-count: 2;
+	-webkit-column-count: 2;
+	column-count: 2;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+}
 hr {
 	max-width: 250px;
 	margin: 25px auto 30px;
 	border-top: solid 5px;
+	border-color: royalblue;
+	color: royalblue;
 }
 body {
-    scroll-behavior: smooth;
+	scroll-behavior: smooth;
+	margin: 0;
+}
+p {
+	padding: 1em;
+}
+.grid {
+	width: 100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-column-gap: 0;
+}
+.item {
+	height: calc(33.3vw - 6.6em);
+	width: calc(33.3vw - 6.6em);
+	margin: 0px;
+	overflow: hidden;
+	position: relative;
+	display: inline-flex;
+}
+.item img {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	-webkit-filter: url(#monochrome);
+	filter: url(#monochrome);
+}
+.item div {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	transition: opacity 0.5s;
+	background: rgba(255, 255, 255, 1);
+	text-align: center;
+	color: black;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+h2 {
+	padding: 0;
+	margin: 0;
+}
+.item p {
+	margin: 0;
+	font-size: 15px;
+}
+.item:hover div {
+	opacity: 1;
+	transition: opacity 0.5s;
+}
+a {
+	color: royalblue;
 }

@@ -1,29 +1,12 @@
-import 'zenscroll';
-import '../css/main.css'
-import fontawesome from '@fortawesome/fontawesome';
-import { faArrowDown } from '@fortawesome/fontawesome-free-solid'
+import "zenscroll";
+import fontawesome from "@fortawesome/fontawesome";
+import { faArrowDown } from "@fortawesome/fontawesome-free-solid"
 
 fontawesome.library.add(faArrowDown);
 
-import { regl } from './canvas';
-import * as config from './config';
-import { fullscreen, update, display, createSplat } from './shaders';
-
-function letterM() {
-	const color = [0.1, 0.1, 0.6];
-
-	for (let i = 0.8; i > 0.2; i -= 0.05) {
-		createSplat(0.3 * window.innerWidth, i * window.innerHeight, 0, 0, color, config.SPLAT_RADIUS);
-		createSplat(0.7 * window.innerWidth, i * window.innerHeight, 0, 0, color, config.SPLAT_RADIUS);
-	}
-
-	for (let i = -0.1; i <= 0.1; i += 0.0125) {
-		createSplat((i + 0.4) * window.innerWidth, (i * 2 + 0.4) * window.innerHeight, 0, 0, color, config.SPLAT_RADIUS);
-		createSplat((i + 0.6) * window.innerWidth, (-i * 2 + 0.4) * window.innerHeight, 0, 0, color, config.SPLAT_RADIUS);
-	}
-	createSplat(0.05 * window.innerWidth, window.innerHeight, 0, -100, color, config.SPLAT_RADIUS);
-	createSplat(0.95 * window.innerWidth, window.innerHeight, 0, -100, color, config.SPLAT_RADIUS);
-}
+import { regl } from "./canvas";
+import * as config from "./config";
+import { fullscreen, update, display, letterM, createSplat } from "./shaders";
 
 regl.frame(() => {
 	fullscreen(() => {
@@ -32,7 +15,7 @@ regl.frame(() => {
 			createSplat(pointer.x, pointer.y, pointer.dx, pointer.dy, pointer.color, config.SPLAT_RADIUS);
 			pointer.moved = false;
 		}
-		update(config);
+		update(config);	  
 		display();
 	});
 });
@@ -52,6 +35,6 @@ document.addEventListener("mousemove", (e) => {
 	pointer.x = e.clientX;
 	pointer.y = e.clientY;
 });
-document.addEventListener('mousedown', () => {
+document.addEventListener("mousedown", () => {
 	pointer.color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
 });

@@ -1,5 +1,5 @@
-import { regl } from './canvas';
-import * as config from './config';
+import { regl } from "./canvas";
+import * as config from "./config";
 
 function doubleFbo(filter) {
     let fbos = [createFbo(filter), createFbo(filter)];
@@ -22,7 +22,7 @@ function createFbo(filter) {
         height: window.innerHeight >> config.TEXTURE_DOWNSAMPLE,
         min: filter,
         mag: filter,
-        type: 'half float'
+        type: "half float"
     });
     window.addEventListener("resize", () => {
         tex.resize(window.innerWidth >> config.TEXTURE_DOWNSAMPLE, window.innerHeight >> config.TEXTURE_DOWNSAMPLE)
@@ -33,7 +33,7 @@ function createFbo(filter) {
     });
 };
 
-export const velocity = doubleFbo('linear');
-export const density = doubleFbo('linear');
-export const pressure = doubleFbo('nearest');
-export const divergenceTex = createFbo('nearest');
+export const velocity = doubleFbo("linear");
+export const density = doubleFbo("linear");
+export const pressure = doubleFbo("nearest");
+export const divergenceTex = createFbo("nearest");

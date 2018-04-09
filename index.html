@@ -1,24 +1,108 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>ModderMe123 </title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="https://avatars2.githubusercontent.com/u/14153763?s=256" />
+    <link rel="stylesheet" href="css/main.css">
 </head>
+
 <body>
+    <svg class="defs-only">
+        <filter id="monochrome" color-interpolation-filters="sRGB" x="0" y="0" height="100%" width="100%">
+            <feColorMatrix type="matrix" values="0.95 0 0 0  0.05
+                            0.85 0 0 0  0.15
+                            0.50 0 0 0  0.50 
+                            0    0 0 1  0" />
+        </filter>
+    </svg>
     <canvas id="c"></canvas>
     <section class="fullscreen">
-        <a href="#next" class="button"><i class="fas fa-arrow-down"></i></a>
+        <a href="#about" class="button">
+            <i class="fas fa-arrow-down"></i>
+        </a>
     </section>
-    <section id="next">
+    <section id="about">
         <h1>About</h1>
         <hr>
-        <h3>Things I like</h3>
-        <ul>
-            <li>testing</li>
+        <p>I'm a student that likes to code cool simulations (like the background of this page). I love bleeding edge things. I watch out for bugs and won't rest until I squash them. </p>
+        <h3>Languages I've coded in</h3>
+        <ul class="languages">
+            <li>JavaScript
+                <br>
+                <progress max="100" value="90"></progress>
+            </li>
+            <li>HTML5
+                <br>
+                <progress max="100" value="70"></progress>
+            </li>
+            <li>CSS3
+                <br>
+                <progress max="100" value="40"></progress>
+            </li>
+            <li>Java
+                <br>
+                <progress max="100" value="60"></progress>
+            </li>
+            <li>Rust
+                <br>
+                <progress max="100" value="90"></progress>
+            </li>
+            <li>Swift
+                <br>
+                <progress max="100" value="20"></progress>
+            </li>
+            <li>Scala
+                <br>
+                <progress max="100" value="60"></progress>
+            </li>
         </ul>
-        <p>I'm a student that likes to code cool simulations (like the background of this page). I also like bleeding edge things.</p>
     </section>
-    
+    <section id="work">
+        <h1>Projects</h1>
+        <hr>
+        <p>If you are just looking for some things to play around with, here are some things you can try. Many of these projects
+            <a href="http://coler706.github.io">Coler706</a> has helped with so go check him out as well</p>
+        <div class="grid">
+            <div class="item">
+                <img width="500px" src="images/img1.png">
+                <div>
+                    <h2>Traffic dots</h2>
+                    <p>Just a fun little project where dots move randomly semi locked to a grid. They bump into each other and you can click to repel or attract them, depending on the setting.</p>
+                    <a href="http://cm-tech.github.io/Traffic-Dots/canvas">View site</a>
+                </div>
+            </div>
+            <div class="item">
+                <img width="500px" src="images/img2.png">
+                <div>
+                    <h2>Car Evolution</h2>
+                    <p>This project uses the planck.js physics engine to simulate cars that evolve to drive through a course. Heavily inspired by
+                        <a href="http://boxcar2d.com">BoxCar2D</a>.</p>
+                    <a href="http://cm-tech.github.io/car-evolution">View site</a>
+                </div>
+            </div>
+            <div class="item">
+                <img width="500px" src="images/img3.png">
+                <div>
+                    <h2>Boids</h2>
+                    <p>Boids is a term that is used to describe objects which travel in groups. This project simulates boids shaped like caterpillars.</p>
+                    <a href="http://cm-tech.github.io/boids">View site</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="contact">
+        <h1>Boring Stuff</h1>
+        <hr>
+        <p>I didn't know what to put here, but I need something to fit the color scheme. Maybe I will replace this with a contact form
+        </p>
+    </section>
+    <footer>
+        <h1>Thanks for reading!</h1>
+        <hr>
+    </footer>
     <script src="bundle.js"></script>
 </body>
+
 </html>

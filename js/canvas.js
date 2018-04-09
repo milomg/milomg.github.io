@@ -14,5 +14,5 @@ export const regl = require("regl")({
         antialias: false
     },
     canvas: c,
-    extensions: ['OES_texture_half_float', 'OES_texture_half_float_linear']
+    extensions: ["OES_texture_half_float", "OES_texture_half_float_linear"]
 });
