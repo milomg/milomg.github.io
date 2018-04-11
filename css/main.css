@@ -12,21 +12,18 @@
 }
 .button {
 	position: absolute;
-	bottom: 50px;
+	bottom: 0;
 	left: 50%;
-	transform: translate(-50%, 0);
-	color: royalblue;
+	transform: translate(-50%, 50%);
 	width: 4rem;
 	height: 4rem;
-	font-size: 3em;
-	line-height: 4rem;
-	border-radius: 4rem;
-	font-weight: 900;
+	font-size: 1.5em;
 	text-align: center;
-	border: 5px solid white;
+	border-radius: 100%;
+	background: white;
 }
 body {
-	font-family: "Open Sans";
+	font-family: "Open Sans", sans-serif;
 	color: white;
 	font-size: 1.25em;
 }
@@ -46,6 +43,10 @@ section {
 #work {
 	background: black;
 	color: white;
+}
+#about h1,
+#contact h1 {
+	color: #404040;
 }
 h1 {
 	text-align: center;
@@ -73,11 +74,7 @@ hr {
 	color: royalblue;
 }
 body {
-	scroll-behavior: smooth;
 	margin: 0;
-}
-p {
-	padding: 1em;
 }
 .grid {
 	width: 100%;
@@ -130,4 +127,27 @@ h2 {
 }
 a {
 	color: royalblue;
+}
+.defs-only {
+	position: absolute;
+	height: 0;
+	width: 0;
+	overflow: hidden;
+	left: -100%;
+}
+progress {
+	-webkit-appearance: none;
+	height: 8px;
+}
+::-webkit-progress-inner-element {
+	border: 0.5px solid #dedede;
+	background: royalblue;
+	border-radius: 10px;
+	overflow: hidden;
+}
+::-webkit-progress-bar {
+	background-color: #dfdfdf;
+}
+::-webkit-progress-value {
+	background-color: royalblue;
 }
