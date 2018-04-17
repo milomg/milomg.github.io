@@ -16,10 +16,10 @@
 	left: 50%;
 	transform: translate(-50%, 50%);
 	width: 4rem;
-	height: 4rem;
-	font-size: 1.5em;
+	height: 5rem;
+	font-size: 1.75em;
 	text-align: center;
-	border-radius: 100%;
+	border-radius: 4rem;
 	background: white;
 }
 body {
