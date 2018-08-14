@@ -1,21 +1,24 @@
 import "zenscroll";
-import fontawesome from "@fortawesome/fontawesome";
-import { faChevronDown } from "@fortawesome/fontawesome-free-solid"
-
-fontawesome.library.add(faChevronDown);
-
 import { regl } from "./canvas";
 import * as config from "./config";
-import { fullscreen, update, display, letterM, createSplat } from "./shaders";
+import { fullscreen, update, display, drawLogo, createSplat } from "./shaders";
 
 regl.frame(() => {
 	fullscreen(() => {
-		letterM();
+		if (window.scrollY < window.innerHeight / 2)
+			drawLogo(1.0 - config.DENSITY_DISSIPATION);
 		if (pointer.moved) {
-			createSplat(pointer.x, pointer.y, pointer.dx, pointer.dy, pointer.color, config.SPLAT_RADIUS);
+			createSplat(
+				pointer.x,
+				pointer.y,
+				pointer.dx,
+				pointer.dy,
+				pointer.color,
+				config.SPLAT_RADIUS
+			);
 			pointer.moved = false;
 		}
-		update(config);	  
+		update(config);
 		display();
 	});
 });
@@ -28,7 +31,7 @@ let pointer = {
 	moved: false,
 	color: [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2]
 };
-document.addEventListener("mousemove", (e) => {
+document.addEventListener("mousemove", e => {
 	pointer.moved = true;
 	pointer.dx = (e.clientX - pointer.x) * 10;
 	pointer.dy = (e.clientY - pointer.y) * 10;
@@ -36,5 +39,9 @@ document.addEventListener("mousemove", (e) => {
 	pointer.y = e.clientY;
 });
 document.addEventListener("mousedown", () => {
-	pointer.color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
+	pointer.color = [
+		Math.random() + 0.2,
+		Math.random() + 0.2,
+		Math.random() + 0.2
+	];
 });

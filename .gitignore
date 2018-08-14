@@ -2,5 +2,6 @@
 .eslintrc.json
 node_modules/
 package-lock.json
+shrinkwrap.yaml
 bundle.js.map
 yarn.lock
