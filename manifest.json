@@ -1,0 +1,15 @@
+{
+	"short_name": "modderme123",
+	"name": "ModderMe123",
+	"icons": [
+		{
+			"src": "https://avatars2.githubusercontent.com/u/14153763",
+			"type": "image/png",
+			"sizes": "460x460"
+		}
+	],
+	"start_url": "/",
+	"background_color": "#1e3338",
+	"display": "browser",
+	"theme_color": "#82aaff"
+}
