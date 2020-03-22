@@ -1,23 +1,22 @@
+const path = require("path");
+const CopyPlugin = require("copy-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+
 module.exports = {
-	entry: "./js/script.js",
-	output: {
-		path: __dirname,
-		filename: "bundle.js"
-	},
-	module: {
-		rules: [
-			{ test: /\.(vert|frag)$/, use: "raw-loader" },
-			{ test: /\.(png|jpg|gif)$/i, use: "url-loader" },
-			{
-				test: /\.js$/,
-				exclude: /node_modules/,
-				use: {
-					loader: "babel-loader",
-					options: {
-						presets: ["@babel/preset-env"]
-					}
-				}
-			}
-		]
-	}
+    entry: "./js/script.js",
+    output: {
+        path: path.resolve(__dirname, "dist"),
+        filename: "bundle.js",
+    },
+    optimization: {
+        minimize: true,
+        minimizer: [new TerserPlugin()],
+    },
+    plugins: [new CopyPlugin([{ from: "public", to: "." }])],
+    module: {
+        rules: [
+            { test: /\.(vert|frag)$/, use: "raw-loader" },
+            { test: /\.png$/i, use: "url-loader" },
+        ],
+    },
 };
