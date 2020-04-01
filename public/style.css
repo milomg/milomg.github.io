@@ -115,8 +115,10 @@ body {
 }
 .item {
     position: relative;
-    height: min(calc(33.3vw - 6.6em), 300px);
-    width: min(calc(33.3vw - 6.6em), 300px);
+    height: calc(33.3vw - 6.6em);
+    max-height: 300px;
+    width: calc(33.3vw - 6.6em);
+    max-width: 300px;
 }
 .item img {
     position: absolute;
