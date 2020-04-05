@@ -70,10 +70,12 @@ h1 {
     margin: 0;
 }
 .languages li {
-    margin: 0 0 1em 0;
-    -webkit-column-break-inside: avoid;
-    page-break-inside: avoid;
-    break-inside: avoid;
+    margin: 0 0 1.5em 0;
+    display: inline-block;
+    width: 100%;
+}
+.languages p {
+    margin-bottom: -0.5em;
 }
 .languages {
     list-style-type: none;
