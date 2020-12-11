@@ -20,6 +20,6 @@
   "scripts": {
     "start": "rollup -c -w",
     "build": "rollup -c --environment NODE_ENV:production",
-    "format": "prettier --write '{src,public}/*' --print-width 150 --tab-width 4"
+    "format": "prettier --write '{src,public}/*' --print-width 150"
   }
 }

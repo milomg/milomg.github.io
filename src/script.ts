@@ -4,36 +4,36 @@ import * as config from "./config";
 import { fullscreen, update, display, drawLogo, createSplat } from "./shaders";
 
 regl.frame(() => {
-    fullscreen(() => {
-        if (window.scrollY < window.innerHeight / 2) drawLogo(1.0 - config.DENSITY_DISSIPATION);
-        if (pointer.moved) {
-            createSplat(pointer.x, pointer.y, pointer.dx, pointer.dy, pointer.color, config.SPLAT_RADIUS);
-            pointer.moved = false;
-        }
-        update(config);
-        display();
-    });
+  fullscreen(() => {
+    if (window.scrollY < window.innerHeight / 2) drawLogo(1.0 - config.DENSITY_DISSIPATION);
+    if (pointer.moved) {
+      createSplat(pointer.x, pointer.y, pointer.dx, pointer.dy, pointer.color, config.SPLAT_RADIUS);
+      pointer.moved = false;
+    }
+    update(config);
+    display();
+  });
 });
 
 let pointer = {
-    x: 0,
-    y: 0,
-    dx: 0,
-    dy: 0,
-    moved: false,
-    color: [0.5, 0.66, 1],
+  x: 0,
+  y: 0,
+  dx: 0,
+  dy: 0,
+  moved: false,
+  color: [0.5, 0.66, 1],
 };
 document.addEventListener("mousemove", (e) => {
-    pointer.moved = true;
-    pointer.dx = (e.clientX - pointer.x) * 10;
-    pointer.dy = (e.clientY - pointer.y) * 10;
-    pointer.x = e.clientX;
-    pointer.y = e.clientY;
+  pointer.moved = true;
+  pointer.dx = (e.clientX - pointer.x) * 10;
+  pointer.dy = (e.clientY - pointer.y) * 10;
+  pointer.x = e.clientX;
+  pointer.y = e.clientY;
 });
 document.addEventListener("mousedown", () => {
-    pointer.color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
+  pointer.color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
 });
 
 console.log("%cHi! Nice to see you there", "font-size: x-large");
-console.log("If you are wondering how I made this, the source code is at https://github.com/modderme123/modderme123.github.io")
+console.log("If you are wondering how I made this, the source code is at https://github.com/modderme123/modderme123.github.io");
 console.log("The fluid simulation was made with https://regl.party and is inspired by a GPU Gems chapter");

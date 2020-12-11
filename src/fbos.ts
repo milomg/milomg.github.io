@@ -3,35 +3,35 @@ import * as config from "./config";
 import type REGL from "regl";
 
 function doubleFbo(filter: REGL.TextureMagFilterType) {
-    let fbos = [createFbo(filter), createFbo(filter)];
-    return {
-        get read() {
-            return fbos[0];
-        },
-        get write() {
-            return fbos[1];
-        },
-        swap() {
-            fbos.reverse();
-        },
-    };
+  let fbos = [createFbo(filter), createFbo(filter)];
+  return {
+    get read() {
+      return fbos[0];
+    },
+    get write() {
+      return fbos[1];
+    },
+    swap() {
+      fbos.reverse();
+    },
+  };
 }
 
 function createFbo(filter: REGL.TextureMagFilterType) {
-    let tex = regl.texture({
-        width: window.innerWidth >> config.TEXTURE_DOWNSAMPLE,
-        height: window.innerHeight >> config.TEXTURE_DOWNSAMPLE,
-        min: filter,
-        mag: filter,
-        type: "half float",
-    } as REGL.Texture2DOptions);
-    window.addEventListener("resize", () => {
-        tex.resize(window.innerWidth >> config.TEXTURE_DOWNSAMPLE, window.innerHeight >> config.TEXTURE_DOWNSAMPLE);
-    });
-    return regl.framebuffer({
-        color: tex,
-        depthStencil: false,
-    });
+  let tex = regl.texture({
+    width: window.innerWidth >> config.TEXTURE_DOWNSAMPLE,
+    height: window.innerHeight >> config.TEXTURE_DOWNSAMPLE,
+    min: filter,
+    mag: filter,
+    type: "half float",
+  } as REGL.Texture2DOptions);
+  window.addEventListener("resize", () => {
+    tex.resize(window.innerWidth >> config.TEXTURE_DOWNSAMPLE, window.innerHeight >> config.TEXTURE_DOWNSAMPLE);
+  });
+  return regl.framebuffer({
+    color: tex,
+    depthStencil: false,
+  });
 }
 
 export const velocity = doubleFbo("linear");

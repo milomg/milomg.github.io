@@ -1,122 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>ModderMe123</title>
-        <link href="https://fonts.googleapis.com/css?family=Raleway:300|Source+Sans+Pro:300" rel="stylesheet" />
-        <link rel="shortcut icon" type="image/png" href="https://avatars2.githubusercontent.com/u/14153763" />
-        <link rel="stylesheet" href="style.css" />
-        <link rel="manifest" href="/manifest.json" />
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="theme-color" content="#82aaff" />
+  <head>
+    <title>ModderMe123</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300|Source+Sans+Pro:300" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/png" href="https://avatars2.githubusercontent.com/u/14153763" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#82aaff" />
 
-        <script src="https://kit.fontawesome.com/d4bdf34b1d.js" crossorigin="anonymous"></script>
-    </head>
+    <script src="https://kit.fontawesome.com/d4bdf34b1d.js" crossorigin="anonymous"></script>
+  </head>
 
-    <body>
-        <svg class="defs-only">
-            <filter id="monochrome" color-interpolation-filters="sRGB" x="0" y="0" height="100%" width="100%">
-                <feColorMatrix
-                    type="matrix"
-                    values="-0.35 0 0 0  0.50
+  <body>
+    <svg class="defs-only">
+      <filter id="monochrome" color-interpolation-filters="sRGB" x="0" y="0" height="100%" width="100%">
+        <feColorMatrix
+          type="matrix"
+          values="-0.35 0 0 0  0.50
                             -0.47 0 0 0  0.67
                             -0.78 0 0 0  1.00
                              0    0 0 1  0"
-                />
-            </filter>
-        </svg>
-        <canvas id="c"></canvas>
-        <section class="fullscreen">
-            <a href="#about" class="button">
-                <div class="mouse">
-                    <div class="mouse-button">&nbsp;</div>
-                </div>
-            </a>
-        </section>
-        <section id="about">
-            <h1>Hi!</h1>
+        />
+      </filter>
+    </svg>
+    <canvas id="c"></canvas>
+    <section class="fullscreen">
+      <a href="#about" class="button">
+        <div class="mouse">
+          <div class="mouse-button">&nbsp;</div>
+        </div>
+      </a>
+    </section>
+    <section id="about">
+      <h1>Hi!</h1>
+      <p>
+        I'm a student that likes to code cool simulations and build awesome frontend sites. I love high performance, clean, well structured code. I
+        carefully pick out bugs and won't rest until I squash them.
+      </p>
+      <h3>Languages I enjoy coding in</h3>
+      <div class="languages">
+        <div>
+          <p>TypeScript & JavaScript</p>
+          <progress max="100" value="90"></progress>
+        </div>
+        <div>
+          <p>HTML & CSS</p>
+          <progress max="100" value="90"></progress>
+        </div>
+        <div>
+          <p>Rust</p>
+          <progress max="100" value="80"></progress>
+        </div>
+        <div>
+          <p>Scala & Java</p>
+          <progress max="100" value="50"></progress>
+        </div>
+        <div>
+          <p>C#</p>
+          <progress max="100" value="60"></progress>
+        </div>
+        <div>
+          <p>Python</p>
+          <progress max="100" value="60"></progress>
+        </div>
+      </div>
+    </section>
+    <section id="work">
+      <h1>Simulations</h1>
+      <p>
+        I have made hundreds of fun little simulation projects to improve my programming skills. I've put a couple below and many more are available
+        at <a href="https://cm-ht.ml">CM-Tech</a>.
+      </p>
+      <div class="grid">
+        <div class="item">
+          <a href="http://cm-tech.github.io/traffic-dots/"><img src="images/img1.png" alt="brownian motion simulation" /></a>
+          <div>
+            <h2>Traffic dots</h2>
             <p>
-                I'm a student that likes to code cool simulations and build awesome frontend sites. I love high performance, clean, well structured code. 
-                I carefully pick out bugs and won't rest until I squash them.
+              Just a fun little project where dots move randomly semi locked to a grid. They bump into each other and you can click to repel or
+              attract them, depending on the setting.
             </p>
-            <h3>Languages I enjoy coding in</h3>
-            <div class="languages">
-                <div>
-                    <p>TypeScript & JavaScript</p>
-                    <progress max="100" value="90"></progress>
-                </div>
-                <div>
-                    <p>HTML & CSS</p>
-                    <progress max="100" value="90"></progress>
-                </div>
-                <div>
-                    <p>Rust</p>
-                    <progress max="100" value="80"></progress>
-                </div>
-                <div>
-                    <p>Scala & Java</p>
-                    <progress max="100" value="50"></progress>
-                </div>
-                <div>
-                    <p>C#</p>
-                    <progress max="100" value="60"></progress>
-                </div>
-                <div>
-                    <p>Python</p>
-                    <progress max="100" value="60"></progress>
-                </div>
-            </div>
-        </section>
-        <section id="work">
-            <h1>Simulations</h1>
+            <a href="http://cm-tech.github.io/traffic-dots/">View site</a>
+          </div>
+        </div>
+        <div class="item">
+          <a href="http://cm-tech.github.io/car-evolution"><img src="images/img2.png" alt="car simulation" /></a>
+          <div>
+            <h2>Car Evolution</h2>
             <p>
-                I have made hundreds of fun little simulation projects to improve my programming skills. 
-                I've put a couple below and many more are available at <a href="https://cm-ht.ml">CM-Tech</a>. 
+              This project uses the planck.js physics engine to simulate cars that evolve to drive through a course. Heavily inspired by
+              <a href="http://boxcar2d.com">BoxCar2D</a>.
             </p>
-            <div class="grid">
-                <div class="item">
-                    <a href="http://cm-tech.github.io/traffic-dots/"><img src="images/img1.png" alt="brownian motion simulation" /></a>
-                    <div>
-                        <h2>Traffic dots</h2>
-                        <p>
-                            Just a fun little project where dots move randomly semi locked to a grid. They bump into each other and you can click to
-                            repel or attract them, depending on the setting.
-                        </p>
-                        <a href="http://cm-tech.github.io/traffic-dots/">View site</a>
-                    </div>
-                </div>
-                <div class="item">
-                    <a href="http://cm-tech.github.io/car-evolution"><img src="images/img2.png" alt="car simulation" /></a>
-                    <div>
-                        <h2>Car Evolution</h2>
-                        <p>
-                            This project uses the planck.js physics engine to simulate cars that evolve to drive through a course. Heavily inspired by
-                            <a href="http://boxcar2d.com">BoxCar2D</a>.
-                        </p>
-                        <a href="http://cm-tech.github.io/car-evolution">View site</a>
-                    </div>
-                </div>
-                <div class="item">
-                    <a href="http://cm-tech.github.io/boids"><img src="images/img3.png" alt="boids simulation" /></a>
-                    <div>
-                        <h2>Boids</h2>
-                        <p>
-                            Boids is a term coined by Craig Reynolds that is used to describe objects which flock in groups. This project simulates boids shaped like
-                            caterpillars.
-                        </p>
-                        <a href="http://cm-tech.github.io/boids">View site</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section id="contact">
-            <h1>Frontend work</h1>
-            <p>I've worked on large React and Angular codebases, and I'm comfortable picking up new things quickly. This gives me the flexibility to adapt to new teams, libraries, and languages. </p>
-        </section>
-            <div class="social">
-                <a href="https://github.com/modderme123">GitHub</a>
-                <a href="mailto:modderme123@gmail.com">Email</a>
-            </div>
-        <script src="bundle.js"></script>
-    </body>
+            <a href="http://cm-tech.github.io/car-evolution">View site</a>
+          </div>
+        </div>
+        <div class="item">
+          <a href="http://cm-tech.github.io/boids"><img src="images/img3.png" alt="boids simulation" /></a>
+          <div>
+            <h2>Boids</h2>
+            <p>
+              Boids is a term coined by Craig Reynolds that is used to describe objects which flock in groups. This project simulates boids shaped
+              like caterpillars.
+            </p>
+            <a href="http://cm-tech.github.io/boids">View site</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="contact">
+      <h1>Frontend work</h1>
+      <p>
+        I've worked on large React and Angular codebases, and I'm comfortable picking up new things quickly. This gives me the flexibility to adapt to
+        new teams, libraries, and languages.
+      </p>
+    </section>
+    <div class="social">
+      <a href="https://github.com/modderme123">GitHub</a>
+      <a href="mailto:modderme123@gmail.com">Email</a>
+    </div>
+    <script src="bundle.js"></script>
+  </body>
 </html>
