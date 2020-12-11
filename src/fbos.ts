@@ -1,7 +1,8 @@
 import { regl } from "./canvas";
 import * as config from "./config";
+import type REGL from "regl";
 
-function doubleFbo(filter) {
+function doubleFbo(filter: REGL.TextureMagFilterType) {
     let fbos = [createFbo(filter), createFbo(filter)];
     return {
         get read() {
@@ -16,14 +17,14 @@ function doubleFbo(filter) {
     };
 }
 
-function createFbo(filter) {
+function createFbo(filter: REGL.TextureMagFilterType) {
     let tex = regl.texture({
         width: window.innerWidth >> config.TEXTURE_DOWNSAMPLE,
         height: window.innerHeight >> config.TEXTURE_DOWNSAMPLE,
         min: filter,
         mag: filter,
         type: "half float",
-    });
+    } as REGL.Texture2DOptions);
     window.addEventListener("resize", () => {
         tex.resize(window.innerWidth >> config.TEXTURE_DOWNSAMPLE, window.innerHeight >> config.TEXTURE_DOWNSAMPLE);
     });

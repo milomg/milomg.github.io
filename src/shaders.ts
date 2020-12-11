@@ -1,3 +1,4 @@
+import type REGL from "regl";
 import { regl } from "./canvas";
 import { TEXTURE_DOWNSAMPLE } from "./config";
 import { velocity, density, pressure, divergenceTex } from "./fbos";
@@ -14,8 +15,13 @@ import displayShader from "../shaders/display.frag";
 
 import imgURL from "../public/images/logo.png";
 
-const texelSize = ({ viewportWidth, viewportHeight }) => [1 / viewportWidth, 1 / viewportHeight];
-const viewport = ({ viewportWidth, viewportHeight }) => ({
+const texelSize: REGL.DynamicVariableFn<number[]> = ({ viewportWidth, viewportHeight }) => [1 / viewportWidth, 1 / viewportHeight];
+const viewport: REGL.DynamicVariableFn<{
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}> = ({ viewportWidth, viewportHeight }) => ({
     x: 0,
     y: 0,
     width: viewportWidth >> TEXTURE_DOWNSAMPLE,
@@ -29,24 +35,32 @@ export const fullscreen = regl({
     },
     count: 6,
 });
-
+interface SplatProps {
+    framebuffer: REGL.Framebuffer2D;
+    uTarget: REGL.Framebuffer2D;
+    point: number[];
+    color: number;
+    radius: number;
+}
 const splat = regl({
     frag: splatShader,
-    framebuffer: regl.prop("framebuffer"),
+    framebuffer: regl.prop<SplatProps, "framebuffer">("framebuffer"),
     uniforms: {
-        uTarget: regl.prop("uTarget"),
+        uTarget: regl.prop<SplatProps, "uTarget">("uTarget"),
         aspectRatio: ({ viewportWidth, viewportHeight }) => viewportWidth / viewportHeight,
-        point: regl.prop("point"),
-        color: regl.prop("color"),
-        radius: regl.prop("radius"),
+        point: regl.prop<SplatProps, "point">("point"),
+        color: regl.prop<SplatProps, "color">("color"),
+        radius: regl.prop<SplatProps, "radius">("radius"),
     },
     viewport,
 });
 
 const img = new Image();
 img.src = imgURL;
-
-let logo;
+interface LogoProps {
+    dissipation: number;
+}
+let logo: undefined | REGL.DrawCommand;
 img.onload = () =>
     (logo = regl({
         frag: logoShader,
@@ -57,19 +71,25 @@ img.onload = () =>
             ratio: ({ viewportWidth, viewportHeight }) => {
                 return viewportWidth > viewportHeight ? [viewportWidth / viewportHeight, 1.0] : [1.0, viewportHeight / viewportWidth];
             },
-            dissipation: regl.prop("dissipation"),
+            dissipation: regl.prop<LogoProps, "dissipation">("dissipation"),
         },
         viewport,
     }));
 
+interface AdvectProps {
+    framebuffer: REGL.Framebuffer2D;
+    color: number[];
+    dissipation: number;
+    x: REGL.Framebuffer2D;
+}
 const advect = regl({
     frag: advectShader,
-    framebuffer: regl.prop("framebuffer"),
+    framebuffer: regl.prop<AdvectProps, "framebuffer">("framebuffer"),
     uniforms: {
         timestep: 0.017,
-        dissipation: regl.prop("dissipation"),
-        color: regl.prop("color"),
-        x: regl.prop("x"),
+        dissipation: regl.prop<AdvectProps, "dissipation">("dissipation"),
+        color: regl.prop<AdvectProps, "color">("color"),
+        x: regl.prop<AdvectProps, "x">("x"),
         velocity: () => velocity.read,
         texelSize,
     },
@@ -89,7 +109,7 @@ const clear = regl({
     framebuffer: () => pressure.write,
     uniforms: {
         pressure: () => pressure.read,
-        dissipation: regl.prop("dissipation"),
+        dissipation: regl.prop<LogoProps, "dissipation">("dissipation"),
     },
     viewport,
 });
@@ -120,7 +140,7 @@ export const display = regl({
     },
 });
 
-export function createSplat(x, y, dx, dy, color, radius) {
+export function createSplat(x: number, y: number, dx: number, dy: number, color: number[], radius: number) {
     splat({
         framebuffer: velocity.write,
         uTarget: velocity.read,
@@ -139,13 +159,18 @@ export function createSplat(x, y, dx, dy, color, radius) {
     });
     density.swap();
 }
-export function drawLogo(dissipation) {
+export function drawLogo(dissipation: number) {
     if (logo) {
         logo({ dissipation });
         density.swap();
     }
 }
-export const update = (config) => {
+export const update = (config: {
+    VELOCITY_DISSIPATION: number;
+    DENSITY_DISSIPATION: number;
+    PRESSURE_ITERATIONS: number;
+    PRESSURE_DISSIPATION: number;
+}) => {
     advect({
         framebuffer: velocity.write,
         x: velocity.read,

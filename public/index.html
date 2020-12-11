@@ -28,55 +28,50 @@
         <canvas id="c"></canvas>
         <section class="fullscreen">
             <a href="#about" class="button">
-                <i class="fas fa-chevron-down"></i>
+                <div class="mouse">
+                    <div class="mouse-button">&nbsp;</div>
+                </div>
             </a>
         </section>
         <section id="about">
-            <h1>About</h1>
-            <hr />
+            <h1>Hi!</h1>
             <p>
-                I'm a student that likes to code cool simulations (like the fluid simulation on this page). I love bleeding edge things. I watch out
-                for bugs and won't rest until I squash them.
+                I'm a student that likes to code cool simulations and build awesome frontend sites. I love high performance, clean, well structured code. 
+                I carefully pick out bugs and won't rest until I squash them.
             </p>
             <h3>Languages I enjoy coding in</h3>
-            <ul class="languages">
-                <li>
-                    <p>TypeScript/JavaScript</p>
+            <div class="languages">
+                <div>
+                    <p>TypeScript & JavaScript</p>
                     <progress max="100" value="90"></progress>
-                </li>
-                <li>
+                </div>
+                <div>
+                    <p>HTML & CSS</p>
+                    <progress max="100" value="90"></progress>
+                </div>
+                <div>
                     <p>Rust</p>
-                    <progress max="100" value="90"></progress>
-                </li>
-                <li>
-                    <p>Scala</p>
-                    <progress max="100" value="60"></progress>
-                </li>
-                <li>
-                    <p>Swift</p>
-                    <progress max="100" value="40"></progress>
-                </li>
-                <li>
+                    <progress max="100" value="80"></progress>
+                </div>
+                <div>
+                    <p>Scala & Java</p>
+                    <progress max="100" value="50"></progress>
+                </div>
+                <div>
                     <p>C#</p>
-                    <progress max="100" value="40"></progress>
-                </li>
-                <li>
-                    <p>Java</p>
                     <progress max="100" value="60"></progress>
-                </li>
-                <li>
+                </div>
+                <div>
                     <p>Python</p>
-                    <progress max="100" value="30"></progress>
-                </li>
-            </ul>
+                    <progress max="100" value="60"></progress>
+                </div>
+            </div>
         </section>
         <section id="work">
-            <h1>Projects</h1>
-            <hr />
+            <h1>Simulations</h1>
             <p>
-                If you are just looking for some things to play around with, here are some things you can try. Many of these projects are part of a
-                collaboration with
-                <a href="https://ckissane.github.io">Cole</a> so please check him out as well
+                I have made hundreds of fun little simulation projects to improve my programming skills. 
+                I've put a couple below and many more are available at <a href="https://cm-ht.ml">CM-Tech</a>. 
             </p>
             <div class="grid">
                 <div class="item">
@@ -106,40 +101,22 @@
                     <div>
                         <h2>Boids</h2>
                         <p>
-                            Boids is a term that is used to describe objects which travel in groups. This project simulates boids shaped like
+                            Boids is a term coined by Craig Reynolds that is used to describe objects which flock in groups. This project simulates boids shaped like
                             caterpillars.
                         </p>
                         <a href="http://cm-tech.github.io/boids">View site</a>
                     </div>
                 </div>
             </div>
-            <br />
-            <footer><a href="http://github.com/cm-tech">Even More Projects!</a></footer>
         </section>
         <section id="contact">
-            <h1>Technical Details</h1>
-            <hr />
-            <p>
-                The fluid simulation was made with <a href="https://github.com/regl-project/regl">regl</a>. It was inspired by the
-                <a href="https://developer.download.nvidia.com/books/HTML/gpugems/gpugems_ch38.html">gpugems</a> fluid simulation. The main body of
-                the site was handcoded. You can view the entire source on
-                <a href="https://github.com/modderme123/modderme123.github.io">github</a>
-            </p>
+            <h1>Frontend work</h1>
+            <p>I've worked on large React and Angular codebases, and I'm comfortable picking up new things quickly. This gives me the flexibility to adapt to new teams, libraries, and languages. </p>
         </section>
-        <section>
-            <ul class="social">
-                <li>
-                    <a href="https://github.com/modderme123">
-                        <i class="fab fa-github fa-3x"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="mailto:modderme123@gmail.com">
-                        <i class="fas fa-envelope fa-3x"></i>
-                    </a>
-                </li>
-            </ul>
-        </section>
+            <div class="social">
+                <a href="https://github.com/modderme123">GitHub</a>
+                <a href="mailto:modderme123@gmail.com">Email</a>
+            </div>
         <script src="bundle.js"></script>
     </body>
 </html>

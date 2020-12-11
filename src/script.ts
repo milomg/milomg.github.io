@@ -33,3 +33,7 @@ document.addEventListener("mousemove", (e) => {
 document.addEventListener("mousedown", () => {
     pointer.color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
 });
+
+console.log("%cHi! Nice to see you there", "font-size: x-large");
+console.log("If you are wondering how I made this, the source code is at https://github.com/modderme123/modderme123.github.io")
+console.log("The fluid simulation was made with https://regl.party and is inspired by a GPU Gems chapter");

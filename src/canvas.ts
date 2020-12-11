@@ -1,6 +1,6 @@
 import reglmaker from "regl";
 
-const c = document.getElementById("c");
+const c = document.getElementById("c") as HTMLCanvasElement;
 function resize() {
     c.width = window.innerWidth;
     c.height = window.innerHeight;
