@@ -63,29 +63,15 @@ section {
 #about,
 #contact,
 #work {
-  background: rgba(38, 50, 56, 0.9);
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  color: black;
 }
-section a {
-  filter: brightness(1.2);
-}
+
 h1 {
   font-family: "Raleway";
   font-size: 3em;
 }
-.languages div {
-  flex: 50%;
-}
-.languages p {
-  margin-bottom: 0.5em;
-}
-.languages {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin: 0;
-  padding: 0;
-}
+
 .social {
   text-align: center;
   padding: 2rem 1rem;
@@ -118,7 +104,6 @@ body {
 }
 .item img {
   width: 100%;
-  filter: url(#monochrome);
 }
 .item div {
   border-radius: 0.25rem;
@@ -133,6 +118,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 .item h2 {
   margin-top: 0;
@@ -145,38 +131,4 @@ body {
 }
 a {
   color: #82aaff;
-}
-.defs-only {
-  position: absolute;
-  height: 0;
-  width: 0;
-  overflow: hidden;
-  left: -100%;
-}
-progress {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  height: 8px;
-  border-radius: 10px;
-  border: none;
-  background-color: #dfdfdf;
-  margin-bottom: 1em;
-}
-::-webkit-progress-inner-element {
-  border: 0.5px solid #dedede;
-  background: #82aaff;
-  border-radius: 10px;
-  overflow: hidden;
-}
-::-moz-progress-bar {
-  background-color: #82aaff;
-  border-radius: 10px;
-}
-
-::-webkit-progress-bar {
-  background-color: #dfdfdf;
-}
-::-webkit-progress-value {
-  background-color: #82aaff;
-  border-radius: 10px;
 }

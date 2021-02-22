@@ -1,7 +1,7 @@
 import type REGL from "regl";
 import { regl } from "./canvas";
-import { TEXTURE_DOWNSAMPLE } from "./config";
-import { velocity, density, pressure, divergenceTex } from "./fbos";
+import { TEXTURE_DOWNSAMPLE, VORTICITY_AMOUNT } from "./config";
+import { velocity, density, pressure, divergenceTex, vorticityTex } from "./fbos";
 
 import projectShader from "../shaders/project.vert";
 import splatShader from "../shaders/splat.frag";
@@ -12,6 +12,8 @@ import clearShader from "../shaders/clear.frag";
 import gradientSubtractShader from "../shaders/gradientSubtract.frag";
 import jacobiShader from "../shaders/jacobi.frag";
 import displayShader from "../shaders/display.frag";
+import vorticityShader from "../shaders/vorticity.frag";
+import vortForceShader from "../shaders/vortForce.frag";
 
 import imgURL from "../public/images/logo.png";
 
@@ -68,9 +70,7 @@ img.onload = () =>
     uniforms: {
       density: () => density.read,
       image: regl.texture(img),
-      ratio: ({ viewportWidth, viewportHeight }) => {
-        return viewportWidth > viewportHeight ? [viewportWidth / viewportHeight, 1.0] : [1.0, viewportHeight / viewportWidth];
-      },
+      ratio: ({ viewportWidth: vw, viewportHeight: vh }) => [vw / Math.min(vw, vh), vh / Math.min(vw, vh)],
       dissipation: regl.prop<LogoProps, "dissipation">("dissipation"),
     },
     viewport,
@@ -139,7 +139,25 @@ export const display = regl({
     density: () => density.read,
   },
 });
-
+export const vorticity = regl({
+  frag: vorticityShader,
+  framebuffer: vorticityTex,
+  uniforms: {
+    velocity: () => velocity.read,
+    texelSize,
+  },
+});
+export const vorticityForce = regl({
+  frag: vortForceShader,
+  framebuffer: () => velocity.write,
+  uniforms: {
+    velocity: () => velocity.read,
+    vorticity: vorticityTex,
+    texelSize,
+    timestep: 0.017,
+    curl: VORTICITY_AMOUNT,
+  },
+});
 export function createSplat(x: number, y: number, dx: number, dy: number, color: number[], radius: number) {
   splat({
     framebuffer: velocity.write,
@@ -171,21 +189,10 @@ export const update = (config: {
   PRESSURE_ITERATIONS: number;
   PRESSURE_DISSIPATION: number;
 }) => {
-  advect({
-    framebuffer: velocity.write,
-    x: velocity.read,
-    dissipation: config.VELOCITY_DISSIPATION,
-    color: [0, 0, 0, 0],
-  });
-  velocity.swap();
+  vorticity();
 
-  advect({
-    framebuffer: density.write,
-    x: density.read,
-    dissipation: config.DENSITY_DISSIPATION,
-    color: [0.12, 0.2, 0.22, 1],
-  });
-  density.swap();
+  vorticityForce();
+  velocity.swap();
 
   divergence();
 
@@ -201,4 +208,20 @@ export const update = (config: {
 
   gradientSubtract();
   velocity.swap();
+
+  advect({
+    framebuffer: velocity.write,
+    x: velocity.read,
+    dissipation: config.VELOCITY_DISSIPATION,
+    color: [0, 0, 0, 0],
+  });
+  velocity.swap();
+
+  advect({
+    framebuffer: density.write,
+    x: density.read,
+    dissipation: config.DENSITY_DISSIPATION,
+    color: [0.12, 0.2, 0.22, 1],
+  });
+  density.swap();
 };

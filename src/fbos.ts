@@ -38,3 +38,4 @@ export const velocity = doubleFbo("linear");
 export const density = doubleFbo("linear");
 export const pressure = doubleFbo("nearest");
 export const divergenceTex = createFbo("nearest");
+export const vorticityTex = createFbo("linear");
