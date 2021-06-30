@@ -1,7 +1,13 @@
 import type REGL from "regl";
 import { regl } from "./canvas";
 import { TEXTURE_DOWNSAMPLE, VORTICITY_AMOUNT } from "./config";
-import { velocity, density, pressure, divergenceTex, vorticityTex } from "./fbos";
+import {
+  velocity,
+  density,
+  pressure,
+  divergenceTex,
+  vorticityTex,
+} from "./fbos";
 
 import projectShader from "../shaders/project.vert";
 import splatShader from "../shaders/splat.frag";
@@ -17,7 +23,10 @@ import vortForceShader from "../shaders/vortForce.frag";
 
 import imgURL from "../public/images/logo.png";
 
-const texelSize: REGL.DynamicVariableFn<number[]> = ({ viewportWidth, viewportHeight }) => [1 / viewportWidth, 1 / viewportHeight];
+const texelSize: REGL.DynamicVariableFn<number[]> = ({
+  viewportWidth,
+  viewportHeight,
+}) => [1 / viewportWidth, 1 / viewportHeight];
 const viewport: REGL.DynamicVariableFn<{
   x: number;
   y: number;
@@ -49,7 +58,8 @@ const splat = regl({
   framebuffer: regl.prop<SplatProps, "framebuffer">("framebuffer"),
   uniforms: {
     uTarget: regl.prop<SplatProps, "uTarget">("uTarget"),
-    aspectRatio: ({ viewportWidth, viewportHeight }) => viewportWidth / viewportHeight,
+    aspectRatio: ({ viewportWidth, viewportHeight }) =>
+      viewportWidth / viewportHeight,
     point: regl.prop<SplatProps, "point">("point"),
     color: regl.prop<SplatProps, "color">("color"),
     radius: regl.prop<SplatProps, "radius">("radius"),
@@ -60,20 +70,24 @@ const splat = regl({
 const img = new Image();
 img.src = imgURL;
 interface LogoProps {
-  dissipation: number;
+  logo: boolean;
 }
-let logo: undefined | REGL.DrawCommand;
+let display: undefined | REGL.DrawCommand;
 img.onload = () =>
-  (logo = regl({
-    frag: logoShader,
-    framebuffer: () => density.write,
+  (display = regl({
+    frag: displayShader,
     uniforms: {
       density: () => density.read,
-      image: regl.texture(img),
-      ratio: ({ viewportWidth: vw, viewportHeight: vh }) => [vw / Math.min(vw, vh), vh / Math.min(vw, vh)],
-      dissipation: regl.prop<LogoProps, "dissipation">("dissipation"),
+      velocity: () => velocity.read,
+      ratio: ({ viewportWidth: vw, viewportHeight: vh }) => [
+        vw / Math.min(vw, vh),
+        vh / Math.min(vw, vh),
+      ],
+      image: regl.texture({ data: img, mag: "linear", min: "linear" }),
+      texelSize,
+      logo: regl.prop<LogoProps, "logo">("logo")
     },
-    viewport,
+    // viewport,
   }));
 
 interface AdvectProps {
@@ -133,12 +147,7 @@ const jacobi = regl({
   },
   viewport,
 });
-export const display = regl({
-  frag: displayShader,
-  uniforms: {
-    density: () => density.read,
-  },
-});
+
 export const vorticity = regl({
   frag: vorticityShader,
   framebuffer: vorticityTex,
@@ -158,7 +167,14 @@ export const vorticityForce = regl({
     curl: VORTICITY_AMOUNT,
   },
 });
-export function createSplat(x: number, y: number, dx: number, dy: number, color: number[], radius: number): void {
+export function createSplat(
+  x: number,
+  y: number,
+  dx: number,
+  dy: number,
+  color: number[],
+  radius: number
+): void {
   splat({
     framebuffer: velocity.write,
     uTarget: velocity.read,
@@ -177,10 +193,9 @@ export function createSplat(x: number, y: number, dx: number, dy: number, color:
   });
   density.swap();
 }
-export function drawLogo(dissipation: number): void {
-  if (logo) {
-    logo({ dissipation });
-    density.swap();
+export function displayMain(logo:boolean): void {
+  if (display) {
+    display({logo});
   }
 }
 export const update = (config: {

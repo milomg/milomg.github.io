@@ -1,19 +1,17 @@
 import "zenscroll";
 import { regl } from "./canvas";
 import * as config from "./config";
-import { fullscreen, update, display, drawLogo, createSplat } from "./shaders";
+import { fullscreen, update, displayMain as display, createSplat } from "./shaders";
 
 let t = 0;
 regl.frame(() => {
   fullscreen(() => {
-    if (window.scrollY < window.innerHeight / 2)
-      drawLogo(1.0 - config.DENSITY_DISSIPATION);
-
-    const frequency = 0.1;
-    const red = Math.sin(frequency * t + 0) + 1;
-    const green = Math.sin(frequency * t + 2) + 1;
-    const blue = Math.sin(frequency * t + 4) + 1;
-    t++;
+    // if ()
+      // drawLogo(1.0 - config.DENSITY_DISSIPATION);
+    const red = Math.sin(t + 0) + 1;
+    const green = Math.sin(t + 2) + 1;
+    const blue = Math.sin(t + 4) + 1;
+    t+=0.1;
     createSplat(
       pointer.x,
       pointer.y,
@@ -25,8 +23,20 @@ regl.frame(() => {
     pointer.dx *= 0.5;
     pointer.dy *= 0.5;
 
+    for (let i = 0; i<10; i++) {
+      const x = Math.cos(i/10*2*Math.PI);
+      const y = Math.sin(i/10*2*Math.PI);
+      createSplat(
+        x*400+window.innerWidth/2,
+        y*400+window.innerHeight/2,
+        x * 300,
+        y * 300,
+        [red, green, blue],
+        0.00002
+      );
+    }
     update(config);
-    display();
+    display(window.scrollY < window.innerHeight / 2);
   });
 });
 
