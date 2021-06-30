@@ -17,10 +17,10 @@ void main() {
   float T = texture2D(vorticity, coords + vec2(0.0, texelSize.y)).x;
 
   float vC = texture2D(vorticity, coords).r;
-  
+
   vec2 force = 0.5 * vec2(abs(T) - abs(B), abs(L) - abs(R));
-  force *= curl * vC / max(length(force), EPSILON); 
+  force *= curl * vC / max(length(force), EPSILON);
 
   vec2 vel = texture2D(velocity, coords).xy;
-  gl_FragColor = vec4(vel + timestep * force, 0.0,1.0);
+  gl_FragColor = vec4(vel + timestep * force, 0.0, 1.0);
 }

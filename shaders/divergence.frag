@@ -6,10 +6,10 @@ uniform vec2 texelSize;
 uniform sampler2D velocity; // vector field
 
 vec2 sampleVelocity(in vec2 uv) {
-    vec2 mult = vec2(1.0, 1.0);
-    if (uv.x < 0.0 || uv.x > 1.0) { mult.x = -1.0; }
-    if (uv.y < 0.0 || uv.y > 1.0) { mult.y = -1.0; }
-    return mult * texture2D(velocity, clamp(uv, 0.0, 1.0)).xy;
+  vec2 mult = vec2(1.0, 1.0);
+  if (uv.x < 0.0 || uv.x > 1.0) mult.x = -1.0;
+  if (uv.y < 0.0 || uv.y > 1.0) mult.y = -1.0;
+  return mult * texture2D(velocity, clamp(uv, 0.0, 1.0)).xy;
 }
 
 void main() {

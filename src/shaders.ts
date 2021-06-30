@@ -158,7 +158,7 @@ export const vorticityForce = regl({
     curl: VORTICITY_AMOUNT,
   },
 });
-export function createSplat(x: number, y: number, dx: number, dy: number, color: number[], radius: number) {
+export function createSplat(x: number, y: number, dx: number, dy: number, color: number[], radius: number): void {
   splat({
     framebuffer: velocity.write,
     uTarget: velocity.read,
@@ -177,7 +177,7 @@ export function createSplat(x: number, y: number, dx: number, dy: number, color:
   });
   density.swap();
 }
-export function drawLogo(dissipation: number) {
+export function drawLogo(dissipation: number): void {
   if (logo) {
     logo({ dissipation });
     density.swap();
@@ -188,7 +188,7 @@ export const update = (config: {
   DENSITY_DISSIPATION: number;
   PRESSURE_ITERATIONS: number;
   PRESSURE_DISSIPATION: number;
-}) => {
+}): void => {
   vorticity();
 
   vorticityForce();

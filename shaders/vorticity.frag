@@ -11,5 +11,5 @@ void main() {
   float B = texture2D(velocity, coords - vec2(0.0, texelSize.y)).x;
   float T = texture2D(velocity, coords + vec2(0.0, texelSize.y)).x;
 
-  gl_FragColor = vec4(0.5*((R - L) - (T - B)),0.0,0.0,1.0);
-} 
+  gl_FragColor = vec4(0.5 * ((R - L) - (T - B)), 0.0, 0.0, 1.0);
+}

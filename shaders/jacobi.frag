@@ -15,7 +15,7 @@ void main() {
 
   // divergence sample, from center
   float bC = texture2D(divergence, coords).x;
-  
+
   // evaluate Jacobi iteration
   gl_FragColor = vec4(0.25 * (L + R + B + T - bC), 0, 0, 1);
 }
