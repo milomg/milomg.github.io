@@ -209,3 +209,46 @@ nav {
   font-family: "Fira Code", "Courier New", Courier, monospace;
   color: #eeffff;
 }
+
+@media screen and (max-width: 850px) {
+  section {
+    margin: 0;
+  }
+  .vr {
+    display: none;
+  }
+  #logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #eeffff;
+  }
+  #logo-placeholder {
+    width: 64px;
+    height: 64px;
+    margin: 12px;
+  }
+  #logo > h1 {
+    margin: 0 12px;
+    font-size: 24px;
+  }
+  nav {
+    height: 88px;
+  }
+  .links {
+    margin-right: 0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  section {
+    padding: 1em 2em;
+  }
+}
+
+
+@media screen and (max-width: 400px) {
+  h1 {
+    font-size: 2em;
+  }
+}
