@@ -30,7 +30,7 @@ function createFbo(filter: REGL.TextureMagFilterType) {
     depthStencil: false,
   });
   window.addEventListener("resize", () => {
-    tex.resize(window.innerWidth >> config.TEXTURE_DOWNSAMPLE, window.innerHeight >> config.TEXTURE_DOWNSAMPLE)
+    tex.resize(window.innerWidth >> config.TEXTURE_DOWNSAMPLE, window.innerHeight >> config.TEXTURE_DOWNSAMPLE);
     framebuffer.resize(window.innerWidth >> config.TEXTURE_DOWNSAMPLE, window.innerHeight >> config.TEXTURE_DOWNSAMPLE);
   });
   return framebuffer;
@@ -41,3 +41,16 @@ export const density = doubleFbo("linear");
 export const pressure = doubleFbo("nearest");
 export const divergenceTex = createFbo("nearest");
 export const vorticityTex = createFbo("linear");
+
+function densityColor() {
+  regl.clear({
+    framebuffer: density.write,
+    color: [38 / 255, 50 / 255, 56 / 255, 1],
+  });
+  regl.clear({
+    framebuffer: density.read,
+    color: [38 / 255, 50 / 255, 56 / 255, 1],
+  });
+}
+window.addEventListener("resize", densityColor);
+densityColor();

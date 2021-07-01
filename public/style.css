@@ -27,7 +27,6 @@
   border-radius: 18px;
   border: 2px solid #ffffff;
 }
-
 .mouse-button {
   background-color: #ffffff;
   width: 4px;
@@ -51,24 +50,28 @@ body {
   color: white;
   font-size: 1.5em;
 }
-.fullscreen {
-  height: 100vh;
-  padding: 0;
-}
 section {
-  padding: 3em 5em;
+  padding: 1em 5em;
+  margin: 0 130px;
+}
+section > * {
   max-width: 900px;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 #about,
-#contact,
+#fun,
 #work {
-  background: rgba(255, 255, 255, 0.95);
-  color: black;
+  background: #263238;
+  color: white;
 }
-
+#top {
+  height: calc(100vh - 130px);
+  padding: 0;
+  position: relative;
+}
 h1 {
-  font-family: "Raleway";
+  font-family: "Fira Code", "Courier New", Courier, monospace;
   font-size: 3em;
 }
 
@@ -131,4 +134,78 @@ body {
 }
 a {
   color: #82aaff;
+}
+#scroller {
+  width: 100vw;
+  height: calc(100vh - 130px);
+  overflow: scroll;
+  scroll-behavior: smooth;
+}
+.hr {
+  background: #eeffff;
+  left: 0;
+  width: 100vw;
+  height: 2px;
+  pointer-events: none;
+}
+.vr {
+  background: #eeffff;
+  position: fixed;
+  top: 0px;
+  width: 2px;
+  height: 100vh;
+  pointer-events: none;
+}
+.vr1 {
+  left: 128px;
+}
+.vr2 {
+  right: 128px;
+}
+nav {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 128px;
+  border-bottom: 2px solid #eeffff;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#logo-placeholder {
+  width: 80px;
+  height: 80px;
+  margin: 24px;
+}
+#logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #eeffff;
+}
+#logo > h1 {
+  margin: 0 24px;
+  font-size: 36px;
+}
+.links {
+  display: flex;
+  margin-right: 130px;
+  counter-reset: item;
+}
+.links li {
+  list-style-type: decimal-leading-zero;
+  margin-right: 32px;
+  font-size: 16px;
+  margin-left: 8px;
+}
+.links li::marker {
+  color: #82aaff;
+}
+
+.links a {
+  text-decoration: none;
+  font-family: "Fira Code", "Courier New", Courier, monospace;
+  color: #eeffff;
 }

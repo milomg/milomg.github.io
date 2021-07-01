@@ -1,17 +1,10 @@
 import type REGL from "regl";
 import { regl } from "./canvas";
 import { TEXTURE_DOWNSAMPLE, VORTICITY_AMOUNT } from "./config";
-import {
-  velocity,
-  density,
-  pressure,
-  divergenceTex,
-  vorticityTex,
-} from "./fbos";
+import { velocity, density, pressure, divergenceTex, vorticityTex } from "./fbos";
 
 import projectShader from "../shaders/project.vert";
 import splatShader from "../shaders/splat.frag";
-import logoShader from "../shaders/logo.frag";
 import advectShader from "../shaders/advect.frag";
 import divergenceShader from "../shaders/divergence.frag";
 import clearShader from "../shaders/clear.frag";
@@ -23,10 +16,7 @@ import vortForceShader from "../shaders/vortForce.frag";
 
 import imgURL from "../public/images/logo.png";
 
-const texelSize: REGL.DynamicVariableFn<number[]> = ({
-  viewportWidth,
-  viewportHeight,
-}) => [1 / viewportWidth, 1 / viewportHeight];
+const texelSize: REGL.DynamicVariableFn<number[]> = ({ viewportWidth, viewportHeight }) => [1 / viewportWidth, 1 / viewportHeight];
 const viewport: REGL.DynamicVariableFn<{
   x: number;
   y: number;
@@ -58,8 +48,7 @@ const splat = regl({
   framebuffer: regl.prop<SplatProps, "framebuffer">("framebuffer"),
   uniforms: {
     uTarget: regl.prop<SplatProps, "uTarget">("uTarget"),
-    aspectRatio: ({ viewportWidth, viewportHeight }) =>
-      viewportWidth / viewportHeight,
+    aspectRatio: ({ viewportWidth, viewportHeight }) => viewportWidth / viewportHeight,
     point: regl.prop<SplatProps, "point">("point"),
     color: regl.prop<SplatProps, "color">("color"),
     radius: regl.prop<SplatProps, "radius">("radius"),
@@ -69,9 +58,6 @@ const splat = regl({
 
 const img = new Image();
 img.src = imgURL;
-interface LogoProps {
-  logo: boolean;
-}
 let display: undefined | REGL.DrawCommand;
 img.onload = () =>
   (display = regl({
@@ -79,15 +65,9 @@ img.onload = () =>
     uniforms: {
       density: () => density.read,
       velocity: () => velocity.read,
-      ratio: ({ viewportWidth: vw, viewportHeight: vh }) => [
-        vw / Math.min(vw, vh),
-        vh / Math.min(vw, vh),
-      ],
       image: regl.texture({ data: img, mag: "linear", min: "linear" }),
       texelSize,
-      logo: regl.prop<LogoProps, "logo">("logo")
     },
-    // viewport,
   }));
 
 interface AdvectProps {
@@ -118,12 +98,15 @@ const divergence = regl({
   },
   viewport,
 });
+interface ClearProps {
+  dissipation: number;
+}
 const clear = regl({
   frag: clearShader,
   framebuffer: () => pressure.write,
   uniforms: {
     pressure: () => pressure.read,
-    dissipation: regl.prop<LogoProps, "dissipation">("dissipation"),
+    dissipation: regl.prop<ClearProps, "dissipation">("dissipation"),
   },
   viewport,
 });
@@ -167,14 +150,7 @@ export const vorticityForce = regl({
     curl: VORTICITY_AMOUNT,
   },
 });
-export function createSplat(
-  x: number,
-  y: number,
-  dx: number,
-  dy: number,
-  color: number[],
-  radius: number
-): void {
+export function createSplat(x: number, y: number, dx: number, dy: number, color: number[], radius: number): void {
   splat({
     framebuffer: velocity.write,
     uTarget: velocity.read,
@@ -193,9 +169,9 @@ export function createSplat(
   });
   density.swap();
 }
-export function displayMain(logo:boolean): void {
+export function displayMain(): void {
   if (display) {
-    display({logo});
+    display();
   }
 }
 export const update = (config: {
@@ -236,7 +212,7 @@ export const update = (config: {
     framebuffer: density.write,
     x: density.read,
     dissipation: config.DENSITY_DISSIPATION,
-    color: [0.12, 0.2, 0.22, 1],
+    color: [38 / 255, 50 / 255, 56 / 255, 1],
   });
   density.swap();
 };
