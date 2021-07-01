@@ -3,18 +3,18 @@ import { regl } from "./canvas";
 import { TEXTURE_DOWNSAMPLE, VORTICITY_AMOUNT } from "./config";
 import { velocity, density, pressure, divergenceTex, vorticityTex } from "./fbos";
 
-import projectShader from "../shaders/project.vert";
-import splatShader from "../shaders/splat.frag";
-import advectShader from "../shaders/advect.frag";
-import divergenceShader from "../shaders/divergence.frag";
-import clearShader from "../shaders/clear.frag";
-import gradientSubtractShader from "../shaders/gradientSubtract.frag";
-import jacobiShader from "../shaders/jacobi.frag";
-import displayShader from "../shaders/display.frag";
-import vorticityShader from "../shaders/vorticity.frag";
-import vortForceShader from "../shaders/vortForce.frag";
+import projectShader from "./shaders/project.vert?raw";
+import splatShader from "./shaders/splat.frag?raw";
+import advectShader from "./shaders/advect.frag?raw";
+import divergenceShader from "./shaders/divergence.frag?raw";
+import clearShader from "./shaders/clear.frag?raw";
+import gradientSubtractShader from "./shaders/gradientSubtract.frag?raw";
+import jacobiShader from "./shaders/jacobi.frag?raw";
+import displayShader from "./shaders/display.frag?raw";
+import vorticityShader from "./shaders/vorticity.frag?raw";
+import vortForceShader from "./shaders/vortForce.frag?raw";
 
-import imgURL from "../public/images/logo.png";
+import imgURL from "/images/logo.png";
 
 const texelSize: REGL.DynamicVariableFn<number[]> = ({ viewportWidth, viewportHeight }) => [1 / viewportWidth, 1 / viewportHeight];
 const viewport: REGL.DynamicVariableFn<{
