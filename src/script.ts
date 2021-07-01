@@ -10,10 +10,12 @@ regl.frame(() => {
     const green = Math.sin(t + 2) + 1;
     const blue = Math.sin(t + 4) + 1;
     t += 0.1;
-    createSplat(pointer.x, pointer.y, pointer.dx * 10, pointer.dy * 10, [red, green, blue], 0.0005);
-    pointer.dx *= 0.5;
-    pointer.dy *= 0.5;
 
+    for (const [, pointer] of pointers) {
+      createSplat(pointer.x, pointer.y, pointer.dx * 100, pointer.dy * 100, [red, green, blue], 0.0005);
+      pointer.dx *= 0.5;
+      pointer.dy *= 0.5;
+    }
     if (scroller.scrollTop < window.innerHeight / 2) {
       for (let i = 0; i < 10; i++) {
         const x = Math.cos((i / 10) * 2 * Math.PI);
@@ -34,17 +36,49 @@ regl.frame(() => {
   });
 });
 
-const pointer = {
-  x: window.innerWidth / 2,
-  y: window.innerHeight / 2,
-  dx: 0,
-  dy: 0,
-};
+const pointers = new Map<number, { x: number; y: number; dx: number; dy: number }>();
+
 document.addEventListener("mousemove", (e) => {
-  pointer.dx = (e.clientX - pointer.x) * 10;
-  pointer.dy = (e.clientY - pointer.y) * 10;
+  let pointer = pointers.get(-1);
+  if (!pointer) {
+    pointers.set(
+      -1,
+      (pointer = {
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        dx: 0,
+        dy: 0,
+      })
+    );
+  }
+  pointer.dx = e.clientX - pointer.x;
+  pointer.dy = e.clientY - pointer.y;
   pointer.x = e.clientX;
   pointer.y = e.clientY;
+});
+document.addEventListener("touchstart", (e) => {
+  for (const touch of e.changedTouches) {
+    pointers.set(touch.identifier, {
+      x: touch.clientX,
+      y: touch.clientX,
+      dx: 0,
+      dy: 0,
+    });
+  }
+});
+document.addEventListener("touchend", (e) => {
+  for (const touch of e.changedTouches) {
+    pointers.delete(touch.identifier);
+  }
+});
+document.addEventListener("touchmove", (e) => {
+  for (const touch of e.changedTouches) {
+    const pointer = pointers.get(touch.identifier)!;
+    pointer.dx = touch.clientX - pointer.x;
+    pointer.dy = touch.clientY - pointer.y;
+    pointer.x = touch.clientX;
+    pointer.y = touch.clientY;
+  }
 });
 
 window.onhashchange = () => {
