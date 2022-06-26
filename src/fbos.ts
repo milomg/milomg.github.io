@@ -2,13 +2,13 @@ import { regl } from "./canvas";
 import * as config from "./config";
 import type REGL from "regl";
 
-function doubleFbo(filter: REGL.TextureMagFilterType) {
-  const fbos = [createFbo(filter), createFbo(filter)];
+function doubleFbo(filter: REGL.TextureMagFilterType, downsample = config.TEXTURE_DOWNSAMPLE) {
+  const fbos = [createFbo(filter, downsample), createFbo(filter, downsample)];
   return {
-    get read() {
+    read() {
       return fbos[0];
     },
-    get write() {
+    write() {
       return fbos[1];
     },
     swap() {
@@ -17,10 +17,10 @@ function doubleFbo(filter: REGL.TextureMagFilterType) {
   };
 }
 
-function createFbo(filter: REGL.TextureMagFilterType) {
+function createFbo(filter: REGL.TextureMagFilterType, downsample = config.TEXTURE_DOWNSAMPLE) {
   const tex = regl.texture({
-    width: window.innerWidth >> config.TEXTURE_DOWNSAMPLE,
-    height: window.innerHeight >> config.TEXTURE_DOWNSAMPLE,
+    width: window.innerWidth >> downsample,
+    height: window.innerHeight >> downsample,
     min: filter,
     mag: filter,
     type: "half float",
@@ -30,25 +30,24 @@ function createFbo(filter: REGL.TextureMagFilterType) {
     depthStencil: false,
   });
   window.addEventListener("resize", () => {
-    tex.resize(window.innerWidth >> config.TEXTURE_DOWNSAMPLE, window.innerHeight >> config.TEXTURE_DOWNSAMPLE);
-    framebuffer.resize(window.innerWidth >> config.TEXTURE_DOWNSAMPLE, window.innerHeight >> config.TEXTURE_DOWNSAMPLE);
+    tex.resize(window.innerWidth >> downsample, window.innerHeight >> downsample);
+    framebuffer.resize(window.innerWidth >> downsample, window.innerHeight >> downsample);
   });
   return framebuffer;
 }
 
-export const velocity = doubleFbo("linear");
 export const density = doubleFbo("linear");
+export const velocity = doubleFbo("linear");
 export const pressure = doubleFbo("nearest");
 export const divergenceTex = createFbo("nearest");
-export const vorticityTex = createFbo("linear");
 
 function densityColor() {
   regl.clear({
-    framebuffer: density.write,
+    framebuffer: density.write(),
     color: [38 / 255, 50 / 255, 56 / 255, 1],
   });
   regl.clear({
-    framebuffer: density.read,
+    framebuffer: density.read(),
     color: [38 / 255, 50 / 255, 56 / 255, 1],
   });
 }

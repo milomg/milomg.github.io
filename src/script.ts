@@ -1,6 +1,5 @@
 import { regl } from "./canvas";
-import * as config from "./config";
-import { fullscreen, update, displayMain as display, createSplat } from "./shaders";
+import { fullscreen, update, createSplat } from "./shaders";
 
 const scroller = document.getElementById("scroller") as HTMLDivElement;
 let t = 0;
@@ -31,8 +30,7 @@ regl.frame(() => {
         );
       }
     }
-    update(config);
-    display();
+    update();
   });
 });
 
@@ -73,7 +71,18 @@ document.addEventListener("touchend", (e) => {
 });
 document.addEventListener("touchmove", (e) => {
   for (const touch of e.changedTouches) {
-    const pointer = pointers.get(touch.identifier)!;
+    let pointer = pointers.get(touch.identifier);
+    if (!pointer) {
+      pointers.set(
+        touch.identifier,
+        (pointer = {
+          x: touch.clientX,
+          y: touch.clientX,
+          dx: 0,
+          dy: 0,
+        })
+      );
+    }
     pointer.dx = touch.clientX - pointer.x;
     pointer.dy = touch.clientY - pointer.y;
     pointer.x = touch.clientX;
@@ -88,4 +97,4 @@ window.onhashchange = () => {
 console.log("%cHi! Nice to see you there", "font-size: x-large");
 console.log("%cEaster egg #2", "font-size: xx-small; color: black; background: black;");
 console.log("If you are wondering how I made this, the source code is at https://github.com/modderme123/modderme123.github.io");
-console.log("The fluid simulation was made with https://regl.party and is inspired by a GPU Gems chapter");
+console.log("The fluid simulation was made with https://regl.party and is inspired by GPU Gems");

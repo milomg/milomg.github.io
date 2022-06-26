@@ -12,5 +12,5 @@ uniform sampler2D x;         // quantity to advect
 void main() {
   vec2 pos = coords - timestep * texelSize * texture2D(velocity, coords).xy;
   vec4 start = texture2D(x, pos);
-  gl_FragColor = (color - start) * (1.0 - dissipation) + start;
+  gl_FragColor = mix(color, start, dissipation);
 }

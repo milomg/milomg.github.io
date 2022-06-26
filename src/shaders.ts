@@ -1,18 +1,17 @@
 import type REGL from "regl";
 import { regl } from "./canvas";
-import { TEXTURE_DOWNSAMPLE, VORTICITY_AMOUNT } from "./config";
-import { velocity, density, pressure, divergenceTex, vorticityTex } from "./fbos";
+import { TEXTURE_DOWNSAMPLE } from "./config";
+import { velocity, density, pressure, divergenceTex } from "./fbos";
 
 import projectShader from "./shaders/project.vert?raw";
 import splatShader from "./shaders/splat.frag?raw";
 import advectShader from "./shaders/advect.frag?raw";
 import divergenceShader from "./shaders/divergence.frag?raw";
 import clearShader from "./shaders/clear.frag?raw";
-import gradientSubtractShader from "./shaders/gradientSubtract.frag?raw";
+import gradientShader from "./shaders/gradient.frag?raw";
 import jacobiShader from "./shaders/jacobi.frag?raw";
 import displayShader from "./shaders/display.frag?raw";
 import vorticityShader from "./shaders/vorticity.frag?raw";
-import vortForceShader from "./shaders/vortForce.frag?raw";
 
 import imgURL from "/images/logo.png";
 
@@ -31,14 +30,20 @@ const viewport: REGL.DynamicVariableFn<{
 
 export const fullscreen = regl({
   vert: projectShader,
+  primitive: "triangle strip",
   attributes: {
-    points: [1, 1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1],
+    points: [-1, -1, -1, 1, 1, -1, 1, 1],
   },
-  count: 6,
+  uniforms: {
+    texelSize,
+  },
+  count: 4,
+  viewport,
 });
+
 interface SplatProps {
   framebuffer: REGL.Framebuffer2D;
-  uTarget: REGL.Framebuffer2D;
+  x: REGL.Framebuffer2D;
   point: number[];
   color: number;
   radius: number;
@@ -47,13 +52,11 @@ const splat = regl({
   frag: splatShader,
   framebuffer: regl.prop<SplatProps, "framebuffer">("framebuffer"),
   uniforms: {
-    uTarget: regl.prop<SplatProps, "uTarget">("uTarget"),
-    aspectRatio: ({ viewportWidth, viewportHeight }) => viewportWidth / viewportHeight,
+    x: regl.prop<SplatProps, "x">("x"),
     point: regl.prop<SplatProps, "point">("point"),
     color: regl.prop<SplatProps, "color">("color"),
     radius: regl.prop<SplatProps, "radius">("radius"),
   },
-  viewport,
 });
 
 const img = new Image();
@@ -63,97 +66,81 @@ img.onload = () =>
   (display = regl({
     frag: displayShader,
     uniforms: {
-      density: () => density.read,
-      velocity: () => velocity.read,
+      density: density.read,
+      velocity: velocity.read,
       image: regl.texture({ data: img, mag: "linear", min: "linear" }),
-      texelSize,
+      texelSize
     },
+    viewport: {},
   }));
 
-interface AdvectProps {
-  framebuffer: REGL.Framebuffer2D;
-  color: number[];
-  dissipation: number;
-  x: REGL.Framebuffer2D;
-}
-const advect = regl({
+const advectVelocity = regl({
   frag: advectShader,
-  framebuffer: regl.prop<AdvectProps, "framebuffer">("framebuffer"),
+  framebuffer: velocity.write,
   uniforms: {
     timestep: 0.017,
-    dissipation: regl.prop<AdvectProps, "dissipation">("dissipation"),
-    color: regl.prop<AdvectProps, "color">("color"),
-    x: regl.prop<AdvectProps, "x">("x"),
-    velocity: () => velocity.read,
-    texelSize,
+    dissipation: 0.98,
+    color: [0, 0, 0, 1],
+    x: velocity.read,
+    velocity: velocity.read,
   },
-  viewport,
+});
+const advectDensity = regl({
+  frag: advectShader,
+  framebuffer: density.write,
+  uniforms: {
+    timestep: 0.017,
+    dissipation: 0.97,
+    color: [38 / 255, 50 / 255, 56 / 255, 1],
+    x: density.read,
+    velocity: velocity.read,
+  },
 });
 const divergence = regl({
   frag: divergenceShader,
   framebuffer: divergenceTex,
   uniforms: {
-    velocity: () => velocity.read,
-    texelSize,
+    velocity: velocity.read,
   },
-  viewport,
 });
-interface ClearProps {
-  dissipation: number;
-}
-const clear = regl({
+const clearPressure = regl({
   frag: clearShader,
-  framebuffer: () => pressure.write,
+  framebuffer: pressure.write,
   uniforms: {
-    pressure: () => pressure.read,
-    dissipation: regl.prop<ClearProps, "dissipation">("dissipation"),
+    pressure: pressure.read,
+    dissipation: 0.8,
   },
-  viewport,
 });
-const gradientSubtract = regl({
-  frag: gradientSubtractShader,
-  framebuffer: () => velocity.write,
+const gradient = regl({
+  frag: gradientShader,
+  framebuffer: velocity.write,
   uniforms: {
-    pressure: () => pressure.read,
-    velocity: () => velocity.read,
-    texelSize,
+    pressure: pressure.read,
+    velocity: velocity.read,
   },
-  viewport,
 });
 const jacobi = regl({
   frag: jacobiShader,
-  framebuffer: () => pressure.write,
+  framebuffer: pressure.write,
   uniforms: {
-    pressure: () => pressure.read,
-    divergence: () => divergenceTex,
-    texelSize,
+    pressure: pressure.read,
+    divergence: divergenceTex,
   },
-  viewport,
+});
+const vorticity = regl({
+  frag: vorticityShader,
+  framebuffer: velocity.write,
+  uniforms: {
+    velocity: velocity.read,
+    timestep: 0.017,
+    curl: 12,
+  },
 });
 
-export const vorticity = regl({
-  frag: vorticityShader,
-  framebuffer: vorticityTex,
-  uniforms: {
-    velocity: () => velocity.read,
-    texelSize,
-  },
-});
-export const vorticityForce = regl({
-  frag: vortForceShader,
-  framebuffer: () => velocity.write,
-  uniforms: {
-    velocity: () => velocity.read,
-    vorticity: vorticityTex,
-    texelSize,
-    timestep: 0.017,
-    curl: VORTICITY_AMOUNT,
-  },
-});
 export function createSplat(x: number, y: number, dx: number, dy: number, color: number[], radius: number): void {
   splat({
-    framebuffer: velocity.write,
-    uTarget: velocity.read,
+    framebuffer: velocity.write(),
+    x: velocity.read(),
     point: [x / window.innerWidth, 1 - y / window.innerHeight],
     radius,
     color: [dx, -dy, 1],
@@ -161,58 +148,39 @@ export function createSplat(x: number, y: number, dx: number, dy: number, color:
   velocity.swap();
 
   splat({
-    framebuffer: density.write,
-    uTarget: density.read,
+    framebuffer: density.write(),
+    x: density.read(),
     point: [x / window.innerWidth, 1 - y / window.innerHeight],
     radius,
     color,
   });
   density.swap();
 }
-export function displayMain(): void {
-  if (display) {
-    display();
-  }
-}
-export const update = (config: {
-  VELOCITY_DISSIPATION: number;
-  DENSITY_DISSIPATION: number;
-  PRESSURE_ITERATIONS: number;
-  PRESSURE_DISSIPATION: number;
-}): void => {
-  vorticity();
 
-  vorticityForce();
+export const update = (): void => {
+  advectDensity();
+  density.swap();
+
+  advectVelocity();
   velocity.swap();
 
   divergence();
 
-  clear({
-    dissipation: config.PRESSURE_DISSIPATION,
-  });
+  clearPressure();
   pressure.swap();
 
-  for (let i = 0; i < config.PRESSURE_ITERATIONS; i++) {
+  for (let i = 0; i < 25; i++) {
     jacobi();
     pressure.swap();
   }
 
-  gradientSubtract();
+  gradient();
   velocity.swap();
 
-  advect({
-    framebuffer: velocity.write,
-    x: velocity.read,
-    dissipation: config.VELOCITY_DISSIPATION,
-    color: [0, 0, 0, 0],
-  });
+  vorticity();
   velocity.swap();
 
-  advect({
-    framebuffer: density.write,
-    x: density.read,
-    dissipation: config.DENSITY_DISSIPATION,
-    color: [38 / 255, 50 / 255, 56 / 255, 1],
-  });
-  density.swap();
+  if (display) {
+    display();
+  }
 };
