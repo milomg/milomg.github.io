@@ -1,7 +1,6 @@
-import { regl } from "./canvas";
+import { regl } from "./surfaces";
 import { fullscreen, update, createSplat } from "./shaders";
 
-const scroller = document.getElementById("scroller") as HTMLDivElement;
 let t = 0;
 regl.frame(() => {
   fullscreen(() => {
@@ -15,21 +14,7 @@ regl.frame(() => {
       pointer.dx *= 0.5;
       pointer.dy *= 0.5;
     }
-    if (scroller.scrollTop < window.innerHeight / 2) {
-      for (let i = 0; i < 10; i++) {
-        const x = Math.cos((i / 10) * 2 * Math.PI);
-        const y = Math.sin((i / 10) * 2 * Math.PI);
-        const r = Math.min(window.innerWidth, window.innerHeight) / 3;
-        createSplat(
-          x * r + window.innerWidth / 2,
-          y * r + window.innerHeight / 2,
-          -(x * 300 + y * 100.0),
-          -(y * 300 - x * 100.0),
-          [1, 1, 1],
-          0.00005
-        );
-      }
-    }
+
     update();
   });
 });

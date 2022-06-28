@@ -1,7 +1,5 @@
 import type REGL from "regl";
-import { regl } from "./canvas";
-import { TEXTURE_DOWNSAMPLE } from "./config";
-import { velocity, density, pressure, divergenceTex } from "./fbos";
+import { regl, TEXTURE_DOWNSAMPLE, velocity, density, pressure, divergenceTex } from "./surfaces";
 
 import projectShader from "./shaders/project.vert?raw";
 import splatShader from "./shaders/splat.frag?raw";
@@ -16,17 +14,6 @@ import vorticityShader from "./shaders/vorticity.frag?raw";
 import imgURL from "/images/logo.png";
 
 const texelSize: REGL.DynamicVariableFn<number[]> = ({ viewportWidth, viewportHeight }) => [1 / viewportWidth, 1 / viewportHeight];
-const viewport: REGL.DynamicVariableFn<{
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}> = ({ viewportWidth, viewportHeight }) => ({
-  x: 0,
-  y: 0,
-  width: viewportWidth >> TEXTURE_DOWNSAMPLE,
-  height: viewportHeight >> TEXTURE_DOWNSAMPLE,
-});
 
 export const fullscreen = regl({
   vert: projectShader,
@@ -38,7 +25,12 @@ export const fullscreen = regl({
     texelSize,
   },
   count: 4,
-  viewport,
+  viewport: ({ viewportWidth, viewportHeight }) => ({
+    x: 0,
+    y: 0,
+    width: viewportWidth >> TEXTURE_DOWNSAMPLE,
+    height: viewportHeight >> TEXTURE_DOWNSAMPLE,
+  }),
 });
 
 interface SplatProps {
@@ -59,6 +51,8 @@ const splat = regl({
   },
 });
 
+const baseColor = [38 / 255, 50 / 255, 56 / 255];
+
 const img = new Image();
 img.src = imgURL;
 let display: undefined | REGL.DrawCommand;
@@ -68,8 +62,9 @@ img.onload = () =>
     uniforms: {
       density: density.read,
       velocity: velocity.read,
+      color: baseColor,
       image: regl.texture({ data: img, mag: "linear", min: "linear" }),
-      texelSize
+      texelSize,
     },
     viewport: {},
   }));
@@ -80,7 +75,6 @@ const advectVelocity = regl({
   uniforms: {
     timestep: 0.017,
     dissipation: 0.98,
-    color: [0, 0, 0, 1],
     x: velocity.read,
     velocity: velocity.read,
   },
@@ -91,7 +85,6 @@ const advectDensity = regl({
   uniforms: {
     timestep: 0.017,
     dissipation: 0.97,
-    color: [38 / 255, 50 / 255, 56 / 255, 1],
     x: density.read,
     velocity: velocity.read,
   },
@@ -137,7 +130,7 @@ const vorticity = regl({
   },
 });
 
-export function createSplat(x: number, y: number, dx: number, dy: number, color: number[], radius: number): void {
+export function createSplat(x: number, y: number, dx: number, dy: number, [r, g, b]: number[], radius: number): void {
   splat({
     framebuffer: velocity.write(),
     x: velocity.read(),
@@ -152,7 +145,7 @@ export function createSplat(x: number, y: number, dx: number, dy: number, color:
     x: density.read(),
     point: [x / window.innerWidth, 1 - y / window.innerHeight],
     radius,
-    color,
+    color: [r - baseColor[0], g - baseColor[1], b - baseColor[2]],
   });
   density.swap();
 }

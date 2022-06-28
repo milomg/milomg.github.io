@@ -1,80 +1,93 @@
+:root {
+  --accent: #82aaff;
+  --nav: 96px;
+  --base: #fff;
+}
+.light {
+  --accent: #7c4dff;
+  --base: #000;
+}
 #c {
   position: fixed;
-  background: #263238;
+  display: block;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
   z-index: -1;
 }
-.button {
+.arrow {
   position: absolute;
   bottom: 0;
   left: 50%;
-  width: 4rem;
-  text-align: center;
-  transform: translate(-50%, 0%);
-  height: 4rem;
+  transform: translateX(-50%);
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
   display: flex;
-  align-items: center;
   justify-content: center;
-}
-.mouse {
-  width: 26px;
-  height: 40px;
-  position: relative;
-  right: 0;
-  border-radius: 18px;
-  border: 2px solid #ffffff;
-}
-.mouse-button {
-  background-color: #ffffff;
-  width: 4px;
-  height: 10px;
-  border-radius: 2px;
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  margin: 0 0 0 -2px;
-  transform: translate(0, -4px) scale(1, 1);
-  animation: mouse-scroll 1s infinite alternate;
-}
-
-@keyframes mouse-scroll {
-  to {
-    transform: translate(0, 0px) scale(1, 0.8);
-  }
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--base);
 }
 body {
   font-family: "Source Sans Pro", sans-serif;
   color: white;
   font-size: 1.5em;
 }
+body.light {
+  color: black;
+}
 section {
-  padding: 1em 5em;
-  margin: 0 130px;
-}
-section > * {
+  margin: 0 auto;
+  padding: 0 10vw;
   max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
-#about,
-#fun,
-#work {
-  background: #263238;
-  color: white;
+hr {
+  width: 100%;
+  border-color: var(--base);
 }
 #top {
-  height: calc(100vh - 130px);
+  max-width: unset;
   padding: 0;
+  padding-bottom: var(--nav);
+  height: calc(100% - var(--nav));
   position: relative;
+  align-items: center;
+}
+.purple {
+  color: #5c78c7;
+  mix-blend-mode: screen;
+}
+.light .purple {
+  color: #83b200;
+  mix-blend-mode: difference;
+}
+.header {
+  padding: 5vw;
+  width: max-content;
+}
+.header h1 {
+  margin: 0;
+  font-size: min(8vw, 15vh);
+  display: block;
+  width: max-content;
+}
+.header h1:nth-child(2) {
+  margin-left: min(17vw, 31vh);
 }
 h1 {
   font-family: "Fira Code", "Courier New", Courier, monospace;
   font-size: 3em;
 }
-
+#about h1, #work h1, #fun h1 {
+  margin: 0;
+}
 .social {
   text-align: center;
   padding: 2rem 1rem;
@@ -83,19 +96,27 @@ h1 {
   display: inline-block;
   vertical-align: middle;
   margin: 0.5rem;
-  color: white;
-  font-size: 20px;
+  color: var(--base);
   text-decoration: none;
+}
+.light .social a {
+  color: black;
 }
 body {
   margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-rows: var(--nav) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+  height: 100vh;
+  width: 100vw;
 }
 .grid {
   width: 100%;
   display: flex;
   flex-direction: row;
 }
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 800px) {
   .grid {
     flex-direction: column;
   }
@@ -109,19 +130,21 @@ body {
   width: 100%;
 }
 .item div {
-  border-radius: 0.25rem;
+  border-radius: 1rem;
   position: absolute;
   width: 75%;
   padding: 1em;
   opacity: 0;
   transition: opacity 0.5s;
-  background: white;
+  background: #263238;
   text-align: center;
-  color: #263238;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+}
+.light .item div {
+  background: white;
 }
 .item h2 {
   margin-top: 0;
@@ -133,42 +156,32 @@ body {
   opacity: 1;
 }
 a {
-  color: #82aaff;
+  color: var(--accent);
 }
 #scroller {
-  width: 100vw;
-  height: calc(100vh - 130px);
-  overflow: scroll;
+  overflow: overlay;
   scroll-behavior: smooth;
+  height: 100%;
 }
-.hr {
-  background: #eeffff;
-  left: 0;
-  width: 100vw;
-  height: 2px;
-  pointer-events: none;
+::-webkit-scrollbar-thumb {
+  background: rgba(90, 90, 90, 0.5);
+  border-radius: 10px;
 }
-.vr {
-  background: #eeffff;
-  position: fixed;
-  top: 0px;
-  width: 2px;
-  height: 100vh;
-  pointer-events: none;
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(90, 90, 90, 0.9);
 }
-.vr1 {
-  left: 128px;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
-.vr2 {
-  right: 128px;
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 nav {
   position: sticky;
   top: 0;
   left: 0;
   width: 100vw;
-  height: 128px;
-  border-bottom: 2px solid #eeffff;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -183,15 +196,9 @@ nav {
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: #eeffff;
-}
-#logo > h1 {
-  margin: 0 24px;
-  font-size: 36px;
 }
 .links {
   display: flex;
-  margin-right: 130px;
   counter-reset: item;
 }
 .links li {
@@ -201,53 +208,24 @@ nav {
   margin-left: 8px;
 }
 .links li::marker {
-  color: #82aaff;
+  color: var(--accent);
 }
-
 .links a {
   text-decoration: none;
   font-family: "Fira Code", "Courier New", Courier, monospace;
-  color: #eeffff;
+  color: var(--base);
 }
 
 @media screen and (max-width: 850px) {
-  section {
-    margin: 0;
-  }
-  .vr {
-    display: none;
-  }
-  #logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #eeffff;
-  }
   #logo-placeholder {
     width: 64px;
     height: 64px;
     margin: 12px;
   }
-  #logo > h1 {
-    margin: 0 12px;
-    font-size: 24px;
-  }
-  nav {
-    height: 88px;
+  :root {
+    --nav: 88px;
   }
   .links {
     margin-right: 0;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  section {
-    padding: 1em 2em;
-  }
-}
-
-@media screen and (max-width: 400px) {
-  h1 {
-    font-size: 2em;
   }
 }
