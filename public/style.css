@@ -41,9 +41,9 @@ body.light {
 }
 section {
   margin: 0 auto;
-  padding: 0 10vw;
+  padding: 1em 10vw;
   max-width: 900px;
-  height: 100%;
+  min-height: 100%;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -59,6 +59,7 @@ hr {
   height: calc(100% - var(--nav));
   position: relative;
   align-items: center;
+  min-height: 0;
 }
 .purple {
   color: #5c78c7;
@@ -85,7 +86,9 @@ h1 {
   font-family: "Fira Code", "Courier New", Courier, monospace;
   font-size: 3em;
 }
-#about h1, #work h1, #fun h1 {
+#about h1,
+#work h1,
+#fun h1 {
   margin: 0;
 }
 .social {

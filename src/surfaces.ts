@@ -1,5 +1,4 @@
 import REGL from "regl";
-import reglmaker from "regl";
 
 const c = document.getElementById("c") as HTMLCanvasElement;
 function resize() {
@@ -9,7 +8,7 @@ function resize() {
 window.addEventListener("resize", resize);
 resize();
 
-export const regl = reglmaker({
+export const regl = REGL({
   attributes: {
     alpha: false,
     depth: false,
