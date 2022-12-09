@@ -16,7 +16,7 @@ export const regl = REGL({
     antialias: false,
   },
   canvas: c,
-  extensions: ["OES_texture_float", "OES_texture_float_linear"],
+  extensions: ["OES_texture_half_float", "OES_texture_half_float_linear"],
 });
 
 export const TEXTURE_DOWNSAMPLE = 3;
@@ -46,12 +46,12 @@ function createFbo({ filter, downsample = TEXTURE_DOWNSAMPLE }: Config) {
     height: window.innerHeight >> downsample,
     min: filter,
     mag: filter,
-    type: "float",
+    type: "half float",
   });
   const framebuffer = regl.framebuffer({
     color: tex,
     depthStencil: false,
-    colorType: "float",
+    colorType: "half float",
   });
   window.addEventListener("resize", () => {
     tex.resize(window.innerWidth >> downsample, window.innerHeight >> downsample);

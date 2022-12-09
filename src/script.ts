@@ -4,13 +4,13 @@ import { fullscreen, update, createSplat } from "./shaders";
 let t = 0;
 regl.frame(() => {
   fullscreen(() => {
-    const red = Math.sin(t + 0) + 1;
-    const green = Math.sin(t + 2) + 1;
-    const blue = Math.sin(t + 4) + 1;
+    const red = Math.sin(t + 0) * 0.8 + 0.8;
+    const green = Math.sin(t + 2) * 0.8 + 0.8;
+    const blue = Math.sin(t + 4) * 0.8 + 0.8;
     t += 0.1;
 
     for (const [, pointer] of pointers) {
-      createSplat(pointer.x, pointer.y, pointer.dx * 100, pointer.dy * 100, [red, green, blue], 0.0005);
+      createSplat(pointer.x, pointer.y, pointer.dx * 10, pointer.dy * 10, [red, green, blue], 0.0005);
       pointer.dx *= 0.5;
       pointer.dy *= 0.5;
     }

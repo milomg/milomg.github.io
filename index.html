@@ -4,14 +4,14 @@
     <title>ModderMe123</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Source+Sans+Pro&display=swap" rel="stylesheet" />
     <link rel="shortcut icon" type="image/png" href="https://avatars2.githubusercontent.com/u/14153763" />
-    <link rel="stylesheet" href="./public/style.css" />
-    <link rel="manifest" href="./public/manifest.json" />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="manifest" href="./manifest.json" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#82aaff" />
   </head>
 
-  <body>
+  <body class="light">
     <canvas id="c"></canvas>
     <nav>
       <div>
@@ -39,91 +39,119 @@
         <hr />
         <p>
           I'm a student at University of Toronto who loves to code. In my free time, I make graphical simulations, build frontend sites, and write the
-          occasional Rust server. I carefully craft high performance, clean, and well structured code. Click on the items below to see more about my
-          work in different programming languages and environments.
+          occasional Rust server. I carefully craft fast and clean code. Click on the items below to see more about my work in different programming
+          languages and environments.
         </p>
 
         <div>
-          <details>
+          <details open>
             <summary>TypeScript, HTML & CSS</summary>
             <p>
               I've worked on multiple very large TypeScript & React projects, and I love to keep up with the latest frontend trends and news. I'm a
               core team member on SolidJS, where I lead the Solid Playground and DevTools teams. I'm also experienced in writing NodeJS servers,
-              WebGL, and Angular.
+              WebGL, and React.
             </p>
           </details>
-
-          <details>
+          <details open>
             <summary>Rust</summary>
             <p>
-              I'm super excited about things like WebGPU and other graphical frameworks, and Rust's tools for graphics and game dev are awesome. I've
-              also written a few web servers in Rust (including a pretty neat reverse shell).
+              In addition to loving cutting edge performance libraries, I'm also a programming language polyglot. I've written several small WebGPU
+              apps, networking servers, and even a compiler in Rust. I've even made a metasploit reverse shell payload Rust.
             </p>
           </details>
-          <details>
+          <details open>
             <summary>Scala & Java</summary>
             <p>
-              I developed a massively multiplayer .io browser game in Scala called Snowy. This project taught me about build tools, profiling, and
-              functional programming.
+              I developed a massively multiplayer realtime browser game in Scala & ScalaJS called Snowy, a synthesis of my interest in graphics,
+              physics, and networking. This project taught me about build tools, profiling, and functional programming.
             </p>
           </details>
-
-          <details>
+          <details open>
             <summary>C#</summary>
             <p>
-              I worked on a large microservices project that included RabbitMQ, ElasticSearch, where I wrote C# services with .NET Core and OAuth. My
-              work involved building SSO and replacing SQL Server with PostgreSQL on a document management system used by thousands of lawyers.
+              I worked on a large microservices document management system used by thousands of lawyers. My work involved building an OAuth server for
+              SSO and replacing a SQL Server ORM with native PostgreSQL.
             </p>
           </details>
-
-          <details>
+          <details open>
             <summary>Python</summary>
             <p>
-              I teach an 8 week Advanced Python course for students at Robotics for All. I've also used Python to develop a webserver using FastAPI
+              I teach an 8 week advanced Python course for students at Robotics for All. I've also used Python to develop a webserver using FastAPI
               and SQLAlchemy
             </p>
           </details>
         </div>
       </section>
       <section id="work">
+        <h1>projects</h1>
+        <hr />
+        <p></p>
+        <div>
+          <div class="item">
+            <img src="images/solidplayground.png" alt="solid playground" />
+            <div>
+              <a href="https://playground.solidjs.com"><h2>Solid Playground</h2></a>
+              <p>
+                The Solid Playground is a web app that lets you write Solid code and see the results in real time. It uses Monaco and ESLint to
+                provide a developer experience that rivals a full local setup.
+              </p>
+            </div>
+          </div>
+          <div class="item">
+            <div>
+              <a href="https://github.com/cm-tech/timeviewer"><h2>TimeViewer</h2></a>
+              <p>
+                TimeViewer is a web app that lets you view your daily activity in realtime with extreme precision. Its macOS window watcher was used
+                to rebuild ActivityWatch and is used by thousands of users daily.
+              </p>
+            </div>
+            <img src="images/timeviewer.png" alt="timeviewer" />
+          </div>
+          <div class="item">
+            <img src="images/bbchallenge.png" alt="busy beaver challenge" />
+            <div>
+              <a href="https://bbchallenge.com"><h2>Busy Beaver Challenge</h2></a>
+              <p>
+                The Busy Beaver Challenge is working on a formal proof of the upper bound of BB(5). I added the interactive viewer of Turing Machines
+                that shows the simulations.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="sims">
         <h1>simulations</h1>
         <hr />
         <p>
           I have made over a hundred fun little simulation projects. I've put a few below and many more are available at
           <a href="https://cm-ht.ml">CM-Tech</a>, a name I use on projects that I build with my friend <a href="https://ckissane.github.io">Cole</a>.
         </p>
-        <div class="grid">
+        <div>
           <div class="item">
-            <a href="http://creative-coding.pages.dev/traffic-dots/"><img src="images/img1.png" alt="brownian motion simulation" /></a>
+            <img src="images/img1.png" alt="brownian motion simulation" />
             <div>
-              <h2>Traffic dots</h2>
+              <a href="http://creative-coding.pages.dev/traffic-dots/"><h2>Traffic dots</h2></a>
               <p>
                 A fun project where dots move randomly semi locked to a grid. They bump into each other and you can click to repel or attract them,
                 depending on the setting.
               </p>
-              <a href="http://creative-coding.pages.dev/traffic-dots/">View site</a>
             </div>
           </div>
           <div class="item">
-            <a href="https://cm-tech.github.io/car-evolution/"><img src="images/img2.png" alt="car simulation" /></a>
             <div>
-              <h2>Car Evolution</h2>
-              <p>
-                This project uses the planck.js physics engine to simulate cars that evolve to drive through a course. Heavily inspired by
-                <a href="http://boxcar2d.com">BoxCar2D</a>.
-              </p>
-              <a href="https://cm-tech.github.io/car-evolution/">View site</a>
+              <a href="https://cm-tech.github.io/car-evolution/"><h2>Car Evolution</h2></a>
+              <p>This project uses the planck.js physics engine to simulate and evolve cars to drive through a virtual course.</p>
             </div>
+            <img src="images/img2.png" alt="car simulation" />
           </div>
           <div class="item">
-            <a href="http://creative-coding.pages.dev/boids"><img src="images/img3.png" alt="boids simulation" /></a>
+            <img src="images/img3.png" alt="boids simulation" />
             <div>
-              <h2>Boids</h2>
+              <a href="http://creative-coding.pages.dev/boids"><h2>Boids</h2></a>
               <p>
                 Boids is a term coined by Craig Reynolds that is used to describe objects which flock in groups. This project simulates boids shaped
                 like caterpillars.
               </p>
-              <a href="http://creative-coding.pages.dev/boids">View site</a>
             </div>
           </div>
         </div>
@@ -132,8 +160,11 @@
         <h1>fun facts</h1>
         <hr />
         <ul>
+          <li>
+            My first blog post on reactivity algorithms is
+            <a href="https://dev.to/modderme123/super-charging-fine-grained-reactive-performance-47ph">here</a>
+          </li>
           <li>Before the pandemic I was learning to rock climb. My best was a V6.</li>
-          <li>I wrote most of the front-end code for <a href="https://daud.io">daud.io</a>. I challenge you to beat me ;)</li>
           <li>I have hidden a few <span title="Easter Egg 1">Easter eggs</span> in this site; see how many you can find.</li>
         </ul>
       </section>

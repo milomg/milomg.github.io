@@ -2,10 +2,12 @@
   --accent: #82aaff;
   --nav: 96px;
   --base: #fff;
+  --background: #000;
 }
 .light {
   --accent: #7c4dff;
   --base: #000;
+  --background: #fff;
 }
 #c {
   position: fixed;
@@ -15,6 +17,7 @@
   top: 0;
   left: 0;
   z-index: -1;
+  background: var(--background);
 }
 .arrow {
   position: absolute;
@@ -33,17 +36,14 @@
 }
 body {
   font-family: "Source Sans Pro", sans-serif;
-  color: white;
+  color: var(--base);
   font-size: 1.5em;
 }
-body.light {
-  color: black;
-}
 section {
-  margin: 0 auto;
-  padding: 1em 10vw;
+  margin: 0em auto;
+  padding: 4em 10vw;
   max-width: 900px;
-  min-height: 100%;
+  min-height: calc(100% - 8em);
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -85,10 +85,6 @@ hr {
 h1 {
   font-family: "Fira Code", "Courier New", Courier, monospace;
   font-size: 3em;
-}
-#about h1,
-#work h1,
-#fun h1 {
   margin: 0;
 }
 .social {
@@ -102,9 +98,6 @@ h1 {
   color: var(--base);
   text-decoration: none;
 }
-.light .social a {
-  color: black;
-}
 body {
   margin: 0;
   padding: 0;
@@ -114,49 +107,20 @@ body {
   height: 100vh;
   width: 100vw;
 }
-.grid {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-}
-@media screen and (max-width: 800px) {
-  .grid {
-    flex-direction: column;
-  }
-}
 .item {
-  position: relative;
-  flex: 33%;
-  min-width: 100px;
+  display: flex;
+  gap: 1em;
 }
 .item img {
-  width: 100%;
+  min-width: 0;
+  border-radius: 1em;
 }
 .item div {
-  border-radius: 1rem;
-  position: absolute;
-  width: 75%;
-  padding: 1em;
-  opacity: 0;
-  transition: opacity 0.5s;
-  background: #263238;
+  flex: 80%;
   text-align: center;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border: 1px solid #eee;
-}
-.light .item div {
-  background: white;
-}
-.item h2 {
-  margin-top: 0;
-}
-.item p {
-  font-size: 15px;
-}
-.item:hover div {
-  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 a {
   color: var(--accent);
@@ -189,6 +153,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid var(--base);
 }
 #logo-placeholder {
   width: 80px;

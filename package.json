@@ -3,18 +3,16 @@
   "version": "0.0.1",
   "license": "MIT",
   "dependencies": {
-    "regl": "^2.1.0",
-    "solid-js": "^1.5.5"
+    "regl": "^2.1.0"
   },
   "devDependencies": {
-    "@types/node": "^18.7.18",
-    "@typescript-eslint/eslint-plugin": "^5.37.0",
-    "@typescript-eslint/parser": "^5.37.0",
-    "eslint": "^8.23.1",
-    "prettier": "^2.7.1",
-    "typescript": "^4.8.3",
-    "vite": "^3.1.2",
-    "vite-plugin-solid": "^2.3.3"
+    "@types/node": "^18.11.12",
+    "@typescript-eslint/eslint-plugin": "^5.46.0",
+    "@typescript-eslint/parser": "^5.46.0",
+    "eslint": "^8.29.0",
+    "prettier": "^2.8.1",
+    "typescript": "^4.9.4",
+    "vite": "^4.0.0"
   },
   "scripts": {
     "start": "vite",

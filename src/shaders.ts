@@ -11,7 +11,7 @@ import jacobiShader from "./shaders/jacobi.frag?raw";
 import displayShader from "./shaders/display.frag?raw";
 import vorticityShader from "./shaders/vorticity.frag?raw";
 
-import imgURL from "/images/logo.png";
+import imgURL from "/images/logo light.png";
 
 const texelSize: REGL.DynamicVariableFn<number[]> = ({ viewportWidth, viewportHeight }) => [1 / viewportWidth, 1 / viewportHeight];
 
@@ -51,7 +51,7 @@ const splat = regl({
   },
 });
 
-const baseColor = [38 / 255, 50 / 255, 56 / 255];
+const baseColor = [1, 1, 1]; // [38 / 255, 50 / 255, 56 / 255];
 
 const img = new Image();
 img.src = imgURL;
