@@ -70,18 +70,14 @@ hr {
   mix-blend-mode: difference;
 }
 .header {
-  padding: 5vw;
   width: max-content;
 }
 .header h1 {
   margin: 0;
-  font-size: min(8vw, 15vh);
   display: block;
   width: max-content;
 }
-.header h1:nth-child(2) {
-  margin-left: min(17vw, 31vh);
-}
+
 h1 {
   font-family: "Fira Code", "Courier New", Courier, monospace;
   font-size: 3em;
