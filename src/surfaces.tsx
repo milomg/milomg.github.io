@@ -1,6 +1,6 @@
 import REGL from "regl";
 
-const c = document.getElementById("c") as HTMLCanvasElement;
+export const c = (<canvas id="c"></canvas>) as HTMLCanvasElement;
 function resize() {
   c.width = window.innerWidth;
   c.height = window.innerHeight;

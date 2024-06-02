@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ES6",
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "noEmit": true,
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "isolatedModules": true,
+    "baseUrl": "."
   }
 }

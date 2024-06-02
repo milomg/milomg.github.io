@@ -2,22 +2,25 @@
   "name": "modderme123",
   "version": "0.0.1",
   "license": "MIT",
+  "type": "module",
   "dependencies": {
-    "regl": "^2.1.0"
+    "regl": "^2.1.0",
+    "solid-js": "^1.8.17"
   },
   "devDependencies": {
-    "@types/node": "^20.8.7",
-    "@typescript-eslint/eslint-plugin": "^6.8.0",
-    "@typescript-eslint/parser": "^6.8.0",
-    "eslint": "^8.51.0",
-    "prettier": "^3.0.3",
-    "typescript": "^5.2.2",
-    "vite": "^4.5.0"
+    "@types/node": "^20.12.13",
+    "@typescript-eslint/eslint-plugin": "^7.11.0",
+    "@typescript-eslint/parser": "^7.11.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.12"
   },
   "scripts": {
     "start": "vite",
     "build": "vite build",
     "format": "prettier --write .",
     "lint": "eslint 'src/*'"
-  }
+  },
+  "packageManager": "pnpm@9.1.3"
 }

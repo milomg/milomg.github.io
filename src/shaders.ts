@@ -51,7 +51,11 @@ const splat = regl({
   },
 });
 
-const baseColor = [1, 1, 1]; // [38 / 255, 50 / 255, 56 / 255];
+let baseColor = [1, 1, 1];
+
+export function toggleBaseColor(): void {
+  baseColor = baseColor[0] === 1 ? [0, 0, 0] : [1, 1, 1];
+}
 
 const img = new Image();
 img.src = imgURL;
@@ -62,7 +66,7 @@ img.onload = () =>
     uniforms: {
       density: density.read,
       velocity: velocity.read,
-      color: baseColor,
+      color: () => baseColor,
       image: regl.texture({ data: img, mag: "linear", min: "linear" }),
       texelSize,
     },

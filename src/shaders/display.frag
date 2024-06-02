@@ -10,8 +10,8 @@ uniform sampler2D velocity;
 uniform sampler2D image;
 
 void main() {
-    float offset = texelSize.x > 1.0 / 800.0 ? -12.0 : -12.0;
-    float size = texelSize.x > 1.0 / 800.0 ? 64.0 : 72.0;
+    float offset = texelSize.x > 1.0 / 800.0 ? -8.0 : -8.0;
+    float size = texelSize.x > 1.0 / 800.0 ? 64.0 : 64.0;
     vec2 pos = (vec2(offset) + vec2(coords.x, 1.0 - coords.y) / texelSize) / size;
     vec4 logo = texture2D(image, pos);
     vec3 base = texture2D(density, coords).rgb;

@@ -1,5 +1,5 @@
 import { regl } from "./surfaces";
-import { fullscreen, update, createSplat } from "./shaders";
+import { fullscreen, update, createSplat, toggleBaseColor } from "./shaders";
 
 let t = 0;
 regl.frame(() => {
@@ -31,7 +31,7 @@ document.addEventListener("mousemove", (e) => {
         y: window.innerHeight / 2,
         dx: 0,
         dy: 0,
-      })
+      }),
     );
   }
   pointer.dx = e.clientX - pointer.x;
@@ -65,7 +65,7 @@ document.addEventListener("touchmove", (e) => {
           y: touch.clientX,
           dx: 0,
           dy: 0,
-        })
+        }),
       );
     }
     pointer.dx = touch.clientX - pointer.x;
@@ -75,11 +75,13 @@ document.addEventListener("touchmove", (e) => {
   }
 });
 
+window.addEventListener("click", function (evt) {
+  if (evt.detail === 3) {
+    document.body.classList.toggle("light");
+    toggleBaseColor();
+  }
+});
+
 window.onhashchange = () => {
   document.querySelector(window.location.hash)?.scrollIntoView();
 };
-
-console.log("%cHi! Nice to see you there", "font-size: x-large");
-console.log("%cEaster egg #2", "font-size: xx-small; color: black; background: black;");
-console.log("If you are wondering how I made this, the source code is at https://github.com/modderme123/modderme123.github.io");
-console.log("The fluid simulation was made with https://regl.party and is inspired by GPU Gems");
