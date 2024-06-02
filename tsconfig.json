@@ -2,15 +2,18 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
+    "moduleResolution": "bundler",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "moduleResolution": "node",
-    "strict": true,
     "esModuleInterop": true,
-    "noEmit": true,
-    "types": ["vite/client"],
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
+    "allowJs": true,
+    "strict": true,
+    "noEmit": true,
+    "types": ["vinxi/types/client"],
     "isolatedModules": true,
-    "baseUrl": "."
+    "paths": {
+      "~/*": ["./src/*"]
+    }
   }
 }

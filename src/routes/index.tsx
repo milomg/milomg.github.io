@@ -1,12 +1,60 @@
 import { render } from "solid-js/web";
-import { c } from "./surfaces";
-import "./script";
-import "./style.css";
+import { onMount } from "solid-js";
+import { createSim, toggleBaseColor } from "~/components/sim/shaders";
+import { createPointers } from "~/components/sim/pointers";
 
-export const App = () => {
+const App = () => {
+  onMount(() => {
+    console.log("%cHi! Nice to see you there", "font-size: x-large");
+    console.log("%cEaster egg #2", "font-size: xx-small; color: black; background: black;");
+    console.log("If you are wondering how I made this, the source code is at https://github.com/modderme123/modderme123.github.io");
+    console.log("The fluid simulation was made with https://regl.party and is inspired by GPU Gems");
+  });
+
+  let c: HTMLCanvasElement;
+  onMount(() => {
+    function resize() {
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    const pointers = createPointers();
+    const { regl, update, fullscreen, createSplat } = createSim(c);
+    let t = 0;
+    regl.frame(() => {
+      fullscreen(() => {
+        const red = Math.sin(t + 0) * 0.8 + 0.8;
+        const green = Math.sin(t + 2) * 0.8 + 0.8;
+        const blue = Math.sin(t + 4) * 0.8 + 0.8;
+        t += 0.1;
+
+        for (const [, pointer] of pointers) {
+          createSplat(pointer.x, pointer.y, pointer.dx * 10, pointer.dy * 10, [red, green, blue], 0.0005);
+          pointer.dx *= 0.5;
+          pointer.dy *= 0.5;
+        }
+
+        update();
+      });
+    });
+
+    window.addEventListener("click", function (evt) {
+      if (evt.detail === 3) {
+        document.body.classList.toggle("light");
+        toggleBaseColor();
+      }
+    });
+
+    window.onhashchange = () => {
+      document.querySelector(window.location.hash)?.scrollIntoView();
+    };
+  });
+
   return (
     <>
-      {c}
+      <canvas ref={c!} id="c"></canvas>
       <nav>
         <div>
           <a href="#top" id="logo">
@@ -192,9 +240,4 @@ export const App = () => {
   );
 };
 
-render(() => <App />, document.getElementById("root")!);
-
-console.log("%cHi! Nice to see you there", "font-size: x-large");
-console.log("%cEaster egg #2", "font-size: xx-small; color: black; background: black;");
-console.log("If you are wondering how I made this, the source code is at https://github.com/modderme123/modderme123.github.io");
-console.log("The fluid simulation was made with https://regl.party and is inspired by GPU Gems");
+export default App;

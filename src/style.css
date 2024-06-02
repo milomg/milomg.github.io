@@ -127,7 +127,7 @@ nav {
   }
 }
 
-#root {
+#app {
   margin: 0;
   padding: 0;
   display: grid;
