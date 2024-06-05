@@ -232,8 +232,8 @@ const App = () => {
           </ul>
         </section>
         <div class="social">
-          <a href="https://github.com/modderme123">GitHub</a>
-          <a href="mailto:modderme123@gmail.com">Email</a>
+          <a href="https://github.com/milomg">GitHub</a>
+          <a href="mailto:milomg4@gmail.com">Email</a>
         </div>
       </div>
     </>
