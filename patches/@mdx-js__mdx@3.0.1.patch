@@ -1,0 +1,13 @@
+diff --git a/lib/plugin/recma-jsx-rewrite.js b/lib/plugin/recma-jsx-rewrite.js
+index 82a27708f13beb625634c82d9927f21e33cc980f..49f8fcda0d692b2095158b26ba8cba5e3b86acff 100644
+--- a/lib/plugin/recma-jsx-rewrite.js
++++ b/lib/plugin/recma-jsx-rewrite.js
+@@ -196,7 +196,7 @@ export function recmaJsxRewrite(options) {
+                 functionScope.components.push(id)
+               }
+             }
+-          } else if (node.data && node.data._mdxExplicitJsx) {
++          } else if (true) {
+             // Do not turn explicit JSX into components from `_components`.
+             // As in, a given `h1` component is used for `# heading` (next case),
+             // but not for `<h1>heading</h1>`.

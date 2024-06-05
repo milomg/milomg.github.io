@@ -1,7 +1,7 @@
-import { render } from "solid-js/web";
 import { onMount } from "solid-js";
 import { createSim, toggleBaseColor } from "~/components/sim/shaders";
 import { createPointers } from "~/components/sim/pointers";
+import { A } from "@solidjs/router";
 
 const App = () => {
   onMount(() => {
@@ -223,7 +223,7 @@ const App = () => {
           <ul>
             <li>
               My first blog post on reactivity algorithms is{" "}
-              <a href="https://dev.to/modderme123/super-charging-fine-grained-reactive-performance-47ph">here</a>
+              <A href="/2022-12-01/reactivity">here</A>
             </li>
             <li>Before the pandemic I was learning to rock climb. My best was a V6.</li>
             <li>

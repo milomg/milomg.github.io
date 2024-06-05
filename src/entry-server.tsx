@@ -11,7 +11,7 @@ export default createHandler(() => (
             rel="stylesheet"
           />
           <link rel="shortcut icon" type="image/png" href="https://avatars2.githubusercontent.com/u/14153763" />
-          <link rel="manifest" href="./manifest.json" />
+          <link rel="manifest" href="/manifest.json" />
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <meta name="theme-color" content="#82aaff" />
