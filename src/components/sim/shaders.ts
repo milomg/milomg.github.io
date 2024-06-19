@@ -11,8 +11,8 @@ import jacobiShader from "./shaders/jacobi.frag?raw";
 import displayShader from "./shaders/display.frag?raw";
 import vorticityShader from "./shaders/vorticity.frag?raw";
 
-import lightURL from "./logo light.png";
-import darkURL from "./logo.png";
+const lightURL = "/images/logo-light.png";
+const darkURL = "/images/logo.png";
 
 const texelSize: REGL.DynamicVariableFn<number[]> = ({ viewportWidth, viewportHeight }) => [1 / viewportWidth, 1 / viewportHeight];
 
@@ -72,18 +72,18 @@ export function createSim(c: HTMLCanvasElement) {
   }
   let display: undefined | REGL.DrawCommand;
   Promise.all([loadToPromise(lightImage), loadToPromise(darkImage)]).then(([light, dark]) => {
-    (display = regl({
+    display = regl({
       frag: displayShader,
       uniforms: {
         density: density.read,
         velocity: velocity.read,
         color: () => baseColor,
-        image: () => baseColor[0] === 1 ? light : dark,
+        image: () => (baseColor[0] === 1 ? light : dark),
         texelSize,
       },
       viewport: {},
-    }));
-  })
+    });
+  });
 
   const advectVelocity = regl({
     frag: advectShader,

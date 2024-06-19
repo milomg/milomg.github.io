@@ -2,6 +2,7 @@ import { onMount } from "solid-js";
 import { createSim, toggleBaseColor } from "~/components/sim/shaders";
 import { createPointers } from "~/components/sim/pointers";
 import { A } from "@solidjs/router";
+import "./index.css";
 
 const App = () => {
   onMount(() => {
@@ -136,7 +137,7 @@ const App = () => {
           <p></p>
           <div>
             <div class="item">
-              <img src="images/solidplayground.png" alt="solid playground" />
+              <img src="/images/solidplayground.png" alt="solid playground" />
               <div>
                 <a href="https://playground.solidjs.com">
                   <h2>Solid Playground</h2>
@@ -157,10 +158,10 @@ const App = () => {
                   to rebuild ActivityWatch and is used by thousands of users daily.
                 </p>
               </div>
-              <img src="images/timeviewer.png" alt="timeviewer" />
+              <img src="/images/timeviewer.png" alt="timeviewer" />
             </div>
             <div class="item">
-              <img src="images/bbchallenge.png" alt="busy beaver challenge" />
+              <img src="/images/bbchallenge.png" alt="busy beaver challenge" />
               <div>
                 <a href="https://bbchallenge.com">
                   <h2>Busy Beaver Challenge</h2>
@@ -183,7 +184,7 @@ const App = () => {
           </p>
           <div>
             <div class="item">
-              <img src="images/img1.png" alt="brownian motion simulation" />
+              <img src="/images/img1.png" alt="brownian motion simulation" />
               <div>
                 <a href="http://creative-coding.pages.dev/traffic-dots/">
                   <h2>Traffic dots</h2>
@@ -201,10 +202,10 @@ const App = () => {
                 </a>
                 <p>This project uses the planck.js physics engine to simulate and evolve cars to drive through a virtual course.</p>
               </div>
-              <img src="images/img2.png" alt="car simulation" />
+              <img src="/images/img2.png" alt="car simulation" />
             </div>
             <div class="item">
-              <img src="images/img3.png" alt="boids simulation" />
+              <img src="/images/img3.png" alt="boids simulation" />
               <div>
                 <a href="http://creative-coding.pages.dev/boids">
                   <h2>Boids</h2>
@@ -222,8 +223,7 @@ const App = () => {
           <h2>fun facts</h2>
           <ul>
             <li>
-              My first blog post on reactivity algorithms is{" "}
-              <A href="/2022-12-01/reactivity">here</A>
+              My first blog post on reactivity algorithms is <A href="/2022-12-01/reactivity">here</A>
             </li>
             <li>Before the pandemic I was learning to rock climb. My best was a V6.</li>
             <li>

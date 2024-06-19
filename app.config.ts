@@ -20,8 +20,8 @@ export default defineConfig({
         include: /\.mdx?$/,
         jsx: true,
         jsxImportSource: "solid-js",
-        providerImportSource: "solid-mdx",
-        remarkPlugins: [remarkGfm,
+        remarkPlugins: [
+          remarkGfm,
           // [remarkShikiTwoslash.default, { langs: ["typescript"], themes: ["dark-plus", "light-plus"] }]
         ],
         rehypePlugins: [[rehypeRaw, { passThrough: nodeTypes }]],

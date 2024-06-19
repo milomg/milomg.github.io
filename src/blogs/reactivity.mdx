@@ -1,8 +1,3 @@
-import { clientOnly } from "@solidjs/start";
-export const Mermaid = clientOnly(() => import("~/components/mermaid"))
-
-<Mermaid />
-
 # What's a Reactive Library?
 
 Reactivity is the future of JS frameworks!
@@ -43,9 +38,7 @@ import { reactive } from "@reactively/core";
 const nthUser = reactive(10);
 
 // fetch call is deferred until needed
-const lazyData = reactive(() =>
-  fetch(`https://data.mysite.io/users?n=${nthUser.value}`)
-);
+const lazyData = reactive(() => fetch(`https://data.mysite.io/users?n=${nthUser.value}`));
 
 if (needUsers) {
   useBuffer(await lazyData.value);
@@ -435,44 +428,44 @@ That said, there's learning here to improve performance of all the frameworks.
 **Wide graphs**
 
 <table>
-<tbody>
-  <tr>
-    <td>
-      <img src="https://user-images.githubusercontent.com/63816/201512664-fcf21d78-560b-4287-b658-d2e965dc5a6c.png" width="554" height="340" />
-    </td>
-    <td>
-      <img src="https://user-images.githubusercontent.com/63816/201512655-7437764f-ac2f-4cb4-b8bb-5f1e26722240.png" width="554" height="340" />
-    </td>
-  </tr>
+  <tbody>
+    <tr>
+      <td>
+        <img src="https://user-images.githubusercontent.com/63816/201512664-fcf21d78-560b-4287-b658-d2e965dc5a6c.png" width="554" height="340" />
+      </td>
+      <td>
+        <img src="https://user-images.githubusercontent.com/63816/201512655-7437764f-ac2f-4cb4-b8bb-5f1e26722240.png" width="554" height="340" />
+      </td>
+    </tr>
   </tbody>
 </table>
 
 <table>
-<tbody>
-  <tr>
-    <td>
-    <b>Deep Graph</b>
-      <img src="https://user-images.githubusercontent.com/63816/201514471-c12276fa-a7da-41a7-b3a2-0b3c69c23498.png" width="554" height="340" />
-    </td>
-    <td>
-    <b>Square Graph</b>
-      <img src="https://user-images.githubusercontent.com/63816/201512393-8fe73d98-df03-4b9d-9adb-04a3b9d11615.png" width="554" height="340" />
-    </td>
-  </tr>
+  <tbody>
+    <tr>
+      <td>
+        <b>Deep Graph</b>
+        <img src="https://user-images.githubusercontent.com/63816/201514471-c12276fa-a7da-41a7-b3a2-0b3c69c23498.png" width="554" height="340" />
+      </td>
+      <td>
+        <b>Square Graph</b>
+        <img src="https://user-images.githubusercontent.com/63816/201512393-8fe73d98-df03-4b9d-9adb-04a3b9d11615.png" width="554" height="340" />
+      </td>
+    </tr>
   </tbody>
 </table>
 
 **Dynamic Graphs**
 
 <table>
-<tbody>
-  <tr>
-    <td>
-      <img src="https://user-images.githubusercontent.com/63816/201512629-084a07b3-24c6-4ef7-b8f4-bee278d86aa6.png" width="554" height="340" />
-    </td>
-    <td>
-      <img src="https://user-images.githubusercontent.com/63816/201512635-f274501d-c968-4881-aa52-98c50b0bf110.png" width="554" height="340" />
-    </td>
-  </tr>
+  <tbody>
+    <tr>
+      <td>
+        <img src="https://user-images.githubusercontent.com/63816/201512629-084a07b3-24c6-4ef7-b8f4-bee278d86aa6.png" width="554" height="340" />
+      </td>
+      <td>
+        <img src="https://user-images.githubusercontent.com/63816/201512635-f274501d-c968-4881-aa52-98c50b0bf110.png" width="554" height="340" />
+      </td>
+    </tr>
   </tbody>
 </table>
