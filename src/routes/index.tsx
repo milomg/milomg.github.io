@@ -21,32 +21,38 @@ const App = () => {
     window.addEventListener("resize", resize);
     resize();
 
-    const pointers = createPointers();
-    const { regl, update, fullscreen, createSplat } = createSim(c);
-    let t = 0;
-    regl.frame(() => {
-      fullscreen(() => {
-        const red = Math.sin(t + 0) * 0.8 + 0.8;
-        const green = Math.sin(t + 2) * 0.8 + 0.8;
-        const blue = Math.sin(t + 4) * 0.8 + 0.8;
-        t += 0.1;
+    try {
+      const pointers = createPointers();
+      const { regl, update, fullscreen, createSplat } = createSim(c);
+      let t = 0;
+      regl.frame(() => {
+        fullscreen(() => {
+          const red = Math.sin(t + 0) * 0.8 + 0.8;
+          const green = Math.sin(t + 2) * 0.8 + 0.8;
+          const blue = Math.sin(t + 4) * 0.8 + 0.8;
+          t += 0.1;
 
-        for (const [, pointer] of pointers) {
-          createSplat(pointer.x, pointer.y, pointer.dx * 10, pointer.dy * 10, [red, green, blue], 0.0005);
-          pointer.dx *= 0.5;
-          pointer.dy *= 0.5;
-        }
+          for (const [, pointer] of pointers) {
+            createSplat(pointer.x, pointer.y, pointer.dx * 10, pointer.dy * 10, [red, green, blue], 0.0005);
+            pointer.dx *= 0.5;
+            pointer.dy *= 0.5;
+          }
 
-        update();
+          update();
+        });
       });
-    });
 
-    window.addEventListener("click", function (evt) {
-      if (evt.detail === 3) {
-        document.body.classList.toggle("light");
-        toggleBaseColor();
-      }
-    });
+      window.addEventListener("click", function (evt) {
+        if (evt.detail === 3) {
+          document.body.classList.toggle("light");
+          toggleBaseColor();
+        }
+      });
+    } catch (e) {
+      console.error(e);
+      c.remove();
+      document.querySelector("#logo-placeholder")!.id = "logo-img";
+    }
 
     window.onhashchange = () => {
       document.querySelector(window.location.hash)?.scrollIntoView();

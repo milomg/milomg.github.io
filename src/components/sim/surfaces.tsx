@@ -43,14 +43,14 @@ function createFbo(regl: REGL.Regl, { filter, downsample = TEXTURE_DOWNSAMPLE }:
 }
 
 export function createRegl(c: HTMLCanvasElement) {
+  const gl = c.getContext("webgl", {
+    alpha: false,
+    depth: false,
+    stencil: false,
+    antialias: false,
+  });
   const regl = REGL({
-    attributes: {
-      alpha: false,
-      depth: false,
-      stencil: false,
-      antialias: false,
-    },
-    canvas: c,
+    gl: gl!,
     extensions: ["OES_texture_half_float", "OES_texture_half_float_linear"],
   });
 
