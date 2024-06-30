@@ -12,6 +12,7 @@ export default defineConfig({
     compressPublicAssets: { gzip: false, brotli: false },
     prerender: {
       crawlLinks: true,
+      routes: ["/", "/404"],
     },
   },
   vite: {
