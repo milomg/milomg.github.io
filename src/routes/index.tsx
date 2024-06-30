@@ -83,7 +83,7 @@ const App = () => {
       <nav>
         <div>
           <a href="#top" id="logo">
-            <div id="logo-placeholder"></div>
+            <div id="logo-placeholder" role="img" aria-label="logo"></div>
           </a>
         </div>
         <ol class="links">

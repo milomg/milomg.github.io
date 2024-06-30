@@ -1,0 +1,27 @@
+# -------|-------------comment-----------------|-----date-------
+# *       created main loop & timing control     14 hours ago
+# |
+# *       enabled config file parsing            9 hours ago
+# |
+# *       misc bugfixes                          5 hours ago
+# |
+# *       code additions/edits                   4 hours ago
+# |
+# *       more code                              4 hours ago
+# |\
+# | *     here have code                         4 hours ago
+# | |
+# | *     aaaaaaaa                               3 hours ago
+# |/
+# *       adkfjslkdfjsdklfj                      2 hours ago
+# |
+# *       my hands are typing words              2 hours ago
+# |
+# *       haaaaaaaaands                          2 hours ago
+# 
+#             As a project drags on, my commit
+#             messages get less and less informative.
+#                      xkcd.com/1296
+
+User-agent: *
+Allow: /
