@@ -1,8 +1,10 @@
-import { onMount } from "solid-js";
+import { onCleanup, onMount } from "solid-js";
 import { createSim, toggleBaseColor } from "~/components/sim/shaders";
 import { createPointers } from "~/components/sim/pointers";
 import { A } from "@solidjs/router";
 import "./index.css";
+import { createGlobals } from "~/components/global";
+import { Title } from "@solidjs/meta";
 
 const App = () => {
   onMount(() => {
@@ -12,13 +14,31 @@ const App = () => {
     console.log("The fluid simulation was made with https://regl.party and is inspired by GPU Gems");
   });
 
+  createGlobals();
+
   let c: HTMLCanvasElement;
   onMount(() => {
+    function tripleClick(evt: MouseEvent) {
+      if (evt.detail === 3) {
+        document.body.classList.toggle("light");
+        toggleBaseColor();
+      }
+    }
+    window.addEventListener("click", tripleClick);
+    onCleanup(() => window.removeEventListener("click", tripleClick));
+
+    function hashchange() {
+      document.querySelector(window.location.hash)?.scrollIntoView();
+    }
+    window.addEventListener("hashchange", hashchange);
+    onCleanup(() => window.removeEventListener("hashchange", hashchange));
+
     function resize() {
       c.width = window.innerWidth;
       c.height = window.innerHeight;
     }
     window.addEventListener("resize", resize);
+    onCleanup(() => window.removeEventListener("resize", resize));
     resize();
 
     try {
@@ -42,25 +62,23 @@ const App = () => {
         });
       });
 
-      window.addEventListener("click", function (evt) {
+      function tripleClick(evt: MouseEvent) {
         if (evt.detail === 3) {
-          document.body.classList.toggle("light");
           toggleBaseColor();
         }
-      });
+      }
+      window.addEventListener("click", tripleClick);
+      onCleanup(() => window.removeEventListener("click", tripleClick));
     } catch (e) {
       console.error(e);
       c.remove();
       document.querySelector("#logo-placeholder")!.id = "logo-img";
     }
-
-    window.onhashchange = () => {
-      document.querySelector(window.location.hash)?.scrollIntoView();
-    };
   });
 
   return (
     <>
+      <Title>Milo's Homepage · milomg.dev</Title>
       <canvas ref={c!} id="c"></canvas>
       <nav>
         <div>

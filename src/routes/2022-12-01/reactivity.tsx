@@ -1,11 +1,15 @@
-import MDXComponent from "~/blogs/reactivity.mdx";
+import { Title } from "@solidjs/meta";
+import { createGlobals } from "~/components/global";
 import { createMermaid } from "~/components/mermaid";
+import MDXComponent from "~/blogs/reactivity.mdx";
 
 export default function Page() {
   createMermaid();
+  createGlobals();
 
   return (
     <>
+      <Title>Super Charging Fine-Grained Reactive Performance · milomg.dev</Title>
       <nav>
         <div>
           <a href="/#top" id="logo">
