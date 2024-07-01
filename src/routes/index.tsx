@@ -239,6 +239,9 @@ const App = () => {
             <li>
               I have hidden a few <span title="Easter Egg 1">Easter eggs</span> in this site; see how many you can find.
             </li>
+            <li>
+              Triple click
+            </li>
           </ul>
         </section>
         <div class="social">
