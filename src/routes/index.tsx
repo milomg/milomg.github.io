@@ -247,7 +247,7 @@ const App = () => {
           <h2>fun facts</h2>
           <ul>
             <li>
-              My first blog post on reactivity algorithms is <A href="/2022-12-01/reactivity">here</A>
+              I wrote a blog post on <A href="/2022-12-01/reactivity">reactivity algorithms</A>
             </li>
             <li>Before the pandemic I was learning to rock climb. My best was a V6.</li>
             <li>
