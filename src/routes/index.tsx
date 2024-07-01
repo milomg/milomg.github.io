@@ -18,21 +18,6 @@ const App = () => {
 
   let c: HTMLCanvasElement;
   onMount(() => {
-    function tripleClick(evt: MouseEvent) {
-      if (evt.detail === 3) {
-        document.body.classList.toggle("light");
-        toggleBaseColor();
-      }
-    }
-    window.addEventListener("click", tripleClick);
-    onCleanup(() => window.removeEventListener("click", tripleClick));
-
-    function hashchange() {
-      document.querySelector(window.location.hash)?.scrollIntoView();
-    }
-    window.addEventListener("hashchange", hashchange);
-    onCleanup(() => window.removeEventListener("hashchange", hashchange));
-
     function resize() {
       c.width = window.innerWidth;
       c.height = window.innerHeight;
@@ -42,6 +27,7 @@ const App = () => {
     resize();
 
     try {
+      // we create pointers inside onMount so that it doesn't run on the server
       const pointers = createPointers();
       const { regl, update, fullscreen, createSplat } = createSim(c);
       let t = 0;

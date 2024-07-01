@@ -16,7 +16,7 @@ void main() {
     vec4 logo = texture2D(image, pos);
     vec3 base = texture2D(density, coords).rgb;
     if (logo.a <= 0.0 && (base.r > 0.1 || base.g > 0.1 || base.b > 0.1)) {
-        base *= 0.1 / max(base.r, max(base.g, base.b));
+        base *= 0.2 / max(base.r, max(base.g, base.b));
     }
     gl_FragColor = vec4(base + color * (1.0 - logo.a) + logo.rgb, 1.0);
 }

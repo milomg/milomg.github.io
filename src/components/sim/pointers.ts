@@ -1,6 +1,8 @@
+import { onCleanup } from "solid-js";
+
 export function createPointers() {
   const pointers = new Map<number, { x: number; y: number; dx: number; dy: number }>();
-  document.addEventListener("mousemove", (e) => {
+  const mousemove = (e: MouseEvent) => {
     let pointer = pointers.get(-1);
     if (!pointer) {
       pointers.set(
@@ -17,8 +19,11 @@ export function createPointers() {
     pointer.dy = e.clientY - pointer.y;
     pointer.x = e.clientX;
     pointer.y = e.clientY;
-  });
-  document.addEventListener("touchstart", (e) => {
+  };
+  document.addEventListener("mousemove", mousemove);
+  onCleanup(() => document.removeEventListener("mousemove", mousemove));
+
+  const touchstart = (e: TouchEvent) => {
     for (const touch of e.changedTouches) {
       pointers.set(touch.identifier, {
         x: touch.clientX,
@@ -27,13 +32,19 @@ export function createPointers() {
         dy: 0,
       });
     }
-  });
-  document.addEventListener("touchend", (e) => {
+  };
+  document.addEventListener("touchstart", touchstart);
+  onCleanup(() => document.removeEventListener("touchstart", touchstart));
+
+  const touchend = (e: TouchEvent) => {
     for (const touch of e.changedTouches) {
       pointers.delete(touch.identifier);
     }
-  });
-  document.addEventListener("touchmove", (e) => {
+  };
+  document.addEventListener("touchend", touchend);
+  onCleanup(() => document.removeEventListener("touchend", touchend));
+
+  const touchmove = (e: TouchEvent) => {
     for (const touch of e.changedTouches) {
       let pointer = pointers.get(touch.identifier);
       if (!pointer) {
@@ -52,6 +63,9 @@ export function createPointers() {
       pointer.x = touch.clientX;
       pointer.y = touch.clientY;
     }
-  });
+  };
+  document.addEventListener("touchmove", touchmove);
+  onCleanup(() => document.removeEventListener("touchmove", touchmove));
+
   return pointers;
 }
