@@ -1,4 +1,4 @@
-# [ModderMe123](http://modderme123.netlify.app/)
+# [Milo Mighdoll's site](http://milomg.dev/)
 
 1. `npm install`
 2. `npm run start`
