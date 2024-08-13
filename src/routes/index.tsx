@@ -87,8 +87,7 @@ const App = () => {
       <div id="scroller">
         <section id="top">
           <div class="header">
-            <h1>I'm Milo, a software mage</h1>
-            <h1>working at Bubble, and studying at University of Toronto.</h1>
+            <h1>I'm Milo, a software mage working at Bubble and researching signals</h1>
             <h1>
               <span class="nice">-----------------</span>
             </h1>
@@ -98,48 +97,21 @@ const App = () => {
           <hr />
           <h2 title="Nice to meet you! I'm the hover text, what's your name?">about me</h2>
           <p>
-            I'm a student at University of Toronto who loves to code. In my free time, I make graphical simulations, build frontend sites, and write
-            the occasional Rust server. I carefully craft fast and clean code.
+            I'm a core team member working on SolidJS. In my free time, I make graphical simulations, build frontend sites, and research new
+            programming language concepts. I carefully craft fast and clean code.
           </p>
 
-          <div>
-            <details open>
-              <summary>TypeScript, HTML & CSS</summary>
-              <p>
-                I'm a core team member on SolidJS, where I research Solid 2.0 and lead the development of the Solid Playground. I've worked on
-                multiple large TypeScript & React projects, and I love to keep up with the latest frontend trends. I'm currently working on
-                standardizing Signals into JavaScript.
-              </p>
-            </details>
-            <details open>
-              <summary>Rust</summary>
-              <p>
-                In addition to loving cutting edge performance, I'm also a programming language polyglot. I've written several small WebGPU apps,
-                networking servers, and even a compiler. I've even made a metasploit reverse shell payload.
-              </p>
-            </details>
-            <details open>
-              <summary>Scala & Java</summary>
-              <p>
-                I developed a massively multiplayer realtime browser game in Scala & ScalaJS called Snowy, a synthesis of my interest in graphics,
-                physics, and networking. This project taught me about build tools, profiling, and functional programming.
-              </p>
-            </details>
-            <details open>
-              <summary>C#</summary>
-              <p>
-                I worked on a large microservices document management system used by thousands of lawyers. My work involved building an OAuth server
-                for SSO and replacing a SQL Server ORM with native PostgreSQL.
-              </p>
-            </details>
-            <details open>
-              <summary>Others</summary>
-              <p>
-                I've also programmed in Typescript, Scala, Java, Rust, C#, Lean 4, Zig, Python, Haskell, Swift, C, Go, Koka, and Racket. I enjoy
-                programming language theory and design.
-              </p>
-            </details>
-          </div>
+          <p>
+            I'm designing the reactivity core for Solid 2.0 and leading work on the Solid Playground. I'm also working on standardizing Signals into
+            JavaScript.
+          </p>
+
+          <p>
+            In addition to loving cutting edge performance, I'm also a programming language polyglot. I enjoy programming language theory and design,
+            and I've programmed in Typescript, Scala, Java, Rust, C#, Lean 4, Zig, Python, Haskell, Swift, C, Go, Koka, and Racket.
+          </p>
+
+          <p>At work, I've developed large TypeScript, React, Node, and C# projects, spanning from data visualization to AWS infrastructure.</p>
         </section>
         <section id="work">
           <hr />
@@ -173,7 +145,7 @@ const App = () => {
             <div class="item">
               <img src="/images/bbchallenge.png" alt="busy beaver challenge" />
               <div>
-                <a href="https://bbchallenge.com">
+                <a href="https://bbchallenge.org">
                   <h2>Busy Beaver Challenge</h2>
                 </a>
                 <p>
@@ -230,7 +202,7 @@ const App = () => {
         </section>
         <section id="fun">
           <hr />
-          <h2>fun facts</h2>
+          <h2>more</h2>
           <ul>
             <li>
               I wrote a blog post on <A href="/2022-12-01/reactivity">reactivity algorithms</A>
@@ -239,9 +211,7 @@ const App = () => {
             <li>
               I have hidden a few <span title="Easter Egg 1">Easter eggs</span> in this site; see how many you can find.
             </li>
-            <li>
-              Triple click
-            </li>
+            <li>Triple click</li>
           </ul>
         </section>
         <div class="social">

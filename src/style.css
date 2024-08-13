@@ -59,7 +59,8 @@ body {
   display: flex;
   background: var(--background);
 }
-section {
+section,
+.column {
   margin: 0em auto;
   padding: 4em 10vw;
   max-width: calc(900px + 20vw);
