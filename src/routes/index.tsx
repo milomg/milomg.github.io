@@ -87,9 +87,9 @@ const App = () => {
       <div id="scroller">
         <section id="top">
           <div class="header">
-            <h1>I'm Milo, a software mage working at Bubble and researching signals</h1>
+            <h1>I'm Milo, a software engineer and a consultant with expertise in reactivity and web development</h1>
             <h1>
-              <span class="nice">-----------------</span>
+              <span class="nice">⠓⠑⠇⠇⠕ ⠺⠕⠗⠇⠙</span>
             </h1>
           </div>
         </section>
@@ -97,21 +97,21 @@ const App = () => {
           <hr />
           <h2 title="Nice to meet you! I'm the hover text, what's your name?">about me</h2>
           <p>
-            I'm a core team member working on SolidJS. In my free time, I make graphical simulations, build frontend sites, and research new
-            programming language concepts. I carefully craft fast and clean code.
+            As a member of the Solid core team, a modern web development framework, I'm designing the reactivity core for Solid 2.0 and leading work
+            on the Solid Playground. I'm also working with the technical comittee TC39 on standardizing Signals into JavaScript.
           </p>
-
           <p>
-            I'm designing the reactivity core for Solid 2.0 and leading work on the Solid Playground. I'm also working on standardizing Signals into
-            JavaScript.
+            I've helped companies modernize large TypeScript, React, Node, and C# projects, developing everything from data visualization to AWS
+            infrastructure.
           </p>
-
           <p>
-            In addition to loving cutting edge performance, I'm also a programming language polyglot. I enjoy programming language theory and design,
-            and I've programmed in Typescript, Scala, Java, Rust, C#, Lean 4, Zig, Python, Haskell, Swift, C, Go, Koka, and Racket.
+            In addition to loving cutting edge performance, I enjoy programming language theory and design. I've programmed in Typescript, Scala,
+            Java, Rust, C#, Lean 4, Zig, Python, Haskell, Swift, C, Go, Koka, and Racket.
           </p>
-
-          <p>At work, I've developed large TypeScript, React, Node, and C# projects, spanning from data visualization to AWS infrastructure.</p>
+          <p>
+            In my free time, I have been experimenting with new programming ideas, cooking <span title="八宝粥">Chinese porridge</span>, and learning
+            to boulder.
+          </p>
         </section>
         <section id="work">
           <hr />
@@ -207,7 +207,6 @@ const App = () => {
             <li>
               I wrote a blog post on <A href="/2022-12-01/reactivity">reactivity algorithms</A>
             </li>
-            <li>Before the pandemic I was learning to rock climb. My best was a V6.</li>
             <li>
               I have hidden a few <span title="Easter Egg 1">Easter eggs</span> in this site; see how many you can find.
             </li>
