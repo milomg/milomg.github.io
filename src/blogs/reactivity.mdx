@@ -52,14 +52,13 @@ The library's job is to efficiently figure out which reactive functions to run i
 to changes elsewhere in the graph.
 In this example, our dependency graph is quite simple:
 
-<div align='center'>
 
-```mermaid
+{/* we need to do this to avoid shiki from rewriting the codeblock too much */}
+<pre class="language-mermaid">
 graph TD
   A((nthUser)) --> lazyData
-```
+</pre>
 
-</div>
 
 Reactivity libraries are at the heart of modern web component frameworks like Solid, Qwik, Vue, and Svelte.
 And in some cases you can add fine-grained reactive state management to other libraries like Lit and React.
@@ -93,13 +92,13 @@ In a lazy reactive library, reactive elements are only evaluated when they are n
 
 We can compare how a lazy vs eager library will evaluate a graph like this:
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A((A)) --> B
   A --> C
   B --> D
   C --> D
-```
+</pre>
 
 | Lazy                                                                                                                                                                              | Eager                                                                                                                            |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
@@ -112,21 +111,21 @@ The charts below consider how a change being made to `A` updates elements that d
 Let's consider two core challenges that each algorithm needs to address. The first challenge is what we call the diamond problem, which can be an issue for eager reactive algorithms. The challege is to not accidentally evaluate `A,B,D,C` and then evaluate `D` a second time because `C` has updated.
 Evaluating `D` twice is inefficient and may cause a user visible glitch.
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A((A)) --> B
   A --> C
   B --> D
   C --> D
-```
+</pre>
 
 The second challenge is the equality check problem, which can be an issue for lazy reactive algorithms. If some node `B` returns the same value as the last time we called it, then the node below it `C` doesn't need to update. (But a naive lazy algorithm might immediately try to update `C` instead of checking if `B` has updated first)
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A((A)) --> B
   B --> C
-```
+</pre>
 
 To make this more concrete, consider the following code: it is clear that `C` should only ever be run once because every time `A` changes, `B` will reevaluate and return the same value, so none of `C`'s sources have changed.
 
@@ -149,44 +148,43 @@ In the diamond example below, the first pass proceeds as follows:
 After an update to `A`, MobX marks a count in `B` and `C` that they now have one parent that needs to update,
 and MobX continues down from `B` and from `C` incrementing the count of `D` once for each parent that has a non 0 update count. So when the pass ends `D` has a count of 2 parents above it that need to be updated.
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A(("A (0)")) --> B
   A --> C
   B["B (1)"] --> D["D (2)"]
   C["C (1)"] --> D
-
-```
+</pre>
 
 In a second pass, we update every node that has a zero count, and subtract one from each of its children, then tell them to reevaluate if they have a zero count and repeat.
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A((A)) --> B
   A --> C
   B["B (0)"] --> D["D (2)"]
   C["C (0)"] --> D
-```
+</pre>
 
 Then, `B` and `C` are updated, and `D` notices that both of its parents have updated.
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A((A)) --> B
   A --> C
   B --> D["D (0)"]
   C --> D
-```
+</pre>
 
 Now finally `D` is updated.
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A((A)) --> B
   A --> C
   B --> D
   C --> D
-```
+</pre>
 
 This quickly solves the diamond problem by separating the execution of the graph into two phases, one to increase a number of updates and another to update and decrease the number of updates left.
 
@@ -236,41 +234,41 @@ Preact checks whether the parents of any signal need to be updated before updati
 
 On a graph like the following where A has just changed but B and C have not yet seen that update we could have something like this:
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A(("A (1)")) -- "(0)" --> B
   A -- "(0)" --> C
   B["B (2)"] -- "(2)" --> D["D (1)"]
   C["C (7)"] -- "(7)" --> D
-```
+</pre>
 
 Then when we fetch D and the reactive elements update we might have a graph that looks like this
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A(("A (1)")) -- "(1)" --> B
   A -- "(1)" --> C
   B["B (3)"] -- "(3)" --> D["D (2)"]
   C["C (8)"] -- "(8)" --> D
-```
+</pre>
 
 Additionally, Preact stores an extra field that stores whether any of its sources have possibly updated since it has last updated. Then, it avoids walking up the entire graph from `D` to check if any node has a different version when nothing has changed.
 
 We can also see how Preact solves the equality check problem:
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A(("A (3)")) -- "(3)" --> B
   B["B (1)"] -- "(1)" --> C["C (1)"]
-```
+</pre>
 
 When `A` updates, `B` will rerun, but not change its version because it will still return 0, so `C` will not update.
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A(("A (4)")) -- "(4)" --> B
   B["B (1)"] -- "(1)" --> C["C (1)"]
-```
+</pre>
 
 # Reactively
 
@@ -280,7 +278,7 @@ Instead of version numbers, Reactively uses only graph coloring.
 When a node changes, we color it red (dirty) and all of its children green (check).
 This is the first down phase.
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A((A)) --> B
   A --> C
@@ -293,7 +291,7 @@ graph TD
   classDef green fill:#afa,color:#000;
   class B,C, red;
   class D,E,F green;
-```
+</pre>
 
 In the second phase (up) we ask for the value of `F`
 and follow a procedure internally called `updateIfNecessary()` before returning the value of `F`.
@@ -306,7 +304,7 @@ If we find a red node, we update the red node, and mark its direct children red.
 In this example, we walk up from `F` to `E` and discover that C is red.
 So we update `C`, and mark `E` as red.
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A((A)) --> B
   A --> C
@@ -320,11 +318,11 @@ graph TD
   classDef green fill:#afa,color:#000;
   class B,E red;
   class D,F green;
-```
+</pre>
 
 Then, we can update `E`, and mark its children red:
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A((A)) --> B
   A --> C
@@ -337,12 +335,12 @@ graph TD
   classDef green fill:#afa,color:#000;
   class B,F red;
   class D green;
-```
+</pre>
 
 Now we know we must update `F`. `F` asks for the value of D and so we `updateIfNecessary` on `D`,
 and repeat a similar traversal this time with `D` and `B`.
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A((A)) --> B
   A --> C
@@ -353,11 +351,11 @@ graph TD
 
   classDef red fill:#f99,color:#000
   class D,F red;
-```
+</pre>
 
 And finally we get back to a fully evaluated state:
 
-```mermaid
+<pre class="language-mermaid">
 graph TD
   A((A)) --> B
   A --> C
@@ -365,7 +363,7 @@ graph TD
   C --> E
   E --> F
   D --> F
-```
+</pre>
 
 In code, the `updateIfNecessary` process looks like this:
 

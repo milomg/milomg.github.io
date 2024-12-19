@@ -23,7 +23,13 @@ export default defineConfig({
         jsxImportSource: "solid-js",
         remarkPlugins: [
           remarkGfm,
-          // [remarkShikiTwoslash.default, { langs: ["typescript"], themes: ["dark-plus", "light-plus"] }]
+          [
+            remarkShikiTwoslash.default,
+            {
+              lang: "typescript",
+              themes: ["dark-plus", "light-plus"],
+            },
+          ],
         ],
         rehypePlugins: [[rehypeRaw, { passThrough: nodeTypes }]],
       }),

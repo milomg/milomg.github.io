@@ -1,0 +1,20 @@
+p {
+  margin-bottom: 0.75rem;
+}
+.language-id {
+  display: none;
+}
+.shiki.light-plus {
+  display: none;
+}
+.light .shiki.dark-plus {
+  display: none;
+}
+.light .shiki.light-plus {
+  display: block;
+}
+
+.language-mermaid {
+  display: flex;
+  justify-content: center;
+}

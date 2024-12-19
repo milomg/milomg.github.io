@@ -2,6 +2,7 @@ import { Title } from "@solidjs/meta";
 import { createGlobals } from "~/components/global";
 import { createMermaid } from "~/components/mermaid";
 import MDXComponent from "~/blogs/reactivity.mdx";
+import "../blog.css";
 
 export default function Page() {
   createMermaid();
@@ -36,6 +37,7 @@ export default function Page() {
               blockquote: (props) => <blockquote {...props} />,
               br: (props) => <br {...props} />,
               code: (props) => <code {...props} />,
+              div: (props) => <div {...props} />,
               em: (props) => <em {...props} />,
               h1: (props) => <h1 {...props} />,
               h2: (props) => <h2 {...props} />,
@@ -49,6 +51,7 @@ export default function Page() {
               ol: (props) => <ol {...props} />,
               p: (props) => <p {...props} />,
               pre: (props) => <pre {...props} />,
+              span: (props) => <span {...props} />,
               strong: (props) => <strong {...props} />,
               ul: (props) => <ul {...props} />,
               table: (props) => <table {...props} />,
