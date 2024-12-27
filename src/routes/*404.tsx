@@ -4,7 +4,7 @@ import { onCleanup, onMount } from "solid-js";
 import { createGlobals } from "~/components/global";
 import { createPointers } from "~/components/sim/pointers";
 import { createSim, toggleBaseColor } from "~/components/sim/shaders";
-import "./[...404].css";
+import "./*404.css";
 
 export default function NotFound() {
   createGlobals();

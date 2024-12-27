@@ -11,6 +11,7 @@ export default defineConfig({
     static: true,
     compressPublicAssets: { gzip: false, brotli: false },
     prerender: {
+      autoSubfolderIndex: false,
       crawlLinks: true,
       routes: ["/", "/404"],
     },
