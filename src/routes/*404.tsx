@@ -67,37 +67,38 @@ export default function NotFound() {
     }
   });
 
-  return (<Globals>
-    <div>
-      <HttpStatusCode code={404} />
-      <Title>Page not found · milomg.dev</Title>
-      <canvas ref={c!} id="c"></canvas>
-      <nav>
-        <div>
-          <a href="/#top" id="logo">
-            <div id="logo-placeholder" role="img" aria-label="logo"></div>
-          </a>
-        </div>
-        <ol class="links">
-          <li>
-            <a href="/#about">About</a>
-          </li>
-          <li>
-            <a href="/#work">Projects</a>
-          </li>
-          <li>
-            <a href="/#fun">Fun</a>
-          </li>
-        </ol>
-      </nav>
-      <section>
-        <h1>Page not found</h1>
-        <p>
-          I can't find the page you're looking for. Maybe you've mistyped it, or maybe I broke something. In the meantime, enjoy some{" "}
-          <a href="https://open.spotify.com/playlist/37i9dQZF1DX3bH0P2uDnWA">Electro Swing</a>
-        </p>
-      </section>
-    </div>
+  return (
+    <Globals>
+      <div>
+        <HttpStatusCode code={404} />
+        <Title>Page not found · milomg.dev</Title>
+        <canvas ref={c!} id="c"></canvas>
+        <nav>
+          <div>
+            <a href="/#top" id="logo">
+              <div id="logo-placeholder" role="img" aria-label="logo"></div>
+            </a>
+          </div>
+          <ol class="links">
+            <li>
+              <a href="/#about">About</a>
+            </li>
+            <li>
+              <a href="/#work">Projects</a>
+            </li>
+            <li>
+              <a href="/#fun">Fun</a>
+            </li>
+          </ol>
+        </nav>
+        <section>
+          <h1>Page not found</h1>
+          <p>
+            I can't find the page you're looking for. Maybe you've mistyped it, or maybe I broke something. In the meantime, enjoy some{" "}
+            <a href="https://open.spotify.com/playlist/37i9dQZF1DX3bH0P2uDnWA">Electro Swing</a>
+          </p>
+        </section>
+      </div>
     </Globals>
   );
 }
