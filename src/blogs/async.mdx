@@ -1,0 +1,172 @@
+# Async in Standard Signals
+
+## Quick Terminology
+
+I might refer to stabilization in this writeup a few times. You can think of stabilization like a phase designated for evaluation of computations. Stabilization refers to a single synchronous pass where all effects that haven't been updated yet are automatically updated:
+
+```typescript
+const effectQueue = [];
+
+function stabilize() {
+  for (const effect of effectQueue) {
+    effect.update();
+  }
+  effectQueue = [];
+}
+```
+
+Generally, a stabilization pass is expected to run only the effects added before stabilization began, and no effects are expected to run between stabilization calls (so if no computeds are read, then the graph should be marked but not evaluated).
+
+(Note that this terminology is stolen from the stabilize function in incremental: https://ocaml.org/p/incremental/v0.15.0/doc/Incremental/index.html#val-stabilize)
+
+## Implicit State in Effects
+
+One of the principles that we've discovered when working with Solid is that any form of setting state using effects and reading it later leads to less understandable and debuggable code. Similar to the principles of functional programming, it is easier to debug a graph that is pure and where the flow can be easily traced during a stabilization pass.
+
+Setting state during an effect doesn't just include setting a signal, it can also refer to setting the DOM in an effect and reading that DOM value later expecting the updated value to be there. This introduced implicit timing dependencies that aren't obvious to developers and are easy to violate.
+
+However, there are a number of patterns where it may be tempting to set some form of state in an effect/computation. **I claim that we should seek to eliminate these patterns.**
+
+Many of these patterns are solveable in user land, but can only be done so slowly, so it must be the frameworks job to provide performant ways to do this.
+
+## Create writeable
+
+For example, a common pattern in Solid is to want a form of locally writeable props:
+
+```typescript
+// User code
+function Comp(props) {
+  const [value, setValue] = createSignal(props.value);
+  createEffect(() => {
+    setValue(props.value);
+  });
+}
+```
+
+This violates the principle of not writing to state in effects, and so as Solid framework authors we were looking for another pattern. We called this use case createWriteable, and created a pure version that can be included as part of the framework:
+
+```typescript
+function createWriteable(propFn) {
+  const memo = createMemo(() => {
+    const [get, set] = createSignal(propFn());
+    return { get, set };
+  });
+  return [() => memo().get(), (a) => memo().set(a)];
+}
+
+// User code
+function Comp(props) {
+  const [value, setValue] = createWriteable(() => props.value);
+}
+```
+
+## Async
+
+There is a similar problem happening in the way that we suggest that users write asynchronous code
+
+```typescript
+function Comp(props) {
+  const [loading, setLoading] = createSignal(true);
+  const [value, setValue] = createSignal(undefined);
+  createEffect(() => {
+    setLoading(true);
+    fetch(props.url).then((value) => {
+      setLoading(false);
+      setValue(value);
+    });
+  });
+}
+```
+
+Note that this is essentially the exact code that many frameworks use to represent resources (`createResource`). This enables converting from a promise to a signal, so that it can be used in future memos without also turning them async
+
+Note that this pattern can be rewritten using the createWriteable pattern from above:
+
+```typescript
+function Comp(props) {
+  const resource = createMemo(() => {
+    const [loading, setLoading] = createSignal(true);
+    const [value, setValue] = createSignal(undefined);
+
+    fetch(props.url).then((value) => {
+      setLoading(false);
+      setValue(value);
+    });
+
+    return { loading, value };
+  });
+
+  const loading = () => resource().loading();
+  const value = () => resource().value();
+}
+```
+
+In Solid, we take this one step further and notify the suspense component if we are loading:
+
+```typescript
+function createResource(urlFn) {
+  const SuspenseContext = useContext(Suspense);
+
+  const resource = createMemo(() => {
+    const [loading, setLoading] = createSignal(true);
+    const [value, setValue] = createSignal(undefined);
+
+    fetch(urlFn).then((value) => {
+      setLoading(false);
+      setValue(value);
+    });
+
+    return { loading, value };
+  });
+
+  const value = () => {
+    if (resource().loading()) {
+      SuspenseContext.childIsLoading(true);
+    }
+    return resource().value();
+  };
+}
+```
+
+However, there's an additional problem that happens when users want to transform the value of a resource. We often end up losing track of the loading value along the way.
+
+For example consider a user using the above version of createResource:
+
+```tsx
+function Comp(props) {
+  const resource = createResource(() => props.url);
+
+  const transformation = createMemo(() => {
+    return JSON.stringify(resource());
+  });
+
+  return <div>{transformation()}</div>;
+}
+```
+
+Here, we accidentally notify the `transformation` memo's parent context instead of the div.
+
+To solve this problem, bubble reactivity decided to store a .loading field on every single memo.
+
+## Bubble Reactivity
+
+Instead of having every signal/computation node store just the raw value, we started by storing every computation as follows:
+
+```typescript
+type Value<T> = { value: T; loading: boolean };
+```
+
+> Side note, the imaginary type above should also include errors and look more like
+>
+> ```typescript
+> type Value<T,E> = {value:T, loading:boolean, error:false}
+>                 | {value:E, loading:boolean, error:true}
+> ```
+
+Then, we allow for two APIs to read any signal: .get() which reads the value (and if it is loading, then the current memo becomes loading as well), and .loading() which reads the loading bit so that you can avoid becoming loading.
+
+Note that this can almost be implemented entirely user level, at a heavy cost of performance. To fix that, we can add in an additional API to the traversal that supports passing around bit flags.
+
+The exact notification algorithm is here: https://github.com/bubblegroup/bubble-reactivity/blob/main/src/core.ts
+
+The next few behaviors we need are: allowing loading to propagate directly to value during the notification phase (or propagate directly to loading), and supporting overloading effects so that loading propagates up through ownership.

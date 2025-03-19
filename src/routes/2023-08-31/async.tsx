@@ -1,6 +1,6 @@
 import { Title } from "@solidjs/meta";
 import { createGlobals } from "~/components/global";
-import MDXComponent from "~/blogs/links.mdx";
+import MDXComponent from "~/blogs/async.mdx";
 import "../blog.css";
 
 export default function Page() {
@@ -8,7 +8,7 @@ export default function Page() {
 
   return (
     <>
-      <Title>Reactivity Links · milomg.dev</Title>
+      <Title>Async in Standard Signals · milomg.dev</Title>
       <nav>
         <div>
           <a href="/#top" id="logo">

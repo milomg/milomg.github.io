@@ -18,3 +18,9 @@ p {
   display: flex;
   justify-content: center;
 }
+blockquote {
+  border-left: 4px solid var(--hint);
+  padding-left: 1rem;
+  margin: 0.5rem 0;
+  color: var(--dim-text);
+}

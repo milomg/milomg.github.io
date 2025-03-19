@@ -43,12 +43,14 @@ h6 {
   --background: #000;
   --hint: #444;
   --logo: url(/images/logo.png);
+  --dim-text: #ccc;
 }
 .light {
   --accent: #7c4dff;
   --base: #222;
   --background: #fff;
   --hint: #ccc;
+  --dim-text: #666;
   --logo: url(/images/logo-light.png);
 }
 
