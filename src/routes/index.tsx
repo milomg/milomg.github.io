@@ -1,7 +1,6 @@
 import { onCleanup, onMount } from "solid-js";
 import { createSim, toggleBaseColor } from "~/components/sim/shaders";
 import { createPointers } from "~/components/sim/pointers";
-import { A } from "@solidjs/router";
 import "./index.css";
 import { createGlobals } from "~/components/global";
 import { Title } from "@solidjs/meta";
@@ -16,7 +15,7 @@ const App = () => {
 
   createGlobals();
 
-  let c: HTMLCanvasElement;
+  let c!: HTMLCanvasElement;
   onMount(() => {
     function resize() {
       c.width = window.innerWidth;
@@ -205,7 +204,10 @@ const App = () => {
           <h2>more</h2>
           <ul>
             <li>
-              I wrote a blog post on <A href="/2022-12-01/reactivity">reactivity algorithms</A>
+              I wrote a blog post on <a href="/2022-12-01/reactivity">reactivity algorithms</a>
+            </li>
+            <li>
+              I wrote a reading list on <a href="/2023-09-01/links">reactivity and signals</a>
             </li>
             <li>
               I have hidden a few <span title="Easter Egg 1">Easter eggs</span> in this site; see how many you can find.

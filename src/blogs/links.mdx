@@ -1,0 +1,78 @@
+# Reactivity reading
+
+## Modern frontend frameworks
+
+- http://milomg.dev/2022-12-01/reactivity (self promotion here)
+  - https://dev.to/mighdoll/reactive-webgpu-52h0 (interesting use of RC ownership with reactively)
+- https://rkirov.github.io/posts/incremental_computation_3/
+- https://dev.to/ryansolid/a-hands-on-introduction-to-fine-grained-reactivity-3ndf
+- https://preactjs.com/blog/introducing-signals/
+- https://preactjs.com/blog/signal-boosting
+- https://github.com/adamhaile/S (see Clocks, glitch-free defn)
+- https://medium.com/hackernoon/becoming-fully-reactive-an-in-depth-explanation-of-mobservable-55995262a254 (a bit outdated now but still useful)
+- https://vuejs.org/guide/extras/reactivity-in-depth.html
+- https://github.com/hyoo-ru/mam_mol/tree/master/wire (select text, right click, and select translaet on the blog posts here)
+- https://www.pzuraq.com/blog/how-autotracking-works
+
+## Self-adjusting computation (SAC)
+
+Self-adjusting computation is a framework for incremental computation, where the goal is to efficiently recompute a program's output across changes to its input by reusing unchanged intermediate results.
+
+- [Self adjusting computation papers](https://www.umut-acar.org/self-adjusting-computation)
+  - (there are many good papers here, but the original dissertation and the imperative one are recommended)
+- Incremental ([talk](https://www.janestreet.com/tech-talks/seven-implementations-of-incremental/), [library docs](https://opensource.janestreet.com/incremental/)). A production-quality OCaml library for SAC, which tackles a ton of performance and usability issues not dealt with in the academic literature. Highlights:
+  - GC safety without manual disposal or finalizers, by making sure "unnecessary" nodes (those that aren't currently being transitively observed) aren't retained by the framework.
+  - A clever way of efficiently maintaining a topological ordering on a dependency graph that can change dynamically, assigning each node a _height_ that can increase but never decrease.
+  - Dynamic dependencies are opt-in, which they found important for performance (no tracking overhead when rerunning nodes whose dependencies won't ever change).
+- Adapton ([website](http://adapton.org/), [paper](https://arxiv.org/abs/1503.07792)): rust, ocaml, and even [python](https://bitbucket.org/khooyp/adapton.python/src/main/) versions.
+  - _Nominal_ Adapton introduces "names" as a mechanism to reuse previous results even if the structure of the computation changes and shuffles things around.
+  - Fungi ([paper](https://arxiv.org/abs/1808.07826)) provides a type system for Nominal Adapton, helpful because the restrictions on the correct use of names are rather tricky.
+- Salsa ([docs](https://salsa-rs.github.io/salsa/overview.html), [talk](https://www.youtube.com/watch?v=i_IhACacPRY)) the reactive system powering some of Rust's IDE support.
+  - Doing this in Rust has some complications (have to declare interfaces for everything) and some neat benefits (macros; automatically deriving traits; letting the type system forbid setting a signal from within a computation).
+  - Everything is declared up front (no closures or anonymous computations) so serialization is on the table.
+- Anchors ([explainer post](https://lord.io/spreadsheets/))
+  - Tries to combine some of the implementation tricks of Incremental and Adapton. Offers a straightforward explanation of the design space with illustrations.
+
+The most widely applicable takeaway from this line of research is a definition of "from-scratch consistency" as the notion of correctness for incremental computation.
+
+## Build systems
+
+Somewhat like self-adjusting computation, a build system (think: `make`) is concerned with reusing past work to deliver a final set of outputs.
+
+- Build Systems à la Carte ([paper](https://ndmitchell.com/downloads/paper-build_systems_a_la_carte_theory_and_practice-21_apr_2020.pdf), [talk](https://www.youtube.com/watch?v=at-dqYqg3kY), [slides](https://ndmitchell.com/downloads/slides-distributed_build_systems-18_may_2018.pdf)). Develops a pluggable framework for decomposing the design space of build systems (defined very loosely: Excel is a build system in their framework) into orthogonal choices. The two major choices they consider:
+  - Deciding what order to rerun/recheck tasks (the "scheduler")
+  - Determining whether or not a given task needs to be rerun (the "rebuilder").
+
+Many concepts here are cross-applicable to other types of reactivity, and the idea of a pluggable framework is very powerful for unifying different systems into a broader umbrella.
+
+## Functional Reactive Programming (FRP)
+
+FRP is a broad class of _dataflow_-centered approaches to interactive/reactive programming. It treats inputs and outputs as _streams of events_ rather than as individual values, and provides combinators for producing, consuming, and transforming such streams. FRP systems often (but not always) include a distinction between time-varying "signals" (or "behaviors") whose current value can be observed at any time, and "events" which occur only at discrete times.
+
+FRP systems -- as expected of a stream-processing formalism -- allow future outputs to depend on the entire history of the program, not just the current inputs.
+
+- FrTime ([paper](https://cs.brown.edu/~sk/Publications/Papers/Published/ck-frtime/paper.pdf), [library docs](https://docs.racket-lang.org/frtime/)). An early FRP system in Scheme. Makes _everything_ reactive.
+  - Defines "glitch-freeness", which because of FRP's history-dependence is a trickier notion than SAC's "from-scratch consistency".
+- [Deprecating the Observer Pattern with Scala.React](http://infoscience.epfl.ch/record/176887/files/DeprecatingObservers2012.pdf), a recognizably modern Signals library... from 2012!
+  - One of the earlier _imperative_ dataflow languages, with auto-tracking of dependencies and no eDSL or compiler support required.
+- https://stackoverflow.com/questions/25139257/terminology-what-is-a-glitch-in-functional-reactive-programming-rx
+- https://paulstovell.com/reactive-programming/
+- https://staltz.com/why-we-need-callbags.html
+
+## Implicits & scope-respecting operations
+
+Practical reactive systems sometimes include features that involve propagating information down or up the nesting hierarchy, such as `Context`, `Suspense`, or error handlers. Reactivity brings some unique complications here, but the non-reactive versions of these features are reasonably well-studied and can provide a behavioral guideline.
+
+- [Programming with Implicit Values, Functions, and Control](https://www.microsoft.com/en-us/research/publication/programming-with-implicit-values-functions-and-control-or-implicit-functions-dynamic-binding-with-lexical-scoping/) (paper). Provides a blueprint for the (from-scratch) semantics of language features that involve reading from or interacting with the scoped/dynamic context.
+- [Dynamic scoping is an effect, implicit parameters are a coeffect](http://blog.ezyang.com/2020/08/dynamic-scoping-is-an-effect-implicit-parameters-are-a-coeffect/) (blog post). Talks about complications of dynamic scope/implicit parameters in a lazy language; similar complications exist for reactive systems (both complicate the notion of "the call stack").
+
+## Algebraic Effects
+
+Might be tangential; might be very relevant if JS had algebraic effects as a feature. The concept can nevertheless guide certain bits of reactive system design, if you restrict yourself to "immediately tail-resumptive" effects (that don't require suspending the call stack to resume it later).
+
+- Algebraic effects
+  - [Short talk aimed at JS developers](https://www.youtube.com/watch?v=hrBq8R_kxI0), relating algebraic effects to more familiar notions like exceptions, `yield`, and async/await.
+  - In WASM ([proposal](https://wasmfx.dev/)); in OCaml ([docs](https://v2.ocaml.org/releases/5.0/manual/effects.html), [talk](https://www.janestreet.com/tech-talks/effective-programming/)).
+  - https://www.youtube.com/watch?v=tWLPrPfb4_U (reasonably light intro to things you can do with algebraic effects)
+- Delimited Continuations
+  - https://blog.poisson.chat/posts/2023-01-02-del-cont-examples.html

@@ -9,7 +9,7 @@ import "./*404.css";
 export default function NotFound() {
   createGlobals();
 
-  let c: HTMLCanvasElement;
+  let c!: HTMLCanvasElement;
   onMount(() => {
     function tripleClick(evt: MouseEvent) {
       if (evt.detail === 3) {

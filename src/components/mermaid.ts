@@ -6,7 +6,7 @@ export const createMermaid = () =>
     const { default: m } = await mermaid;
     m.initialize({ startOnLoad: false });
     document.querySelectorAll(".language-mermaid").forEach((el) => {
-      el.innerHTML = el.innerText.trim().replace("<br>", "\n").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+      el.innerHTML = (el as HTMLElement).innerText.trim().replace("<br>", "\n").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
     });
     await m.run({
       nodes: document.querySelectorAll(".language-mermaid"),
