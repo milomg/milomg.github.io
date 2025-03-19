@@ -2,7 +2,7 @@ import { onCleanup, onMount } from "solid-js";
 import { createSim, toggleBaseColor } from "~/components/sim/shaders";
 import { createPointers } from "~/components/sim/pointers";
 import "./index.css";
-import { createGlobals } from "~/components/global";
+import { Globals } from "~/components/global";
 import { Title } from "@solidjs/meta";
 
 const App = () => {
@@ -12,8 +12,6 @@ const App = () => {
     console.log("If you are wondering how I made this, the source code is at https://github.com/modderme123/modderme123.github.io");
     console.log("The fluid simulation was made with https://regl.party and is inspired by GPU Gems");
   });
-
-  createGlobals();
 
   let c!: HTMLCanvasElement;
   onMount(() => {
@@ -62,7 +60,7 @@ const App = () => {
   });
 
   return (
-    <>
+    <Globals>
       <Title>Milo's Homepage · milomg.dev</Title>
       <canvas ref={c!} id="c"></canvas>
       <nav>
@@ -220,7 +218,7 @@ const App = () => {
           <a href="mailto:milomg4@gmail.com">Email</a>
         </div>
       </div>
-    </>
+    </Globals>
   );
 };
 

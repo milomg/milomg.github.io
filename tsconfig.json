@@ -10,7 +10,7 @@
     "allowJs": true,
     "strict": true,
     "noEmit": true,
-    "types": ["vinxi/types/client", "@types/mdx"],
+    "types": ["vinxi/types/client", "./src/components/giscus.d.ts", "@types/mdx"],
     "isolatedModules": true,
     "skipLibCheck": true,
     "paths": {

@@ -1,14 +1,12 @@
 import { HttpStatusCode } from "@solidjs/start";
 import { Title } from "@solidjs/meta";
 import { onCleanup, onMount } from "solid-js";
-import { createGlobals } from "~/components/global";
+import { Globals } from "~/components/global";
 import { createPointers } from "~/components/sim/pointers";
 import { createSim, toggleBaseColor } from "~/components/sim/shaders";
 import "./*404.css";
 
 export default function NotFound() {
-  createGlobals();
-
   let c!: HTMLCanvasElement;
   onMount(() => {
     function tripleClick(evt: MouseEvent) {
@@ -69,7 +67,7 @@ export default function NotFound() {
     }
   });
 
-  return (
+  return (<Globals>
     <div>
       <HttpStatusCode code={404} />
       <Title>Page not found · milomg.dev</Title>
@@ -100,5 +98,6 @@ export default function NotFound() {
         </p>
       </section>
     </div>
+    </Globals>
   );
 }

@@ -1,13 +1,14 @@
 import { Title } from "@solidjs/meta";
-import { createGlobals } from "~/components/global";
+import { Globals } from "~/components/global";
 import MDXComponent from "~/blogs/async.mdx";
+import { clientOnly } from "@solidjs/start";
 import "../blog.css";
 
-export default function Page() {
-  createGlobals();
+const Giscus = clientOnly(() => import("~/components/giscus"));
 
+export default function Page() {
   return (
-    <>
+    <Globals>
       <Title>Async in Standard Signals · milomg.dev</Title>
       <nav>
         <div>
@@ -60,8 +61,9 @@ export default function Page() {
               td: (props) => <td {...props} />,
             }}
           />
+          <Giscus />
         </div>
       </div>
-    </>
+    </Globals>
   );
 }

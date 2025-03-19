@@ -1,9 +1,16 @@
-import { onCleanup, onMount } from "solid-js";
-export function createGlobals() {
+import { createContext, createSignal, onCleanup, onMount } from "solid-js";
+
+export const ThemeContext = createContext<{ dark: () => boolean }>({
+  dark: () => false,
+});
+
+export function Globals(props: { children: any }) {
+  const [dark, setDark] = createSignal(false);
   onMount(() => {
     function tripleClick(evt: MouseEvent) {
       if (evt.detail === 3) {
-        document.body.classList.toggle("light");
+        setDark((prev) => !prev);
+        document.body.classList.toggle("light", !dark());
       }
     }
     window.addEventListener("click", tripleClick);
@@ -15,4 +22,6 @@ export function createGlobals() {
     window.addEventListener("hashchange", hashchange);
     onCleanup(() => window.removeEventListener("hashchange", hashchange));
   });
+
+  return <ThemeContext.Provider value={{ dark }}>{props.children}</ThemeContext.Provider>;
 }
