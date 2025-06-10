@@ -24,3 +24,10 @@ blockquote {
   margin: 0.5rem 0;
   color: var(--dim-text);
 }
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

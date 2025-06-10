@@ -1,0 +1,99 @@
+# Topologically Sorted Reactivity
+
+> This is a follow up to my first post on reactivity algorithms. If you haven't read it, I recommend checking it out first.
+>
+> ## [Part 1](/2022-12-01/reactivity)
+
+Signals have been gaining immense popularity in the JavaScript ecosystem. Frameworks including Vue, Svelte, Solid, Angular, and Preact all adopting a modern version of signals, as are many libraries like Jotai, XState, and .
+
+As a quick refresher, signals are a primitive that lets you write code that efficiently recomputes data when it changes.
+
+```ts
+const count = signal(0);
+
+const double = computed(() => count() * 2);
+
+effect(() => {
+  console.log(double());
+});
+
+count(1); // logs 2
+count(2); // logs 4
+```
+
+## The Reactively Algorithm
+
+While we described 3 historical reactive algorithms in the last post, almost every modern signals library today uses a coloring algorithm similar to Reactively. (See [the first post](/2022-12-01/reactivity) for more details)
+
+As a quick refresher, we visualize the algorithm as follows:
+
+<Carousel />
+
+Currently the state of signals libraries:
+
+| name          | algorithm  | notes |
+| :------------ | :--------- | :---- |
+| Reactively    | 🎨Coloring | Lazy  |
+| MobX          | 🎨Coloring | Lazy  |
+| Alien Signals | 🎨Coloring | Lazy  |
+| Svelte        | 🎨Coloring | Lazy  |
+| Angular       | 🎨Coloring | Lazy  |
+| S             | 🎨Coloring | Eager |
+| Solid         | 🎨Coloring | Eager |
+| Incremental   | ⬇️Height   | Eager |
+
+## A new reactive algorithm
+
+One of the clever reactive algorithms that I didn't discuss last post was a height based algorithm.
+
+A height based algorithm uses our visual intuition to figure out how to evaluate the graph. Intuitively, we want to evaluate the top layer first, then the next layer, then the next layer, until we hit the bottom.
+
+That intuition looks like this:
+
+There's a few clever optimizations we can apply here to make this work:
+
+First, we assign every node a "height" - a maximum distance from any signal that it is connected to.
+
+For example,
+
+<Dagre />
+
+Then, our algorithm becomes:
+
+```ts
+const evaluationQueue = new PriorityQueue();
+while (evaluationQueue.length) {
+  const node = evaluationQueue.dequeue();
+  const changed = node.evaluate();
+  if (changed) {
+    for (const observer of node.observers) {
+      evaluationQueue.enqueue(observer, observer.height);
+    }
+  }
+}
+```
+
+This has the nice benefit that it automatically solves the diamond problem from the previous article. If we were to evaluate the graph from above, we'll see something like the following:
+
+<HeightGraph />
+
+Additionally, unlike last time, if a node doesn't change, then none of its observers will even be traversed, which can be a big speedup (particularly for specific patterns that we'll see later).
+
+## Dynamism
+
+One of the simplifications we're working with here is that we know the shape of the graph ahead of time so that we can give everything a height.
+However, the API of JS signal libraries allows us to dynamically construct nodes and detect their sources on demand.
+
+<Dynamic />
+
+Nodes don't just have to link new sources when they're created. Each time they rerun, they can change which sources they depend on.
+
+> Side note: if we assume that computations are pure, then node sources can only change after the first source that changed. If a node's third source changes, then its first two sources will stay the same (but its fourth and fifth sources might change).
+
+As a way to make this dynamic linking faster, Solid 2.0, Vue, and Preact use linked lists to represent the list of sources and observers. Arrays are extremely compact, but the cost of inserting new elements seems to make using arrays expensive
+
+## Not So Easy
+
+This causes a problem for our height based algorithm from above. Let's imagine that midway through running a node, we discover that it depends on a new source. If that source has a height of 3, and the node has a height of 1, then we need to stop and wait until the algorithm evaluates our source.
+
+<BadHeight />
