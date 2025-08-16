@@ -1,15 +1,13 @@
 import { Title } from "@solidjs/meta";
 import { Globals } from "~/components/global";
-import { createMermaid } from "~/components/mermaid";
 import MDXComponent from "~/blogs/reactivity.mdx";
 import { clientOnly } from "@solidjs/start";
 import "../blog.css";
+import { Mermaid } from "~/components/mermaid";
 
 const Giscus = clientOnly(() => import("~/components/giscus"));
 
 export default function Page() {
-  createMermaid();
-
   return (
     <Globals>
       <Title>Super Charging Fine-Grained Reactive Performance · milomg.dev</Title>
@@ -62,6 +60,7 @@ export default function Page() {
               tr: (props) => <tr {...props} />,
               th: (props) => <th {...props} />,
               td: (props) => <td {...props} />,
+              Mermaid,
             }}
           />
           <Giscus />

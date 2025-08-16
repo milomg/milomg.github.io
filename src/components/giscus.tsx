@@ -1,10 +1,14 @@
 import { JSX, onMount, useContext } from "solid-js";
 import { ThemeContext } from "./global";
 
+let importedGiscus = false;
+
 const Giscus = (): JSX.Element => {
   const theme = useContext(ThemeContext);
 
   onMount(() => {
+    if (importedGiscus) return;
+    importedGiscus = true;
     import("giscus");
   });
 

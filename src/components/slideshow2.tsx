@@ -1,7 +1,7 @@
 import { createEffect, createSignal, onMount } from "solid-js";
 import { graphlib, render as drender } from "dagre-d3-es";
 import * as d3 from "d3";
-import { createG } from "./graphUtils";
+import { cancel, createG } from "./graphUtils";
 
 const createG1 = (slide: number, g: graphlib.Graph) => {
   function cn(l: string, create: boolean, shape = "rect") {
@@ -62,10 +62,10 @@ export const Slideshow2 = () => {
         <g transform="translate(1,1)"></g>
       </svg>
       <div>
-        <button onClick={() => setSlide((c) => c - 1)} disabled={slide() <= 0}>
+        <button onClick={cancel(() => setSlide((c) => c - 1))} disabled={slide() <= 0}>
           &lt;
         </button>
-        <button onClick={() => setSlide((c) => c + 1)} disabled={slide() >= 7}>
+        <button onClick={cancel(() => setSlide((c) => c + 1))} disabled={slide() >= 7}>
           &gt;
         </button>
       </div>
