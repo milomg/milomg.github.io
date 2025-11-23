@@ -11,7 +11,6 @@ import { Slideshow2 } from "~/components/slideshow2";
 import { Dagre3 } from "~/components/dagre3";
 const Giscus = clientOnly(() => import("~/components/giscus"));
 
-
 function fixPropsStyle<T>(props: JSX.HTMLAttributes<T>) {
   if ("style" in props) {
     props.style = Object.entries(props.style as Record<string, string>)

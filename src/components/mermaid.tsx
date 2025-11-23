@@ -51,8 +51,8 @@ export const Mermaid = (props: {
 
     render(svg, g);
 
-    const output = svg.select<SVGGElement>('.output');
-    output.attr('transform', 'translate(1,1)')
+    const output = svg.select<SVGGElement>(".output");
+    output.attr("transform", "translate(1,1)");
     const bbox = output.node()!.getBBox();
     svg.attr("height", bbox.height + 2);
     svg.attr("width", bbox.width + 2);

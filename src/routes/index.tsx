@@ -158,8 +158,7 @@ const App = () => {
           <h2>simulations</h2>
           <p>
             I have made over a hundred fun little simulation projects. I've put a few below and many more are available at{" "}
-            <a href="https://cm-ht.ml">CM-Tech</a>, a name I use on projects that I build with my friend <a href="https://ckissane.github.io">Cyris</a>
-            .
+            <a href="https://cm-ht.ml">CM-Tech</a>, a name I use on projects that I build with my friend <a href="https://www.cyr.is/">Cyris</a>.
           </p>
           <div>
             <div class="item">
