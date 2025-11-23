@@ -1,16 +1,16 @@
 p {
   margin-bottom: 0.75rem;
 }
-.language-id {
+.light .dark-theme {
   display: none;
 }
-.shiki.light-plus {
+.dark-theme {
+  display: block;
+}
+.light-theme {
   display: none;
 }
-.light .shiki.dark-plus {
-  display: none;
-}
-.light .shiki.light-plus {
+.light .light-theme {
   display: block;
 }
 
