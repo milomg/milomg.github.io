@@ -159,8 +159,9 @@ type Value<T> = { value: T; loading: boolean };
 > Side note, the imaginary type above should also include errors and look more like
 >
 > ```typescript
-> type Value<T,E> = {value:T, loading:boolean, error:false}
->                 | {value:E, loading:boolean, error:true}
+> type Value<T, E> =
+>   | { value: T; loading: boolean; error: false } //
+>   | { value: E; loading: boolean; error: true };
 > ```
 
 Then, we allow for two APIs to read any signal: .get() which reads the value (and if it is loading, then the current memo becomes loading as well), and .loading() which reads the loading bit so that you can avoid becoming loading.

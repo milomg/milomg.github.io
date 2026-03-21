@@ -1,5 +1,5 @@
-import { createEffect, createSignal, onMount } from "solid-js";
-import { graphlib, render as drender } from "dagre-d3-es";
+import { createEffect, createSignal } from "solid-js";
+import { graphlib } from "dagre-d3-es";
 import * as d3 from "d3";
 import { cancel, createG } from "./graphUtils";
 

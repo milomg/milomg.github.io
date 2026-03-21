@@ -3,7 +3,7 @@ import { createFormatAwareProcessors, FormatAwareProcessors } from "@mdx-js/mdx/
 import { createFilter, FilterPattern } from "@rollup/pluginutils";
 import { SourceMapGenerator } from "source-map";
 import { VFile } from "vfile";
-import { Plugin } from "vinxi";
+import { Plugin } from "vite";
 
 type ApplicableOptions = Omit<CompileOptions, "SourceMapGenerator">;
 interface ExtraOptions {

@@ -49,7 +49,7 @@ export const Dagre3 = () => {
 
       marker.append("path").attr("d", "M 0 0 L 10 5 L 0 10 z").style("stroke-width", 1).style("stroke-dasharray", "1,0");
     }
-    const nodes = inner.selectAll("g.node");
+    const nodes = inner.selectAll<SVGGElement, string>("g.node");
     nodes
       .append("text")
       .attr("dx", 40 + 2 + 4)
