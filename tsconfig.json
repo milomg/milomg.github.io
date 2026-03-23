@@ -10,7 +10,7 @@
     "allowJs": true,
     "strict": true,
     "noEmit": true,
-    "types": ["./src/components/giscus.d.ts", "@types/mdx"],
+    "types": ["vite/client", "@types/mdx", "./src/components/giscus.d.ts"],
     "isolatedModules": true,
     "skipLibCheck": true,
     "paths": {

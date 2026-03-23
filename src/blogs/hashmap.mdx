@@ -1,0 +1,31 @@
+# Modern Hashmaps
+
+Recently, I've been looking into how high performance hashmaps work. 
+As part of that exploration, I've tried to understand the state of the art for current hashmaps.
+In this post, we'll look at how Swiss Tables compare to Boost Hashmaps, and my own experimental new hashmap design.
+
+I've chosen to code in Zig because it's focus on performance and low level control make it easier to design high performance data structures.
+Additionally, the curren Zig hashmap implementation has some performance [issues](https://github.com/ziglang/zig/issues/17851) that we'll try to improve upon.
+
+We're going to look here at a hashmap with the following simple API:
+
+```zig
+fn compare(a: KeyType, b: KeyType) bool { ... }
+fn hash(key: KeyType) u64 { ... }
+
+const HashMap = struct {
+    pub fn init(allocator: *std.mem.Allocator) HashMap { ... }
+    pub fn insert(self: *HashMap, key: KeyType, value: u64) void { ... }
+    pub fn get(self: *HashMap, key: KeyType) ?u64 { ... }
+    pub fn remove(self: *HashMap, key: KeyType) void { ... }
+}
+```
+
+To use this HashMap, we use 64 bit values because they pack nicely, and can represent an arbitrary pointer to memory.
+
+Modern hashmaps tend to use open addressing due to the better cache locality. Notice the large number of pointers below
+
+
+
+## The Problem Of Clustering
+

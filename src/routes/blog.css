@@ -1,6 +1,3 @@
-p {
-  margin-bottom: 0.75rem;
-}
 .light .dark-theme {
   display: none;
 }
@@ -18,7 +15,12 @@ p {
   display: flex;
   justify-content: center;
 }
-blockquote {
+
+.column p {
+  margin-bottom: 0.75rem;
+}
+
+.column blockquote {
   border-left: 4px solid var(--hint);
   padding-left: 1rem;
   margin: 0.5rem 0;
