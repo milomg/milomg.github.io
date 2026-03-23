@@ -1,6 +1,6 @@
 # Modern Hashmaps
 
-Recently, I've been looking into how high performance hashmaps work. 
+Recently, I've been looking into how high performance hashmaps work.
 As part of that exploration, I've tried to understand the state of the art for current hashmaps.
 In this post, we'll look at how Swiss Tables compare to Boost Hashmaps, and my own experimental new hashmap design.
 
@@ -25,7 +25,4 @@ To use this HashMap, we use 64 bit values because they pack nicely, and can repr
 
 Modern hashmaps tend to use open addressing due to the better cache locality. Notice the large number of pointers below
 
-
-
 ## The Problem Of Clustering
-

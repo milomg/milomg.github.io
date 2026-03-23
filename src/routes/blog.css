@@ -1,14 +1,13 @@
-.light .dark-theme {
+.language-id {
   display: none;
 }
-.dark-theme {
-  display: block;
+.shiki span,
+.shiki pre {
+  color: var(--shiki-dark);
 }
-.light-theme {
-  display: none;
-}
-.light .light-theme {
-  display: block;
+.light .shiki span,
+.light .shiki pre {
+  color: var(--shiki-light);
 }
 
 .language-mermaid {

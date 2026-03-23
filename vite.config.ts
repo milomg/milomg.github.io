@@ -2,10 +2,10 @@ import { defineConfig } from "vite";
 import { rollup as mdx } from "./mdx";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
-import { rehypeLezer } from "./rehypeLezer";
 import { nodeTypes } from "@mdx-js/mdx";
 import { solidStart } from "@solidjs/start/config";
 import { nitroV2Plugin } from "@solidjs/vite-plugin-nitro-2";
+import rehypeShiki from "@shikijs/rehype";
 
 export default defineConfig({
   plugins: [
@@ -14,7 +14,19 @@ export default defineConfig({
       jsx: true,
       jsxImportSource: "solid-js",
       remarkPlugins: [remarkGfm],
-      rehypePlugins: [[rehypeRaw, { passThrough: nodeTypes }], rehypeLezer],
+      rehypePlugins: [
+        [rehypeRaw, { passThrough: nodeTypes }],
+        [
+          rehypeShiki,
+          {
+            themes: {
+              light: "github-light",
+              dark: "github-dark",
+            },
+            defaultColor: false,
+          },
+        ],
+      ],
     }),
     solidStart({ extensions: ["md", "mdx"] }),
     nitroV2Plugin({

@@ -1,7 +1,4 @@
 import { createContext, createSignal, onCleanup, onMount } from "solid-js";
-import { StyleModule } from "style-mod";
-import { defaultHighlightStyle } from "@codemirror/language";
-import { oneDarkHighlightStyle } from "@codemirror/theme-one-dark";
 
 export const ThemeContext = createContext<{ dark: () => boolean }>({
   dark: () => false,
@@ -9,11 +6,7 @@ export const ThemeContext = createContext<{ dark: () => boolean }>({
 
 export function Globals(props: { children: any }) {
   const [dark, setDark] = createSignal(false);
-
   onMount(() => {
-    StyleModule.mount(document, defaultHighlightStyle.module!);
-    StyleModule.mount(document, oneDarkHighlightStyle.module!);
-
     function tripleClick(evt: MouseEvent) {
       if (evt.detail === 3) {
         setDark((prev) => !prev);
