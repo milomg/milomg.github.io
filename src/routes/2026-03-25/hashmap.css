@@ -1,0 +1,41 @@
+.widget {
+  margin: 1rem auto;
+  width: 400px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.8rem;
+}
+
+.widget header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.widget strong {
+  font-size: 0.95rem;
+}
+
+.widget menu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.widget p {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  color: #334155;
+}
+
+.button {
+  border: 1px solid #94a3b8;
+  background: #fff;
+  border-radius: 6px;
+  padding: 0.2rem 0.45rem;
+  cursor: pointer;
+}

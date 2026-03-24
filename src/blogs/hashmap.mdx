@@ -1,11 +1,11 @@
 # Modern Hashmaps
 
 Recently, I've been looking into how high performance hashmaps work.
-As part of that exploration, I've tried to understand the state of the art for current hashmaps.
+As part of that exploration, I've tried to understand the state of the art.
 In this post, we'll look at how Swiss Tables compare to Boost Hashmaps, and my own experimental new hashmap design.
 
-I've chosen to code in Zig because it's focus on performance and low level control make it easier to design high performance data structures.
-Additionally, the curren Zig hashmap implementation has some performance [issues](https://github.com/ziglang/zig/issues/17851) that we'll try to improve upon.
+I've chosen to code in Zig because its focus on performance and low-level control makes it easier to design high-performance data structures.
+Additionally, the current Zig hashmap implementation has some performance [issues](https://github.com/ziglang/zig/issues/17851) that we'll try to improve upon.
 
 We're going to look here at a hashmap with the following simple API:
 
@@ -25,4 +25,13 @@ To use this HashMap, we use 64 bit values because they pack nicely, and can repr
 
 Modern hashmaps tend to use open addressing due to the better cache locality. Notice the large number of pointers below
 
+<InteractiveChain />
+
+This hurts cache locality, because as we traverse each chain, we have to jump around memory. 
+Additionally, each node has to store a pointer to the next node, which takes up space.
+
 ## The Problem Of Clustering
+
+<LinearProbing />
+
+<QuadraticProbing />
