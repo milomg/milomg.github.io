@@ -1,14 +1,31 @@
+:root {
+  --border-color: #334155;
+  --text-color: #cbd5e1;
+  --button-bg: #1e293b;
+  --button-border: #475569;
+  --button-text: #e2e8f0;
+}
+
+:root .light {
+  --border-color: #cbd5e1;
+  --text-color: #334155;
+  --button-bg: #fff;
+  --button-border: #94a3b8;
+  --button-text: currentColor;
+}
+
 .widget {
   margin: 1rem auto;
-  width: 400px;
-  border: 1px solid #cbd5e1;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 0.8rem;
 }
 
 .widget header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 0.5rem;
@@ -29,13 +46,51 @@
 .widget p {
   margin: 0.35rem 0 0;
   font-size: 0.88rem;
-  color: #334155;
+  color: var(--text-color);
 }
 
 .button {
-  border: 1px solid #94a3b8;
-  background: #fff;
+  border: 1px solid var(--button-border);
+  background: var(--button-bg);
+  color: var(--button-text);
   border-radius: 6px;
   padding: 0.2rem 0.45rem;
   cursor: pointer;
+}
+
+.probes {
+  margin: 1rem 0;
+}
+
+.probes > ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-start;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.probes > ul > li {
+  flex: 0 1 400px;
+  display: flex;
+  justify-content: center;
+}
+
+.probes > ul .widget {
+  margin: 0;
+  width: 100%;
+  max-width: 400px;
+}
+
+.probes > menu {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0.5rem 0 1rem;
+  list-style: none;
+  padding: 0;
 }

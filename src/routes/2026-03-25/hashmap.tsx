@@ -25,7 +25,7 @@ type BucketChain = {
   items: HashItem[];
 };
 
-type ProbeMode = "linear" | "quadratic";
+type ProbeMode = "linear" | "triangular" | "quadratic" | "randomized";
 
 type ProbeFrame = {
   slots: boolean[];
@@ -34,18 +34,68 @@ type ProbeFrame = {
   inserted: number;
 };
 
+const PROBE_MODE_LABELS: Record<ProbeMode, string> = {
+  linear: "Linear",
+  triangular: "Triangular",
+  quadratic: "Quadratic",
+  randomized: "Randomized",
+};
+
+const mix32 = (value: number) => {
+  let x = value | 0;
+  x ^= x >>> 16;
+  x = Math.imul(x, 0x7feb352d);
+  x ^= x >>> 15;
+  x = Math.imul(x, 0x846ca68b);
+  x ^= x >>> 16;
+  return x >>> 0;
+};
+
+class Mulberry32 {
+  constructor(private state: number) {}
+
+  next() {
+    this.state = (this.state + 0x6d2b79f5) | 0;
+    let t = Math.imul(this.state ^ (this.state >>> 15), 1 | this.state);
+    t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+
+  reset(seed: number) {
+    this.state = seed;
+  }
+}
+
+const PROBE_INDEXES: Record<ProbeMode, (home: number, step: number) => number> = {
+  linear: (home, step) => (home + step) % TABLE_SIZE,
+  triangular: (home, step) => (home + (step * (step + 1)) / 2) % TABLE_SIZE,
+  quadratic: (home, step) => (home + step * step) % TABLE_SIZE,
+  randomized: (home, step) => mix32(home ^ mix32(step ^ 0x9e3779b9)) % TABLE_SIZE,
+};
+
 const TABLE_SIZE = 1200;
 const INSERT_COUNT = 1000;
-const AUTO_PAUSE_INSERTION = 900;
+const PROBE_LOOP_STEPS = 900;
+const PROBE_TICK_MS = 20;
 const PROBE_TABLE_COLS = 40;
 const PROBE_TABLE_ROWS = 30;
 const PROBE_CELL_SIZE = 14;
 const PROBE_CELL_GAP = 3;
 const PROBE_SLOT_INDEXES = Array.from({ length: TABLE_SIZE }, (_, i) => i);
-
-let probeObserver: IntersectionObserver | null = null;
-const visibleProbeSections = new Set<Element>();
-const [probesRunning, setProbesRunning] = createSignal(false);
+const PROBE_PALETTE = [
+  "#ef4444",
+  "#f97316",
+  "#f2be10",
+  "#eab308",
+  "#86bc2f",
+  "#22c55e",
+  "#14b98f",
+  "#06b6d4",
+  "#21a0e9",
+  "#3b82f6",
+  "#636fec",
+  "#8b5cf6",
+] as const;
 
 const createEmptyProbeFrame = (): ProbeFrame => ({
   slots: Array(TABLE_SIZE).fill(false),
@@ -55,25 +105,20 @@ const createEmptyProbeFrame = (): ProbeFrame => ({
 });
 
 const createProbeSimulator = (mode: ProbeMode) => {
+  const rngSeed = 0x6d2b79f5;
   let slots: boolean[] = Array(TABLE_SIZE).fill(false);
-  let rngState = 0x6d2b79f5;
+  const rng = new Mulberry32(rngSeed);
   let inserted = 0;
   let currentFrame: ProbeFrame = createEmptyProbeFrame();
-
-  const nextRandom = () => {
-    // Mulberry32 PRNG: tiny, deterministic, and good enough for visualization patterns.
-    rngState = (rngState + 0x6d2b79f5) | 0;
-    let t = Math.imul(rngState ^ (rngState >>> 15), 1 | rngState);
-    t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
+  const modeLabel = PROBE_MODE_LABELS[mode];
+  const getIndex = PROBE_INDEXES[mode];
 
   const buildNextInsertionFrame = (): ProbeFrame => {
     const visited: number[] = [];
-    const home = Math.floor(nextRandom() * TABLE_SIZE);
+    const home = Math.floor(rng.next() * TABLE_SIZE);
 
     for (let i = 0; i < TABLE_SIZE; i += 1) {
-      const next = mode === "linear" ? (home + i) % TABLE_SIZE : (home + i * i) % TABLE_SIZE;
+      const next = getIndex(home, i);
 
       visited.push(next);
       if (!slots[next]) {
@@ -82,7 +127,7 @@ const createProbeSimulator = (mode: ProbeMode) => {
         return {
           slots: slots,
           probes: visited,
-          message: `${mode === "linear" ? "Linear" : "Quadratic"}: inserted ${inserted} / ${INSERT_COUNT}`,
+          message: `${modeLabel}: inserted ${inserted} / ${INSERT_COUNT}`,
           inserted,
         };
       }
@@ -91,76 +136,33 @@ const createProbeSimulator = (mode: ProbeMode) => {
     return {
       slots: slots,
       probes: [],
-      message: `${mode === "linear" ? "Linear" : "Quadratic"}: inserted ${inserted} / ${INSERT_COUNT}`,
+      message: `${modeLabel}: inserted ${inserted} / ${INSERT_COUNT}`,
       inserted,
     };
   };
 
   return {
-    remaining() {
-      return INSERT_COUNT - inserted;
-    },
     current() {
       return currentFrame;
     },
     reset() {
       slots = Array(TABLE_SIZE).fill(false);
-      rngState = 0x6d2b79f5;
+      rng.reset(rngSeed);
       inserted = 0;
       currentFrame = createEmptyProbeFrame();
     },
     advance() {
-      if (this.remaining() === 0) {
-        throw new Error("No more insertions remaining");
-      }
       currentFrame = buildNextInsertionFrame();
     },
   };
 };
 
-const ProbeAnimation = (props: { mode: ProbeMode; title: string }) => {
-  const simulator = createProbeSimulator(props.mode);
+const createProbeAnimationState = (mode: ProbeMode) => {
+  const simulator = createProbeSimulator(mode);
   const [frameMessage, setFrameMessage] = createSignal("");
-  const [manuallyPaused, setManuallyPaused] = createSignal(false);
-  let sectionRef: HTMLDivElement | undefined;
-
-  const startObserving = (el: Element) => {
-    if (!probeObserver) {
-      probeObserver = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) {
-              visibleProbeSections.add(entry.target);
-            } else {
-              visibleProbeSections.delete(entry.target);
-            }
-          }
-
-          setProbesRunning(visibleProbeSections.size > 0);
-        },
-        { threshold: 0.15 },
-      );
-    }
-
-    probeObserver.observe(el);
-  };
-
-  const palette = [
-    "#ef4444",
-    "#f97316",
-    "#f2be10",
-    "#eab308",
-    "#86bc2f",
-    "#22c55e",
-    "#14b98f",
-    "#06b6d4",
-    "#21a0e9",
-    "#3b82f6",
-    "#636fec",
-    "#8b5cf6",
-  ] as const;
+  let appliedStep = -1;
   const slots = PROBE_SLOT_INDEXES.map(() => {
-    const [get, set] = createSignal<(typeof palette)[number] | undefined>(undefined);
+    const [get, set] = createSignal<(typeof PROBE_PALETTE)[number] | undefined>(undefined);
     return { get, set };
   });
   const probes = PROBE_SLOT_INDEXES.map(() => {
@@ -191,9 +193,9 @@ const ProbeAnimation = (props: { mode: ProbeMode; title: string }) => {
       }
 
       if (chainPosition === 0) {
-        slots[i].set(palette[0]);
+        slots[i].set(PROBE_PALETTE[0]);
       } else {
-        slots[i].set(palette[((chainPosition - 1) % (palette.length - 1)) + 1]);
+        slots[i].set(PROBE_PALETTE[((chainPosition - 1) % (PROBE_PALETTE.length - 1)) + 1]);
       }
     }
 
@@ -205,67 +207,40 @@ const ProbeAnimation = (props: { mode: ProbeMode; title: string }) => {
     setFrameMessage(`${nextFrame.message} -  avg chain length ${chainLength.toFixed(2)}`);
   };
 
-  onMount(() => {
-    if (sectionRef) startObserving(sectionRef);
+  const syncToLoopStep = (nextStep: number) => {
+    if (appliedStep === nextStep) return;
 
-    const id = window.setInterval(() => {
-      if (!probesRunning() || manuallyPaused()) return;
+    while (appliedStep < nextStep) {
+      simulator.advance();
+      appliedStep += 1;
+    }
 
-      if (simulator.current().inserted >= AUTO_PAUSE_INSERTION) {
-        setManuallyPaused(true);
-        return;
-      }
+    applyFrameToSignals(simulator.current());
+  };
 
-      const next = simulator.remaining();
-      if (next === 0) {
-        simulator.reset();
-      } else {
-        simulator.advance();
-      }
-      const nextFrame = simulator.current();
-      applyFrameToSignals(nextFrame);
+  const reset = () => {
+    simulator.reset();
+    appliedStep = 0;
+    applyFrameToSignals(simulator.current());
+  };
 
-      if (nextFrame.inserted >= AUTO_PAUSE_INSERTION) {
-        setManuallyPaused(true);
-      }
-    }, 20);
+  return {
+    slots,
+    probes,
+    frameMessage,
+    syncToLoopStep,
+    reset,
+  };
+};
 
-    onCleanup(() => {
-      window.clearInterval(id);
-
-      if (sectionRef) {
-        visibleProbeSections.delete(sectionRef);
-        probeObserver?.unobserve(sectionRef);
-      }
-
-      setProbesRunning(visibleProbeSections.size > 0);
-    });
-  });
-
+const ProbeAnimation = (props: { title: string; state: ReturnType<typeof createProbeAnimationState> }) => {
   const gridWidth = PROBE_TABLE_COLS * PROBE_CELL_SIZE + (PROBE_TABLE_COLS - 1) * PROBE_CELL_GAP;
   const gridHeight = PROBE_TABLE_ROWS * PROBE_CELL_SIZE + (PROBE_TABLE_ROWS - 1) * PROBE_CELL_GAP;
 
   return (
-    <div ref={sectionRef} class="widget">
+    <div class="widget">
       <header>
         <strong>{props.title}</strong>
-        <menu>
-          <button type="button" onClick={() => setManuallyPaused((value) => !value)} class="button">
-            {manuallyPaused() ? "Play" : "Pause"}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              simulator.reset();
-              const resetFrame = simulator.current();
-              applyFrameToSignals(resetFrame);
-              setManuallyPaused(false);
-            }}
-            class="button"
-          >
-            Reset
-          </button>
-        </menu>
       </header>
 
       <svg viewBox={`0 0 ${gridWidth + 24} ${gridHeight + 24}`} width="100%" aria-label={`${props.title} animation`}>
@@ -282,22 +257,141 @@ const ProbeAnimation = (props: { mode: ProbeMode; title: string }) => {
               width={PROBE_CELL_SIZE}
               height={PROBE_CELL_SIZE}
               rx="2"
-              fill={slots[slot].get() ?? "#e2e8f0"}
-              stroke={probes[slot].get() ? "#0f172a" : "#cbd5e1"}
-              stroke-width={probes[slot].get() ? "1.5" : "1"}
+              fill={props.state.slots[slot].get() ?? "#e2e8f0"}
+              stroke={props.state.probes[slot].get() ? "#0f172a" : "#cbd5e1"}
+              stroke-width={props.state.probes[slot].get() ? "1.5" : "1"}
             />
           );
         })}
       </svg>
 
-      <p>{frameMessage()}</p>
+      <p>{props.state.frameMessage()}</p>
     </div>
   );
 };
 
-const LinearProbing = () => <ProbeAnimation mode="linear" title="Linear Probing" />;
+const ShowMoreProbing = () => {
+  let probeObserver: IntersectionObserver | null = null;
+  const [probesRunning, setProbesRunning] = createSignal(false);
+  const [expanded, setExpanded] = createSignal(false);
+  const [playbackState, setPlaybackState] = createSignal<"playing" | "paused" | "ended">("playing");
+  const probeStates = {
+    linear: createProbeAnimationState("linear"),
+    triangular: createProbeAnimationState("triangular"),
+    quadratic: createProbeAnimationState("quadratic"),
+    randomized: createProbeAnimationState("randomized"),
+  };
+  let currentFrameStep = 0;
 
-const QuadraticProbing = () => <ProbeAnimation mode="quadratic" title="Quadratic Probing" />;
+  const observeProbes = (el: HTMLDivElement) => {
+    if (!probeObserver) {
+      probeObserver = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            setProbesRunning(entry.isIntersecting);
+          }
+        },
+        { threshold: 0.15 },
+      );
+    }
+    probeObserver.observe(el);
+  };
+
+  const syncVisibleStates = () => {
+    probeStates.linear.syncToLoopStep(currentFrameStep);
+    probeStates.triangular.syncToLoopStep(currentFrameStep);
+
+    if (expanded()) {
+      probeStates.quadratic.syncToLoopStep(currentFrameStep);
+      probeStates.randomized.syncToLoopStep(currentFrameStep);
+    }
+  };
+
+  const resetAllStates = () => {
+    currentFrameStep = 0;
+    probeStates.linear.reset();
+    probeStates.triangular.reset();
+    probeStates.quadratic.reset();
+    probeStates.randomized.reset();
+  };
+
+  onMount(() => {
+    syncVisibleStates();
+
+    const id = window.setInterval(() => {
+      if (playbackState() === "playing" && probesRunning()) {
+        if (currentFrameStep >= PROBE_LOOP_STEPS) {
+          setPlaybackState("ended");
+          return;
+        }
+
+        currentFrameStep += 1;
+        syncVisibleStates();
+      }
+    }, PROBE_TICK_MS);
+
+    onCleanup(() => {
+      window.clearInterval(id);
+      probeObserver?.disconnect();
+    });
+  });
+
+  const handleReset = () => {
+    resetAllStates();
+    syncVisibleStates();
+    setPlaybackState("playing");
+  };
+
+  const handleTogglePlayState = () => {
+    const transition = { playing: "paused", paused: "playing", ended: "ended" } as const;
+    setPlaybackState((value) => transition[value]);
+  };
+
+  const handleToggleExpanded = () => {
+    setExpanded((value) => {
+      const next = !value;
+      if (next) {
+        probeStates.quadratic.syncToLoopStep(currentFrameStep);
+        probeStates.randomized.syncToLoopStep(currentFrameStep);
+      }
+      return next;
+    });
+  };
+
+  return (
+    <div ref={observeProbes} class="probes">
+      <ul>
+        <li>
+          <ProbeAnimation title="Linear Probing" state={probeStates.linear} />
+        </li>
+        <li>
+          <ProbeAnimation title="Triangular Probing" state={probeStates.triangular} />
+        </li>
+
+        <Show when={expanded()}>
+          <li>
+            <ProbeAnimation title="Quadratic Probing" state={probeStates.quadratic} />
+          </li>
+          <li>
+            <ProbeAnimation title="Randomized Probing" state={probeStates.randomized} />
+          </li>
+        </Show>
+      </ul>
+
+      <menu>
+        <button type="button" class="button" disabled={playbackState() === "ended"} onClick={handleTogglePlayState}>
+          {{ playing: "Pause", paused: "Play", ended: "Ended" }[playbackState()]}
+        </button>
+        <button type="button" class="button" onClick={handleReset}>
+          Reset
+        </button>
+        <button type="button" class="button" onClick={handleToggleExpanded}>
+          {expanded() ? "Hide" : "Show More"}
+        </button>
+      </menu>
+    </div>
+  );
+};
 
 const InteractiveChain = () => {
   const slotCount = 27;
@@ -424,8 +518,7 @@ const InteractiveChain = () => {
 const MDXProps: MDXComponents = {
   ...MDXDefault,
   InteractiveChain,
-  LinearProbing,
-  QuadraticProbing,
+  ShowMoreProbing,
 };
 
 export default function Page() {

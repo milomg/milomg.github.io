@@ -32,6 +32,48 @@ Additionally, each node has to store a pointer to the next node, which takes up 
 
 ## The Problem Of Clustering
 
-<LinearProbing />
+<ShowMoreProbing />
 
-<QuadraticProbing />
+As the diagrams run, notice how the average chain length of linear probing is noticeably higher than triangular probing.
+
+This is caused by [clustering](https://en.wikipedia.org/wiki/Primary_clustering), because the longer the chain, the more likely it is that new keys will hash to the same index, causing the chain to grow even longer.
+
+Even though quadratic probing reduces clustering, it still has some locality preference, which leads to similar clustering.
+
+Note that we could avoid this completely with rehashing, but that would be expensive (both to rehash, and because of the unpredictable memory accesses).
+
+# Benchmarks
+
+I designed a series of benchmarks to compare the performance of different hashmap implementations.
+In these benchmarks, I focused on frequent insertions, lookups, and deletions (but ignored iteration time).
+I tested with both keys and values being 64 bit integers, and using Wyhash as the hash function.
+
+
+# Robin Hood Hashmaps
+
+One slight variant of the standard hashmap is to include the distance from the ideal bucket in the hash table, and to use that distance to determine which key to evict when a collision occurs.
+This is called Robin Hood Hashing, and it has the advantage of reducing the variance in lookup times, because it tries to keep all keys as close to their ideal home as possible.
+One additional trick is that robin hood hashing can avoid tombstones, because when a key is removed, we know which keys belong to which runs and can therefore shift them back into the correct location.
+
+# Rank Select Quotient Filters
+
+In class, we learned about rank and select quotient filters, which use two bitmap to store run starts and run ends.
+
+Based on the above, I tried creating a compressed robbin hood hashmap using the RSQF bitmap.
+
+This reduced the data requirement nicely, however this left the performance slightly suboptimal, because of a core missing trick: SIMD buckets.
+
+# Swiss Tables
+
+Swiss Tables are a modern SIMD friendly variation on quadratic probing with tombstones, that takes the idea of Cuckoo Filters and applies it to hashmaps.
+They store large buckets of 16 entries, and use a 7 bit fingerprint to determine if a key is present in the bucket.
+Because SIMD instructions can operate on 16 bytes at a time, this allows for very fast lookups a bucket at a time (which drastically reduces the number of buckets that need to be searched).
+
+
+# Cuckoo Filters
+
+We can take the bucketing idea of swiss tables and combine it with the classic cuckoo filters (but this time store actual data) idea to make a SIMD cuckoo hashtable.
+
+In essence, Cuckoo filters move the work from the lookup phase to the insertion phase, where we must find careful buckets for the key.
+
+Unsurprisingly, because Cuckoo filters require only two lookups for each key
