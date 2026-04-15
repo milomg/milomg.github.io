@@ -1,0 +1,5 @@
+.widget.rh-psl .bit.psl.set {
+  background: color-mix(in srgb, #16a34a 35%, var(--button-bg));
+  border-color: color-mix(in srgb, #16a34a 60%, var(--border-color));
+  color: color-mix(in srgb, #14532d 70%, var(--text-color));
+}

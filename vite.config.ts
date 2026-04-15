@@ -35,7 +35,7 @@ export default defineConfig({
       prerender: {
         autoSubfolderIndex: false,
         crawlLinks: true,
-        routes: ["/", "/404"],
+        routes: ["/", "/404", "/2026-03-25/hashmap"],
       },
     }),
   ],

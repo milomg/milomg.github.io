@@ -1,0 +1,36 @@
+.probes {
+  margin: 1rem 0;
+}
+
+.probes > ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-start;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.probes > ul > li {
+  flex: 0 1 400px;
+  display: flex;
+  justify-content: center;
+}
+
+.probes > ul .widget {
+  margin: 0;
+  width: 100%;
+  max-width: 400px;
+}
+
+.probes > menu {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0.5rem 0 1rem;
+  list-style: none;
+  padding: 0;
+}

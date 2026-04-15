@@ -1,0 +1,12 @@
+.hm-chain svg {
+  max-width: 760px;
+  display: block;
+  margin: 1.25rem auto 0.75rem;
+}
+
+.hm-chain-caption {
+  margin: 0 auto 1rem;
+  max-width: 760px;
+  font-size: 0.92rem;
+  color: #334155;
+}
