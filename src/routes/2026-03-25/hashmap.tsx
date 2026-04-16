@@ -10,6 +10,7 @@ import { ProbingDemo } from "~/components/hm/ProbingDemo";
 import { RSQFInsert } from "~/components/hm/RSQFInsert";
 import { RobinHoodPslInsert } from "~/components/hm/RobinHoodPslInsert";
 import { SwissSplatCompare } from "~/components/hm/SwissSplatCompare";
+import { HashmapConfigBenchmarks, HashmapLoadBenchmarks } from "~/components/hm/HashmapBenchmarks";
 
 import { Nav } from "~/components/nav";
 import "../blog.css";
@@ -25,6 +26,8 @@ const MDXProps: MDXComponents = {
   RSQFInsert,
   SwissSplatCompare,
   CuckooInsert,
+  HashmapConfigBenchmarks,
+  HashmapLoadBenchmarks,
 };
 
 export default function Page() {

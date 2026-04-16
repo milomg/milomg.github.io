@@ -240,9 +240,7 @@ const createQfAnimationState = (steps: InsertionStep[]) => {
 const BlockLabelsRow = (props: { offsets: Accessor<number>[] }) => {
   return (
     <div class="bit-block-labels">
-      <For each={BLOCK_INDEXES}>
-        {(block) => <div class="block-label-cell block-offset-badge">ofs {props.offsets[block]()}</div>}
-      </For>
+      <For each={BLOCK_INDEXES}>{(block) => <div class="block-label-cell block-offset-badge">ofs {props.offsets[block]()}</div>}</For>
     </div>
   );
 };
@@ -414,16 +412,16 @@ export const RSQFInsert = () => {
 
       <menu>
         <button type="button" class="button" onClick={reset} disabled={animationState() === "playing"}>
-          ⏮ Reset
+          Reset
         </button>
         <button type="button" class="button" onClick={prevStep} disabled={currentStep() === 0 || animationState() === "playing"}>
-          ⏪ Previous
+          Previous
         </button>
         <button type="button" class="button" onClick={togglePlayPause}>
-          {animationState() === "playing" ? "⏸ Pause" : "▶ Play"}
+          {animationState() === "playing" ? "Pause" : "Play"}
         </button>
         <button type="button" class="button" onClick={nextStep} disabled={currentStep() === steps.length - 1 || animationState() === "playing"}>
-          ⏩ Next
+          Next
         </button>
         <span class="step-counter">
           Step {currentStep() + 1} / {steps.length}

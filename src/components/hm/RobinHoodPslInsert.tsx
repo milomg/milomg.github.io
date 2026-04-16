@@ -316,16 +316,16 @@ export const RobinHoodPslInsert = () => {
 
       <menu>
         <button type="button" class="button" onClick={reset} disabled={animationState() === "playing"}>
-          ⏮ Reset
+          Reset
         </button>
         <button type="button" class="button" onClick={prevStep} disabled={currentStep() === 0 || animationState() === "playing"}>
-          ⏪ Previous
+          Previous
         </button>
         <button type="button" class="button" onClick={togglePlayPause}>
-          {animationState() === "playing" ? "⏸ Pause" : "▶ Play"}
+          {animationState() === "playing" ? "Pause" : "Play"}
         </button>
         <button type="button" class="button" onClick={nextStep} disabled={currentStep() === steps.length - 1 || animationState() === "playing"}>
-          ⏩ Next
+          Next
         </button>
         <span class="step-counter">
           Step {currentStep() + 1} / {steps.length}

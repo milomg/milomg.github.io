@@ -21,9 +21,7 @@ const SWISS_SPLAT_FLIGHT_MS = 620;
 const SWISS_SPLAT_SETTLE_MS = 520;
 const SWISS_COMPARE_FLIGHT_MS = 680;
 
-const SWISS_TAG_GROUP: number[] = [
-  12, 41, 87, 95, 23, 19, 87, 63, 44, 118, 12, 9, 201, 57, 87, 31,
-];
+const SWISS_TAG_GROUP: number[] = [12, 41, 87, 95, 23, 19, 87, 63, 44, 118, 12, 9, 201, 57, 87, 31];
 
 const SWISS_QUERY_SEQUENCE: number[] = [87, 12, 63, 9, 44, 101, 201, 31];
 const SWISS_LANE_INDEXES = Array.from({ length: SWISS_GROUP_WIDTH }, (_, lane) => lane);

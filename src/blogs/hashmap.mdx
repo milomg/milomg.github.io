@@ -27,7 +27,7 @@ Modern hashmaps tend to use open addressing due to the better cache locality. No
 
 <InteractiveChain />
 
-This hurts cache locality, because as we traverse each chain, we have to jump around memory. 
+This hurts cache locality, because as we traverse each chain, we have to jump around memory.
 Additionally, each node has to store a pointer to the next node, which takes up space.
 
 ## The Problem Of Clustering
@@ -48,7 +48,6 @@ I designed a series of benchmarks to compare the performance of different hashma
 In these benchmarks, I focused on frequent insertions, lookups, and deletions (but ignored iteration time).
 I tested with both keys and values being 64 bit integers, and using Wyhash as the hash function.
 
-
 # Robin Hood Hashmaps
 
 One slight variant of the standard hashmap is to include the distance from the ideal bucket in the hash table, and to use that distance to determine which key to evict when a collision occurs.
@@ -65,6 +64,8 @@ In class, we learned about rank and select quotient filters, which use two bitma
 
 Based on the above, I tried creating a compressed Robbin Hood hashmap using the RSQF bitmap.
 
+I tried implementing this in two ways. One using the buckets with offsets shown below, and a second time using a prefix sum tree to dynamically calculate the offsets.
+
 This reduced the data requirement nicely, however this left the performance suboptimal, because of a core missing trick: SIMD buckets. (This would be a good target for a future project, to try and merge SIMD bucketing with the RSQF bitmap idea).
 
 <RSQFInsert />
@@ -75,7 +76,6 @@ Swiss Tables are a modern SIMD friendly variation on quadratic probing with tomb
 They store large buckets of 16 entries, and use a 7 bit fingerprint to determine if a key is present in the bucket.
 Because SIMD instructions can operate on 16 bytes at a time, this allows for very fast lookups a bucket at a time (which drastically reduces the number of buckets that need to be searched).
 
-
 ```zig
 const tags: @Vector(16, u8) = self.loadTagGroup(bucket);
 
@@ -85,11 +85,12 @@ const matches: @Vector(16, u8) = tags == tag_lane;
 
 <SwissSplatCompare />
 
-# Cuckoo Filters
+# Cuckoo Hashing
 
-We can take the bucketing idea of swiss tables and combine it with the classic cuckoo filters (but this time store actual data) idea to make a SIMD cuckoo hashtable.
+We can take the bucketing idea of Swiss tables and combine it with Cuckoo filters (but this time store actual data) to make a SIMD Cuckoo hashtable with fingerprints.
+Unlike the original Cuckoo hashing paper, we store fingerprints so that we can do SIMD bucket checks.
 
-In essence, Cuckoo filters move the work from the lookup phase to the insertion phase, where we must find careful buckets for the key.
+In essence, Cuckoo hashing moves the work from the lookup phase to the insertion phase, where we must find careful buckets for the key.
 
 Unsurprisingly, because Cuckoo filters require only two SIMD block lookups for each key, they have extremely fast lookups (constant time).
 Similarly, they have extremely fast deletions, because we can just remove the key from the bucket.
@@ -99,3 +100,19 @@ They push quite a bit more work to inserts, where they are forced to move keys a
 <CuckooInsert />
 
 One thing to note is that all the fast designs actually use this cuckoo bucketing idea, where we can compare and insert into anywhere in an entire bucket.
+
+
+# Graphs
+
+<HashmapConfigBenchmarks />
+
+<HashmapLoadBenchmarks />
+
+# Links
+
+- Swiss Tables C++: https://abseil.io/about/design/swisstables
+- Swiss Tables Go: https://go.dev/blog/swisstable
+- Boost Hashmaps: https://bannalia.blogspot.com/2022/11/inside-boostunorderedflatmap.html
+- RSQF: https://dl.acm.org/doi/pdf/10.1145/3035918.3035963
+- Rust RSQF: https://github.com/arthurprs/qfilter
+- Bucketed Cuckoo Hashing: https://www.di.ens.fr/~vergnaud/algo0910/Cuckoo.pdf
