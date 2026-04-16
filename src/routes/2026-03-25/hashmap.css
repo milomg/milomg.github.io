@@ -24,6 +24,10 @@
   padding: 0.8rem;
 }
 
+.widget.wide {
+  max-width: 900px;
+}
+
 .widget header {
   display: flex;
   justify-content: center;
@@ -66,27 +70,52 @@
   cursor: not-allowed;
 }
 
-.widget.insert-bits menu > .button,
-.widget.cuckoo menu > .button,
-.probes > menu > .button {
+.widget menu > .button {
   padding: 0.5rem 0.9rem;
 }
 
-.widget.insert-bits {
-  max-width: 900px;
+.insert-bits {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.widget.insert-bits .step-counter {
+.widget .step-counter {
   margin-left: auto;
   font-size: 0.85rem;
   color: var(--text-color);
   font-variant-numeric: tabular-nums;
 }
 
-.widget.insert-bits .visualization {
+.floating-chip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 3;
+  font-size: 0.8rem;
+  font-family: var(--mono-font);
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  background: linear-gradient(135deg, #fb7185, #f97316);
+  opacity: 0.35;
+  box-shadow: 0 10px 24px rgb(15 23 42 / 0.28);
+  transition: opacity 120ms ease;
+}
+
+.floating-chip.active {
+  opacity: 1;
+  transition:
+    transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 120ms ease;
+}
+
+.insert-bits .visualization {
   --bit-cell-size: 18px;
   --bit-cell-gap: 2px;
   --bits-per-block: 4;
@@ -101,33 +130,33 @@
   overflow-x: auto;
 }
 
-.widget.insert-bits .bit-block-labels {
+.insert-bits .bit-block-labels {
   display: flex;
   gap: 0.5rem;
   padding: 0.1rem 0;
 }
 
-.widget.insert-bits .block-label-cell {
+.insert-bits .block-label-cell {
   width: var(--bit-block-width);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.widget.insert-bits .bit-blocks {
+.insert-bits .bit-blocks {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
   padding: 0.2rem 0;
 }
 
-.widget.insert-bits .bit-row {
+.insert-bits .bit-row {
   display: flex;
   gap: var(--bit-cell-gap);
   width: var(--bit-block-width);
 }
 
-.widget.insert-bits .bit {
+.insert-bits .bit {
   width: var(--bit-cell-size);
   height: var(--bit-cell-size);
   display: flex;
@@ -140,42 +169,31 @@
   transition: all 140ms ease;
 }
 
-.widget.insert-bits .bit.set {
+.insert-bits .bit.set {
   background: color-mix(in srgb, #06b6d4 60%, transparent);
   border: 1px solid #06b6d4;
   color: #0ea5e9;
 }
 
-.widget.insert-bits .bit.clear {
+.insert-bits .bit.clear {
   background: color-mix(in srgb, var(--button-bg) 60%, transparent);
   border: 1px solid var(--border-color);
   color: color-mix(in srgb, var(--text-color) 50%, transparent);
 }
 
-.widget.insert-bits .bit.highlight {
+.insert-bits .bit.highlight {
   box-shadow: 0 0 0 2px #f59e0b;
   border-color: #f59e0b;
 }
 
-.widget.insert-bits .bit.clear.range,
-.widget.insert-bits .bit.psl.set.range {
+.insert-bits .bit.clear.range,
+.insert-bits .bit.psl.set.range {
   background: color-mix(in srgb, #f59e0b 22%, var(--button-bg));
   border-color: color-mix(in srgb, #f59e0b 55%, var(--border-color));
   color: color-mix(in srgb, #f59e0b 75%, var(--text-color));
 }
 
-.widget.cuckoo {
-  max-width: 760px;
-}
-
-.widget.cuckoo .step-counter {
-  margin-left: auto;
-  font-size: 0.85rem;
-  color: var(--text-color);
-  font-variant-numeric: tabular-nums;
-}
-
-.cuckoo-grid {
+.cuckoo .cuckoo-grid {
   position: relative;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -184,7 +202,7 @@
   padding-bottom: 0.8rem;
 }
 
-.cuckoo-bucket {
+.cuckoo .cuckoo-grid > article {
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 0.45rem;
@@ -193,118 +211,177 @@
     box-shadow 140ms ease;
 }
 
-.cuckoo-bucket.candidate {
+.cuckoo .candidate {
   border-color: color-mix(in srgb, #f59e0b 44%, var(--border-color));
 }
 
-.cuckoo-bucket.activeProbe {
+.cuckoo .activeProbe {
   box-shadow: 0 0 0 2px color-mix(in srgb, #38bdf8 48%, transparent);
 }
 
-.cuckoo-bucket.activeKick {
+.cuckoo .activeKick {
   border-color: color-mix(in srgb, #fb7185 54%, var(--border-color));
   box-shadow: 0 0 0 2px color-mix(in srgb, #fb7185 34%, transparent);
 }
 
-.cuckoo-bucket.kickTarget {
+.cuckoo .kickTarget {
   border-color: color-mix(in srgb, #f59e0b 54%, var(--border-color));
 }
 
-.cuckoo-bucket h4 {
+.cuckoo article > h4 {
   margin: 0 0 0.3rem;
-  font-size: 0.8rem;
   text-align: center;
-  color: var(--text-color);
 }
 
-.cuckoo-bucket ol {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.cuckoo article > ol {
   display: grid;
   gap: 0.3rem;
 }
 
-.cuckoo-bucket li {
-  border: 1px solid var(--button-border);
+.cuckoo article > ol > li {
+  min-height: 1.65rem;
   border-radius: 6px;
-  height: 1.65rem;
-  display: grid;
-  place-items: center;
   font-size: 0.8rem;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-color);
-  background: color-mix(in srgb, var(--button-bg) 58%, transparent);
 }
 
-.cuckoo-bucket li.filled {
+.cuckoo article > ol > li.filled {
   color: var(--button-text);
   background: color-mix(in srgb, #0ea5e9 24%, var(--button-bg));
   border-color: color-mix(in srgb, #0ea5e9 50%, var(--button-border));
 }
 
-.cuckoo-bucket li.kickSlot {
-  border-color: color-mix(in srgb, #fb7185 64%, var(--button-border));
+.cuckoo article > ol > li.kickSlot {
+  --lane-emphasis-color: #fb7185;
   background: color-mix(in srgb, #fb7185 24%, var(--button-bg));
   color: var(--button-text);
+  border-color: color-mix(in srgb, var(--lane-emphasis-color) 64%, var(--button-border));
 }
 
-.cuckoo-bitmap {
+.cuckoo article > ol.bitmap {
   margin-top: 0.35rem;
-  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.2rem;
 }
 
-.cuckoo-bitmap span {
-  border: 1px solid var(--button-border);
+.cuckoo article > ol.bitmap > li {
+  flex: none;
+  min-height: 1.3rem;
   border-radius: 6px;
-  height: 1.3rem;
-  display: grid;
-  place-items: center;
-  font-family: var(--mono-font);
   font-size: 0.7rem;
-  color: var(--text-color);
-  background: color-mix(in srgb, var(--button-bg) 60%, transparent);
 }
 
-.cuckoo-bitmap span.occupied {
+.cuckoo article > ol.bitmap > li.filled {
+  border-color: color-mix(in srgb, #22c55e 54%, var(--button-border));
+  background: color-mix(in srgb, #22c55e 24%, var(--button-bg));
   color: var(--button-text);
-  background: color-mix(in srgb, #22c55e 26%, var(--button-bg));
-  border-color: color-mix(in srgb, #22c55e 50%, var(--button-border));
 }
 
-.cuckoo-bitmap span.highlighted {
-  border-color: color-mix(in srgb, #f59e0b 62%, var(--button-border));
-  box-shadow: 0 0 0 1px color-mix(in srgb, #f59e0b 45%, transparent);
-}
-
-.cuckoo-floating-key {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 2rem;
-  height: 2rem;
-  display: grid;
-  place-items: center;
-  border-radius: 999px;
-  pointer-events: none;
-  z-index: 3;
-  font-size: 0.8rem;
-  font-variant-numeric: tabular-nums;
-  color: #fff;
-  background: linear-gradient(135deg, #fb7185, #f97316);
-  box-shadow: 0 10px 24px rgb(15 23 42 / 0.28);
-  opacity: 0.35;
-  transition:
-    transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    opacity 120ms ease;
-}
-
-.cuckoo-floating-key.insert {
+.chip-cool {
   background: linear-gradient(135deg, #0ea5e9, #22c55e);
 }
 
-.cuckoo-floating-key.active {
-  opacity: 1;
+.widget > p {
+  margin: 0.55rem 0 0;
+  font-size: 0.82rem;
+  color: var(--text-color);
+  font-family: var(--mono-font);
+  text-align: center;
+}
+
+.swiss-grid {
+  position: relative;
+  margin: 0.7rem 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.8rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.widget .query-chip {
+  justify-self: center;
+  margin-bottom: 0.3rem;
+  min-width: 4rem;
+  height: 1.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--button-border);
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  font-family: var(--mono-font);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-color);
+  background: color-mix(in srgb, var(--button-bg) 70%, transparent);
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 160ms ease;
+}
+
+.widget .query-chip.active {
+  border-color: color-mix(in srgb, #22c55e 60%, var(--button-border));
+  box-shadow: 0 0 0 2px color-mix(in srgb, #22c55e 26%, transparent);
+  transform: translateY(-1px);
+}
+
+.widget h4 {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--text-color) 84%, transparent);
+  font-family: var(--mono-font);
+}
+
+.widget ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.24rem;
+}
+
+.widget ol > li {
+  flex: 1 1 2.2rem;
+  min-height: 1.7rem;
+  border: 1px solid var(--button-border);
+  border-radius: 7px;
+  font-size: 0.72rem;
+  font-family: var(--mono-font);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-color);
+  background: color-mix(in srgb, var(--button-bg) 60%, transparent);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transition:
+    border-color 120ms ease,
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    background-color 120ms ease;
+}
+
+.widget ol > li.filled {
+  border-color: color-mix(in srgb, #22c55e 54%, var(--button-border));
+  background: color-mix(in srgb, #22c55e 24%, var(--button-bg));
+  color: var(--button-text);
+}
+
+.widget ol > li.active {
+  --lane-emphasis-color: #38bdf8;
+  border-color: color-mix(in srgb, var(--lane-emphasis-color) 64%, var(--button-border));
+  box-shadow: 0 0 0 2px color-mix(in srgb, #38bdf8 24%, transparent);
+  transform: translateY(-1px);
+}
+
+.widget ol > li.match {
+  border-color: color-mix(in srgb, #f59e0b 64%, var(--button-border));
+  background: color-mix(in srgb, #f59e0b 24%, var(--button-bg));
+  color: var(--button-text);
+}
+
+.floating-chip.hidden {
+  opacity: 0;
+  visibility: hidden;
 }

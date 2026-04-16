@@ -76,6 +76,15 @@ They store large buckets of 16 entries, and use a 7 bit fingerprint to determine
 Because SIMD instructions can operate on 16 bytes at a time, this allows for very fast lookups a bucket at a time (which drastically reduces the number of buckets that need to be searched).
 
 
+```zig
+const tags: @Vector(16, u8) = self.loadTagGroup(bucket);
+
+const tag_lane: @Vector(16, u8) = @splat(tag);
+const matches: @Vector(16, u8) = tags == tag_lane;
+```
+
+<SwissSplatCompare />
+
 # Cuckoo Filters
 
 We can take the bucketing idea of swiss tables and combine it with the classic cuckoo filters (but this time store actual data) idea to make a SIMD cuckoo hashtable.

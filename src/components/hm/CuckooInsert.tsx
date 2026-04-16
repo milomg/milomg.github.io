@@ -448,7 +448,7 @@ export const CuckooInsert = () => {
   };
 
   return (
-    <section class="widget cuckoo" aria-label="Cuckoo insertion demo">
+    <section class="widget wide cuckoo" aria-label="Cuckoo insertion demo">
       <header>
         <strong>Cuckoo Inserts</strong>
       </header>
@@ -456,7 +456,6 @@ export const CuckooInsert = () => {
       <div ref={gridRef} class="cuckoo-grid" role="list" aria-label="Cuckoo buckets">
         {buckets().map((bucket, bucketIndex) => (
           <article
-            class="cuckoo-bucket"
             classList={{
               candidate: activeItem() ? bucketIndex === activeItem()!.homeA || bucketIndex === activeItem()!.homeB : false,
               activeProbe:
@@ -490,7 +489,7 @@ export const CuckooInsert = () => {
               ))}
             </ol>
 
-            <div class="cuckoo-bitmap" aria-label={`Bucket ${bucketIndex} occupancy bitmap`}>
+            <ol class="bitmap" aria-label={`Bucket ${bucketIndex} occupancy bitmap`}>
               {Array.from({ length: CUCKOO_BUCKET_CAPACITY }, (_, lane) => {
                 const occupancyMask = cuckooMaskForBucket(bucket);
                 const occupied = (occupancyMask & (1 << lane)) !== 0;
@@ -498,17 +497,17 @@ export const CuckooInsert = () => {
                   (probeUi().phase === "primary" && activeItem() && bucketIndex === activeItem()!.homeA) ||
                   (probeUi().phase === "secondary" && activeItem() && bucketIndex === activeItem()!.homeB);
                 return (
-                  <span
+                  <li
                     classList={{
-                      occupied,
-                      highlighted: active && lane === probeUi().lane,
+                      filled: occupied,
+                      match: active && lane === probeUi().lane,
                     }}
                   >
                     {occupied ? "1" : "0"}
-                  </span>
+                  </li>
                 );
               })}
-            </div>
+            </ol>
           </article>
         ))}
 
@@ -516,9 +515,9 @@ export const CuckooInsert = () => {
           {(chip) => (
             <div
               classList={{
-                "cuckoo-floating-key": true,
+                "floating-chip": true,
                 active: chip().active,
-                insert: chip().variant === "insert",
+                "chip-cool": chip().variant === "insert",
               }}
               style={{
                 transform: `translate(${chip().x}px, ${chip().y}px) translate(-50%, -50%)`,

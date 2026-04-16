@@ -241,11 +241,7 @@ const BlockLabelsRow = (props: { offsets: Accessor<number>[] }) => {
   return (
     <div class="bit-block-labels">
       <For each={BLOCK_INDEXES}>
-        {(block) => (
-          <div class="block-label-cell">
-            <span class="block-offset-badge">ofs {props.offsets[block]()}</span>
-          </div>
-        )}
+        {(block) => <div class="block-label-cell block-offset-badge">ofs {props.offsets[block]()}</div>}
       </For>
     </div>
   );
@@ -398,7 +394,7 @@ export const RSQFInsert = () => {
   });
 
   return (
-    <section class="widget insert-bits rsqf-insert" aria-label="RSQF insertion demo">
+    <section class="widget wide insert-bits rsqf-insert" aria-label="RSQF insertion demo">
       <header>
         <strong>RSQF Inserts</strong>
       </header>

@@ -4,7 +4,7 @@
   margin: 1.25rem auto 0.75rem;
 }
 
-.hm-chain-caption {
+.hm-chain > p {
   margin: 0 auto 1rem;
   max-width: 760px;
   font-size: 0.92rem;

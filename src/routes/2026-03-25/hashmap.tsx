@@ -9,6 +9,7 @@ import { InteractiveChain } from "~/components/hm/InteractiveChain";
 import { ProbingDemo } from "~/components/hm/ProbingDemo";
 import { RSQFInsert } from "~/components/hm/RSQFInsert";
 import { RobinHoodPslInsert } from "~/components/hm/RobinHoodPslInsert";
+import { SwissSplatCompare } from "~/components/hm/SwissSplatCompare";
 
 import { Nav } from "~/components/nav";
 import "../blog.css";
@@ -22,6 +23,7 @@ const MDXProps: MDXComponents = {
   ProbingDemo,
   RobinHoodPslInsert,
   RSQFInsert,
+  SwissSplatCompare,
   CuckooInsert,
 };
 

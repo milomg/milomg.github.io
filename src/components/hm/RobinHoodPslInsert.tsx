@@ -300,7 +300,7 @@ export const RobinHoodPslInsert = () => {
   });
 
   return (
-    <section class="widget insert-bits rh-psl" aria-label="Robin Hood PSL insertion demo">
+    <section class="widget wide insert-bits rh-psl" aria-label="Robin Hood PSL insertion demo">
       <header>
         <strong>Robin Hood PSL Inserts</strong>
       </header>

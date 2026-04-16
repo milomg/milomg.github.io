@@ -116,7 +116,7 @@ export const InteractiveChain = () => {
 
       <Show when={chains[activeChain()]}>
         {(chain) => (
-          <p class="hm-chain-caption">
+          <p>
             Bucket {chain().slot}:{" "}
             {chain()
               .items.map((item) => item.key)
