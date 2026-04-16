@@ -5,8 +5,9 @@ As part of that exploration, I've tried to understand the state of the art.
 In this post, we'll look at how Swiss Tables compare to Boost Hashmaps, and my own experimental new hashmap design.
 
 I tried implementing two possibly novel ideas:
-+ A compressed Robin Hood hashmap using the rank select quotient filter bitmap.
-+ A SIMD Cuckoo hashmap with fingerprints inspired by swiss tables.
+
+- A compressed Robin Hood hashmap using the rank select quotient filter bitmap.
+- A SIMD Cuckoo hashmap with fingerprints inspired by swiss tables.
 
 While the first one ended up being much slower than I would like, the SIMD Cuckoo hashmap ended up being very fast, and is a promising design for a future production ready hashmap.
 
@@ -46,13 +47,7 @@ This is caused by [clustering](https://en.wikipedia.org/wiki/Primary_clustering)
 
 Even though quadratic probing reduces clustering, it still has some locality preference, which leads to similar clustering.
 
-Note that we could avoid this completely with rehashing, but that would be expensive (both to rehash, and because of the unpredictable memory accesses).
-
-# Benchmarks
-
-I designed a series of benchmarks to compare the performance of different hashmap implementations.
-In these benchmarks, I focused on frequent insertions, lookups, and deletions (but ignored iteration time).
-I tested with both keys and values being 64 bit integers, and using Wyhash as the hash function.
+Note that we should be able to avoid this with randomized probing, but that would be expensive (both to hash multiple times, and because of the unpredictable memory accesses).
 
 # Robin Hood Hashmaps
 
@@ -64,10 +59,8 @@ One additional trick is that robin hood hashing can avoid tombstones, because wh
 
 The top row in the bitmap is the homes, which represent wether any key was intended for that hashmap slot. Hover a Homes bit to light its PSL run. The highlighted PSL cell is the current insertion target.
 
-
 Note we actually define $homes_i = \exists j : h(key_j) \\% n = i,$ meaning that the home bit is set if there is a run that starts at or before this slot.
 During `get`, we can use this bitmap to quickly skip over empty slots.
-
 
 # Rank Select Quotient Filters
 
@@ -116,6 +109,15 @@ They push quite a bit more work to inserts, where they are forced to move keys a
 One thing to note is that all the fast designs actually use this cuckoo bucketing idea, where we can compare and insert into anywhere in an entire bucket.
 
 # Graphs
+
+I designed a series of benchmarks to compare the performance of different hashmap implementations.
+In these benchmarks, I focused on frequent insertions, lookups, and deletions (but ignored iteration time).
+I tested with both keys and values being 64 bit integers, and using Wyhash as the hash function.
+
+`delete_churn` keeps a fixed live set: each operation removes one currently live key from a rotating slot and inserts a new key, so occupancy stays constant while deletion handling is continuously stressed.
+`alternate_reuse` also keeps occupancy constant, but it repeatedly deletes and reinserts the same key universe (`key = i % working_set`), which minimizes key-space growth and isolates the cost of repeated remove/put on reused slots.
+The load benchmarks pre-size a table to a target capacity, choose an item count at a specific load fraction, and then test three behaviors: `lookup_hit` cycles through existing keys, `lookup_miss` probes absent keys beyond the inserted range, and `insert_load` measures pure insertion throughput from empty to the target count.
+Together, they separate mutation-heavy steady-state behavior (churn/reuse) from load-factor-sensitive read/write behavior to identify causes of degredation.
 
 <HashmapConfigBenchmarks />
 
