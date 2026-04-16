@@ -37,18 +37,6 @@ Modern hashmaps tend to use open addressing due to the better cache locality. No
 This hurts cache locality, because as we traverse each chain, we have to jump around memory.
 Additionally, each node has to store a pointer to the next node, which takes up space.
 
-## The Problem Of Clustering
-
-<ProbingDemo />
-
-As the diagrams run, notice how the average chain length of linear probing is noticeably higher than triangular probing.
-
-This is caused by [clustering](https://en.wikipedia.org/wiki/Primary_clustering), because the longer the chain, the more likely it is that new keys will hash to the same index, causing the chain to grow even longer.
-
-Even though quadratic probing reduces clustering, it still has some locality preference, which leads to similar clustering.
-
-Note that we should be able to avoid this with randomized probing, but that would be expensive (both to hash multiple times, and because of the unpredictable memory accesses).
-
 # Robin Hood Hashmaps
 
 One slight variant of the standard hashmap is to include the distance from the ideal bucket in the hash table, and to use that distance to determine which key to evict when a collision occurs.
@@ -76,6 +64,21 @@ This reduced the data requirement nicely, however this left the performance subo
 
 Here, the top row shows the run "homes" and the bottom row shows the run end bitmap. The offsets show how far in another run has intruded into this block.
 Just like above, you can hover over a Homes bit to light its PSL run.
+
+
+## The Problem Of Clustering
+
+<ProbingDemo />
+
+As the diagrams run, notice how the average chain length of linear probing is noticeably higher than triangular probing.
+
+This is caused by [clustering](https://en.wikipedia.org/wiki/Primary_clustering), because the longer the chain, the more likely it is that new keys will hash to the same index, causing the chain to grow even longer.
+
+Even though quadratic probing reduces clustering, it still has some locality preference, which leads to similar clustering.
+
+We should be able to avoid this with randomized probing, but that would be expensive (both to hash multiple times, and because of the unpredictable memory accesses).
+
+Note that despite this slowdown, we might still choose locality and linear probing because of our ability to use SIMD instructions (see below).
 
 # Swiss Tables
 
