@@ -4,6 +4,12 @@ Recently, I've been looking into how high performance hashmaps work.
 As part of that exploration, I've tried to understand the state of the art.
 In this post, we'll look at how Swiss Tables compare to Boost Hashmaps, and my own experimental new hashmap design.
 
+I tried implementing two possibly novel ideas:
++ A compressed Robin Hood hashmap using the rank select quotient filter bitmap.
++ A SIMD Cuckoo hashmap with fingerprints inspired by swiss tables.
+
+While the first one ended up being much slower than I would like, the SIMD Cuckoo hashmap ended up being very fast, and is a promising design for a future production ready hashmap.
+
 I've chosen to code in Zig because its focus on performance and low-level control makes it easier to design high-performance data structures.
 Additionally, the current Zig hashmap implementation has some performance [issues](https://github.com/ziglang/zig/issues/17851) that we'll try to improve upon.
 
@@ -56,19 +62,27 @@ One additional trick is that robin hood hashing can avoid tombstones, because wh
 
 <RobinHoodPslInsert />
 
-Hover a Homes bit to light its PSL run. The highlighted PSL cell is the current insertion target.
+The top row in the bitmap is the homes, which represent wether any key was intended for that hashmap slot. Hover a Homes bit to light its PSL run. The highlighted PSL cell is the current insertion target.
+
+
+Note we actually define $homes_i = \exists j : h(key_j) \\% n = i,$ meaning that the home bit is set if there is a run that starts at or before this slot.
+During `get`, we can use this bitmap to quickly skip over empty slots.
+
 
 # Rank Select Quotient Filters
 
 In class, we learned about rank and select quotient filters, which use two bitmap to store run starts and run ends.
 
-Based on the above, I tried creating a compressed Robbin Hood hashmap using the RSQF bitmap.
+Based on the above, I tried creating a compressed Robin Hood hashmap using the RSQF bitmap.
 
 I tried implementing this in two ways. One using the buckets with offsets shown below, and a second time using a prefix sum tree to dynamically calculate the offsets.
 
-This reduced the data requirement nicely, however this left the performance suboptimal, because of a core missing trick: SIMD buckets. (This would be a good target for a future project, to try and merge SIMD bucketing with the RSQF bitmap idea).
+This reduced the data requirement nicely, however this left the performance suboptimal (see the graphs below), because the operations to find runs are still pretty heavy, and because of a core missing trick: SIMD buckets. (This would be a good target for a future project, to try and merge SIMD bucketing with the RSQF hashmap idea).
 
 <RSQFInsert />
+
+Here, the top row shows the run "homes" and the bottom row shows the run end bitmap. The offsets show how far in another run has intruded into this block.
+Just like above, you can hover over a Homes bit to light its PSL run.
 
 # Swiss Tables
 

@@ -11,10 +11,12 @@ import { RSQFInsert } from "~/components/hm/RSQFInsert";
 import { RobinHoodPslInsert } from "~/components/hm/RobinHoodPslInsert";
 import { SwissSplatCompare } from "~/components/hm/SwissSplatCompare";
 import { HashmapConfigBenchmarks, HashmapLoadBenchmarks } from "~/components/hm/HashmapBenchmarks";
+import { createKatexRuntime } from "~/components/katex-runtime";
 
 import { Nav } from "~/components/nav";
 import "../blog.css";
 import "./hashmap.css";
+import "katex/dist/katex.min.css";
 
 const Giscus = clientOnly(() => import("~/components/giscus"));
 
@@ -31,6 +33,8 @@ const MDXProps: MDXComponents = {
 };
 
 export default function Page() {
+  createKatexRuntime();
+
   return (
     <Globals>
       <Title>High Performance Hashmaps · milomg.dev</Title>

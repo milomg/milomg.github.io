@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import { rollup as mdx } from "./mdx";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 import rehypeRaw from "rehype-raw";
 import { nodeTypes } from "@mdx-js/mdx";
 import { solidStart } from "@solidjs/start/config";
@@ -13,7 +14,7 @@ export default defineConfig({
       include: /\.mdx?$/,
       jsx: true,
       jsxImportSource: "solid-js",
-      remarkPlugins: [remarkGfm],
+      remarkPlugins: [remarkGfm, remarkMath],
       rehypePlugins: [
         [rehypeRaw, { passThrough: nodeTypes }],
         [
