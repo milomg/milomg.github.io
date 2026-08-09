@@ -84,7 +84,7 @@ const App = () => {
       <div id="scroller">
         <section id="top">
           <div class="header">
-            <h1>I'm Milo, a software engineer and a consultant with expertise in reactivity and web development</h1>
+            <h1>I'm Milo, a software engineer at Google with expertise in reactivity and web development</h1>
             <h1>
               <span class="nice">⠓⠑⠇⠇⠕ ⠺⠕⠗⠇⠙</span>
             </h1>

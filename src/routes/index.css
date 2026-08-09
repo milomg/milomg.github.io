@@ -61,6 +61,7 @@ _:future,
 .item {
   display: flex;
   gap: 1em;
+  align-items: center;
 }
 .item img {
   min-width: 0;
@@ -72,6 +73,15 @@ _:future,
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+@media screen and (max-width: 700px) {
+  .item {
+    flex-direction: column;
+    margin-bottom: 2em;
+  }
+  .item img {
+    order: -1;
+  }
 }
 
 .social {
